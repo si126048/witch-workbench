@@ -19,7 +19,7 @@ jobs:
       - run: npm --prefix website ci
       - run: npm run gate:checks
       - run: npm run test:e2e
-      - run: npm run dist -- --win --publish=never
+      - run: node scripts/build-windows.js
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       - uses: actions/upload-artifact@v4
