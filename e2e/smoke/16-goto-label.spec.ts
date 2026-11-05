@@ -1,11 +1,19 @@
 import { testWithProject as test, expect } from '../electron-fixture';
+import type { Page } from 'playwright/test';
+
+// The top-left Canvas Toolbox covers the centre of a narrow window and the
+// first block. Clicking there focuses its search field, which swallows Ctrl+G.
+async function clickCanvasBackground(window: Page) {
+  const canvas = window.locator('[aria-label="Story canvas"]');
+  await expect(canvas).toBeVisible({ timeout: 30_000 });
+  const box = await canvas.boundingBox();
+  expect(box).not.toBeNull();
+  await window.mouse.click(box!.x + box!.width - 40, box!.y + box!.height - 40);
+}
 
 test.describe('go to label modal', () => {
   test('opens with Ctrl+G when canvas is active', async ({ window }) => {
-    // Click canvas to ensure it has focus
-    const canvas = window.locator('[aria-label="Story canvas"]');
-    await expect(canvas).toBeVisible({ timeout: 30_000 });
-    await canvas.click();
+    await clickCanvasBackground(window);
 
     await window.keyboard.press('Control+g');
 
@@ -13,9 +21,7 @@ test.describe('go to label modal', () => {
   });
 
   test('shows the fixture labels in the list', async ({ window }) => {
-    const canvas = window.locator('[aria-label="Story canvas"]');
-    await expect(canvas).toBeVisible({ timeout: 30_000 });
-    await canvas.click();
+    await clickCanvasBackground(window);
 
     await window.keyboard.press('Control+g');
     await expect(window.getByRole('dialog')).toBeVisible({ timeout: 5_000 });
@@ -27,9 +33,7 @@ test.describe('go to label modal', () => {
   });
 
   test('filters results as the user types', async ({ window }) => {
-    const canvas = window.locator('[aria-label="Story canvas"]');
-    await expect(canvas).toBeVisible({ timeout: 30_000 });
-    await canvas.click();
+    await clickCanvasBackground(window);
 
     await window.keyboard.press('Control+g');
     await expect(window.getByRole('dialog')).toBeVisible({ timeout: 5_000 });
@@ -42,9 +46,7 @@ test.describe('go to label modal', () => {
   });
 
   test('closes with Escape', async ({ window }) => {
-    const canvas = window.locator('[aria-label="Story canvas"]');
-    await expect(canvas).toBeVisible({ timeout: 30_000 });
-    await canvas.click();
+    await clickCanvasBackground(window);
 
     await window.keyboard.press('Control+g');
     await expect(window.getByRole('dialog')).toBeVisible({ timeout: 5_000 });

@@ -54,8 +54,12 @@ test.describe('touchpad gestures', () => {
     const block = window.locator('[data-block-id]').first();
     await expect(block).toBeVisible({ timeout: 30_000 });
 
-    const box = await block.boundingBox();
-    await window.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+    // The first block sits under the top-left toolbox, whose filter panel
+    // ignores wheel events. Zoom from the open corner of the canvas instead.
+    const canvasRoot = window.getByRole('application', { name: 'Story canvas' });
+    const box = await canvasRoot.boundingBox();
+    expect(box).not.toBeNull();
+    await window.mouse.move(box!.x + box!.width - 40, box!.y + box!.height - 40);
     // Scroll "down" repeatedly (zoom out) far past the clamp.
     for (let i = 0; i < 40; i++) {
       await window.mouse.wheel(0, 400);
