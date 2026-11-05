@@ -36,7 +36,7 @@ export default tseslint.config(
 
   // Electron main process & Node.js scripts — provide Node globals
   {
-    files: ['electron.js', 'preload.js', 'version.js', 'vite.config.ts', 'src/lib/**/*.js', 'docs/**/*.js', 'scripts/**/*.js'],
+    files: ['bootstrap.cjs', 'electron.js', 'preload.js', 'version.js', 'vite.config.ts', 'src/lib/**/*.js', 'docs/**/*.js', 'scripts/**/*.js'],
     languageOptions: {
       globals: {
         process: 'readonly',

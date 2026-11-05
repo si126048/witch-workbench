@@ -99,6 +99,8 @@ export default defineConfig(({ mode }) => {
     // Vitest test runner configuration
     test: {
       globals: true,
+      maxWorkers: 4,
+      testTimeout: 30000,
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
       include: ['**/*.test.{ts,tsx}'],

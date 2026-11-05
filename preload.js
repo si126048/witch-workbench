@@ -1,6 +1,25 @@
 const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  nightfall: {
+    clone: remote => ipcRenderer.invoke('nightfall:clone', remote),
+    init: () => ipcRenderer.invoke('nightfall:init'),
+    status: () => ipcRenderer.invoke('nightfall:status'),
+    diff: file => ipcRenderer.invoke('nightfall:diff', file),
+    rules: () => ipcRenderer.invoke('nightfall:rules'),
+    team: (action, payload) => ipcRenderer.invoke('nightfall:team', action, payload),
+    sceneList: () => ipcRenderer.invoke('nightfall:scene-list'),
+    sceneLoad: id => ipcRenderer.invoke('nightfall:scene-load', id),
+    sceneSave: (scene, revision) => ipcRenderer.invoke('nightfall:scene-save', scene, revision),
+    sceneDraftWrite: (scene, revision) => ipcRenderer.invoke('nightfall:scene-draft-write', scene, revision),
+    sceneDraftRead: id => ipcRenderer.invoke('nightfall:scene-draft-read', id),
+    sceneDraftClear: id => ipcRenderer.invoke('nightfall:scene-draft-clear', id),
+    onProgress: callback => {
+      const handler = (_event, text) => callback(text);
+      ipcRenderer.on('nightfall:progress', handler);
+      return () => ipcRenderer.removeListener('nightfall:progress', handler);
+    },
+  },
   getStartupArgs: () => ipcRenderer.invoke('app:get-startup-args'),
   openDirectory: () => ipcRenderer.invoke('dialog:openDirectory'),
   createProject: () => ipcRenderer.invoke('dialog:createProject'),

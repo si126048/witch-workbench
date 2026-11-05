@@ -24,7 +24,7 @@ describe('AboutModal', () => {
 
   it('renders the app name when open', () => {
     render(<AboutModal isOpen={true} onClose={vi.fn()} />);
-    expect(screen.getByText('Vangard Studio')).toBeTruthy();
+    expect(screen.getByText('夜幕工作台')).toBeTruthy();
   });
 
   it('calls onClose when Close button is clicked', async () => {

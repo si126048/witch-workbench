@@ -1,13 +1,14 @@
 {
-  "name": "vangard-studio",
-  "version": "1.1.2",
+  "name": "nightfall-workbench",
+  "version": "0.1.0",
   "author": {
     "name": "Blue Moon Foundry Software",
     "email": "support@bluemoonfoundry.com"
   },
   "license": "AGPL-3.0-only",
   "type": "module",
-  "main": "electron.js",
+  "main": "bootstrap.cjs",
+  "description": "Nightfall Workbench: local RenPy authoring and Git team collaboration",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -47,7 +48,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
-    "dompurify": "^3.4.1",
+    "dompurify": "3.4.17",
     "electron-log": "^5.4.3",
     "electron-updater": "^6.8.3",
     "graphology": "^0.26.0",
@@ -96,20 +97,20 @@
     "vitest": "^4.1.11"
   },
   "build": {
-    "appId": "com.bluemoonfoundry.vangard",
-    "productName": "Vangard Studio",
-    "executableName": "vangard-studio",
-    "publish": {
-      "provider": "github",
-      "owner": "bluemoonfoundry",
-      "repo": "bmf-vangard-renpy-ide"
-    },
+    "appId": "io.nightfall.workbench",
+    "productName": "夜幕工作台",
+    "executableName": "nightfall-workbench",
     "files": [
       "dist/**/*",
       "electron.js",
+      "bootstrap.cjs",
       "preload.js",
       "vangard.png",
-      "src/lib/**/*"
+      "src/lib/**/*",
+      "!src/**/*.test.*",
+      "NOTICE-NIGHTFALL.md",
+      "nightfall.png",
+      "nightfall.ico"
     ],
     "asarUnpack": [
       "node_modules/sharp/**/*"
@@ -118,16 +119,20 @@
       "output": "release"
     },
     "win": {
+      "signExecutable": false,
       "target": "nsis",
-      "icon": "vangard.png",
-      "artifactName": "Vangard_Studio_Windows_${version}.${ext}"
+      "icon": "nightfall.ico",
+      "artifactName": "Nightfall_Workbench_Windows_${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Vangard Studio"
+      "shortcutName": "夜幕工作台",
+      "installerIcon": "nightfall.ico",
+      "uninstallerIcon": "nightfall.ico",
+      "uninstallDisplayName": "夜幕工作台"
     },
     "mac": {
       "target": "dmg",

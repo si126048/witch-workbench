@@ -9,7 +9,7 @@ import React from 'react';
 import { useModalAccessibility } from '@/hooks/useModalAccessibility';
 import packageJson from '../../package.json';
 const BUILD_NUMBER = process.env.BUILD_NUMBER || 'dev';
-import logo from '../../vangard.png';
+import logo from '../../nightfall.png';
 
 interface AboutModalProps {
   isOpen: boolean;
@@ -30,13 +30,12 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
         onClick={e => e.stopPropagation()}
       >
         <div className="p-8 flex flex-col items-center text-center">
-            <img src={logo} alt="Vangard Studio Logo" className="w-32 h-32 mb-4 object-contain drop-shadow-md" />
-            <h2 id="about-modal-title" className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Vangard Studio</h2>
+            <img src={logo} alt="夜幕工作台" className="w-32 h-32 mb-4 object-contain drop-shadow-md" />
+            <h2 id="about-modal-title" className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">夜幕工作台</h2>
             <p className="text-indigo-600 dark:text-indigo-400 font-mono text-sm mb-6">v{packageJson.version} (build {BUILD_NUMBER})</p>
             
             <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
-                A powerful visual environment for creating Ren'Py visual novels. 
-                Design flows, write scripts, and manage assets all in one place.
+                本地视觉小说制作与 Git 团队协作。基于 Vangard Studio，保留上游版权与 AGPL-3.0-only 许可证。
             </p>
             
             <div className="text-xs text-gray-400 dark:text-gray-500 mt-4">
@@ -49,7 +48,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
                 onClick={() => window.electronAPI?.openExternal?.('https://bluemoonfoundry.github.io/bmf-vangard-renpy-ide/')}
                 className="px-6 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-100 text-sm font-bold rounded transition-colors shadow-sm"
             >
-                User Guide
+                上游文档
             </button>
             <button
                 onClick={onClose}

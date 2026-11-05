@@ -1,3 +1,4 @@
+import WorkbenchIcon from './WorkbenchIcon';
 /**
  * @file FirstRunTutorial.tsx
  * @description First-run interactive tutorial with spotlight effect and guided tour
@@ -268,9 +269,9 @@ const FirstRunTutorial: React.FC<FirstRunTutorialProps> = ({ onComplete, forceSh
           onClick={e => e.stopPropagation()}
         >
           <div className="p-8 flex flex-col items-center text-center">
-            <div className="text-5xl mb-4">👋</div>
+            <div className="mb-4 flex justify-center"><WorkbenchIcon name="moon" className="h-12 w-12 text-emerald-400" /></div>
             <h2 id="tutorial-welcome-title" className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Welcome to Vangard Studio!
+              欢迎使用夜幕工作台
             </h2>
             <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed mb-2">
               Want a quick tour to get started?

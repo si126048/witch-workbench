@@ -7,7 +7,7 @@ describe('useSettingsManagement', () => {
 
   it('initializes with system theme', () => {
     const { result } = renderHook(() => useSettingsManagement());
-    expect(result.current.appSettings.theme).toBe('system');
+    expect(result.current.appSettings.theme).toBe('dark');
   });
 
   it('initializes with empty recentProjects', () => {
@@ -166,7 +166,7 @@ describe('useSettingsManagement', () => {
     act(() => result.current.updateTheme('dark'));
     act(() => result.current.updateEditorFont('Fira Code', 20));
     act(() => result.current.resetAppSettings());
-    expect(result.current.appSettings.theme).toBe('system');
+    expect(result.current.appSettings.theme).toBe('dark');
     expect(result.current.appSettings.editorFontSize).toBe(14);
     expect(result.current.appSettings.renpyPath).toBe('/custom/renpy');
   });

@@ -6,6 +6,7 @@ interface MilestoneSettings {
 }
 
 interface UseMilestonesParams {
+  enabled?: boolean;
   blocks: Block[];
   analysisResult: RenpyAnalysisResult;
   images: Map<string, ProjectImage>;
@@ -27,6 +28,7 @@ const MILESTONE_MESSAGES: Record<string, string> = {
 };
 
 export function useMilestones({
+  enabled = true,
   blocks,
   analysisResult,
   images,
@@ -37,6 +39,7 @@ export function useMilestones({
   const firedThisSession = useRef<Set<string>>(new Set());
 
   const trigger = useCallback((id: string) => {
+    if (!enabled) return;
     if (firedThisSession.current.has(id)) return;
     const alreadyDone = projectSettings.completedMilestones?.includes(id) ?? false;
     if (alreadyDone) return;
@@ -49,7 +52,7 @@ export function useMilestones({
       if (!draft.completedMilestones) draft.completedMilestones = [];
       if (!draft.completedMilestones.includes(id)) draft.completedMilestones.push(id);
     });
-  }, [projectSettings.completedMilestones, addToast, updateProjectSettings]);
+  }, [enabled, projectSettings.completedMilestones, addToast, updateProjectSettings]);
 
   useEffect(() => {
     if (blocks.length >= 1)  trigger('first-block');

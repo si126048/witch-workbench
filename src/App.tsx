@@ -1,4 +1,7 @@
-﻿// REVIEW: App.tsx is the app's central state hub (see CLAUDE.md's State Hub
+import { nt } from './lib/nightfallStrings';
+import CloneProjectButton from './components/CloneProjectButton';
+import NightfallWorkspace from './components/NightfallWorkspace';
+// REVIEW: App.tsx is the app's central state hub (see CLAUDE.md's State Hub
 // table) and was as large as ~5,300 lines pre-1.0; a tracked refactor
 // (beads bmf-vangard-renpy-ide-cfo, closed) brought it to 2,464 lines by
 // extracting focused hooks (useProjectIO, useAssetManagement,
@@ -141,6 +144,8 @@ export function applyTheme(root: HTMLElement, theme: Theme): void {
 // --- Main App Component ---
 
 const App: React.FC = () => {
+  const nightfallDirtyRef = useRef(false);
+  const onNightfallDirtyChange = useCallback((dirty: boolean) => { nightfallDirtyRef.current = dirty; }, []);
   // --- State: Blocks & Groups (Undo/Redo) ---
   const { state: blocks, setState: setBlocks, undo, redo, canUndo, canRedo } = useHistory<Block[]>([]);
   const [groups, setGroups] = useImmer<BlockGroup[]>([]);
@@ -185,9 +190,9 @@ const App: React.FC = () => {
   // Update window title based on project path
   useEffect(() => {
     if (projectRootPath) {
-      document.title = `Vangard Studio ${process.env.APP_VERSION} (${projectRootPath})`;
+      document.title = `夜幕工作台 ${process.env.APP_VERSION} (${projectRootPath})`;
     } else {
-      document.title = `Vangard Studio ${process.env.APP_VERSION}`;
+      document.title = `夜幕工作台 ${process.env.APP_VERSION}`;
     }
   }, [projectRootPath]);
 
@@ -554,6 +559,7 @@ const App: React.FC = () => {
   );
   
   const { notifyFirstSave } = useMilestones({
+    enabled: false,
     blocks,
     analysisResult,
     images,
@@ -1046,6 +1052,10 @@ const App: React.FC = () => {
   // Checks whether the selected folder looks like a Ren'Py project before loading.
   // If it doesn't (no game/ folder, no .rpy files), shows a confirmation warning first.
   const handleOpenWithRenpyCheck = useCallback(async (path: string) => {
+      if (nightfallDirtyRef.current) {
+          addToast('请先保存当前场景演出，或在制作工作台中明确关闭未保存的编辑，再切换项目。', 'warning');
+          return;
+      }
       try {
           if (window.electronAPI?.checkRenpyProject) {
               const check = await window.electronAPI.checkRenpyProject(path);
@@ -1078,9 +1088,13 @@ const App: React.FC = () => {
   }, [handleOpenWithRenpyCheck, addToast]);
 
   const handleCreateProject = useCallback(() => {
+      if (nightfallDirtyRef.current) {
+          addToast('请先处理当前场景演出的未保存修改，再新建项目。', 'warning');
+          return;
+      }
       // Open the new project wizard modal
       openWizardModal();
-  }, [openWizardModal]);
+  }, [openWizardModal, addToast]);
 
   const handleWizardComplete = useCallback(async (projectPath: string) => {
       closeWizardModal();
@@ -1820,7 +1834,7 @@ const App: React.FC = () => {
       if (!window.electronAPI) return;
 
       const hasUnsavedChanges = () =>
-          dirtyBlockIdsRef.current.size > 0 || dirtyEditorsRef.current.size > 0 || hasUnsavedSettingsRef.current ||
+          nightfallDirtyRef.current || dirtyBlockIdsRef.current.size > 0 || dirtyEditorsRef.current.size > 0 || hasUnsavedSettingsRef.current ||
           [...untitledFilesRef.current.values()].some(f => f.isDirty);
 
       const removeCheck = window.electronAPI.onCheckUnsavedChangesBeforeExit(() => {
@@ -1828,6 +1842,17 @@ const App: React.FC = () => {
       });
 
       const removeShowModal = window.electronAPI.onShowExitModal(() => {
+          if (nightfallDirtyRef.current) {
+              openUnsavedChangesModal({
+                  title: '场景演出尚未保存',
+                  message: '请返回场景演出页审阅并成对保存。已有本机自动恢复草稿，尚未完成的最后一次编辑可能未写入恢复草稿。',
+                  confirmText: '返回编辑', dontSaveText: '放弃并退出',
+                  onConfirm: () => { closeUnsavedChangesModal(); },
+                  onDontSave: () => { window.electronAPI!.ideStateSavedForQuit(); },
+                  onCancel: () => closeUnsavedChangesModal(),
+              });
+              return;
+          }
           openUnsavedChangesModal({
               title: 'Unsaved Changes',
               message: 'You have unsaved changes. Do you want to save them before exiting?',
@@ -2076,6 +2101,7 @@ const App: React.FC = () => {
     projectRootPath,
     untitledFiles, updateUntitledContent, setUntitledDirty, saveUntitledFile,
   });
+  const [nightfallOpen, setNightfallOpen] = useState(false);
   const focusedTabId = activePaneId === 'secondary' && splitLayout !== 'none'
     ? secondaryActiveTabId
     : activeTabId;
@@ -2168,6 +2194,7 @@ const App: React.FC = () => {
       data-project-ready={(!isLoading && !isInitialAnalysisPending && !!projectRootPath) ? "true" : undefined}
       className={`fixed inset-0 flex flex-col bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 ${appSettings.theme}`}>
       <Toolbar
+        onOpenNightfall={() => setNightfallOpen(true)}
         activeCanvasType={activeCanvasType}
         projectRootPath={projectRootPath}
         hasUnsavedSettings={hasUnsavedSettings}
@@ -2276,8 +2303,8 @@ const App: React.FC = () => {
             <div className="flex-grow flex items-center justify-center p-8">
               <div className="w-full max-w-md space-y-8 text-center">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Project Open</h2>
-                  <p className="text-gray-500 dark:text-gray-400 text-sm">Use the File menu or the buttons below to get started.</p>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{nt('welcome')}</h2>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">{nt('welcomeDescription')}</p>
                 </div>
                 {window.electronAPI && (
                   <div className="flex flex-col sm:flex-row gap-3 justify-center" data-tutorial="project-menu">
@@ -2286,20 +2313,21 @@ const App: React.FC = () => {
                       className="flex items-center justify-center gap-2 px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                      New Project
+                      {nt('newProject')}
                     </button>
                     <button
                       onClick={handleOpenProjectFolder}
                       className="flex items-center justify-center gap-2 px-5 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg>
-                      Open Project
+                      {nt('openProject')}
                     </button>
+                    {window.electronAPI?.nightfall && <CloneProjectButton onOpen={handleOpenWithRenpyCheck} />}
                   </div>
                 )}
                 {appSettings.recentProjects.length > 0 && (
                   <div className="pt-6 border-t border-gray-200 dark:border-gray-700 text-left">
-                    <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Recent Projects</h3>
+                    <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{nt('recentProjects')}</h3>
                     <div className="space-y-1 max-h-64 overflow-y-auto">
                       {appSettings.recentProjects.map((p, i) => {
                         const folderName = p.replace(/[/\\]$/, '').split(/[/\\]/).pop();
@@ -2527,7 +2555,7 @@ const App: React.FC = () => {
       {isLoading && <LoadingOverlay progress={loadingProgress} message={loadingMessage} onCancel={handleCancelLoad} />}
       {isInitialAnalysisPending && !isLoading && <AnalysisOverlay blockCount={blocks.length} progress={analysisProgress} />}
       
-      <div className="fixed bottom-4 right-4 z-[9999] flex flex-col space-y-2 pointer-events-none">
+      <div className={`fixed bottom-4 right-4 z-[9999] flex flex-col space-y-2 pointer-events-none ${nightfallOpen ? "hidden" : ""}`}>
         {toasts.map(toast => (
           <div key={toast.id} className="pointer-events-auto">
             <Toast toast={toast} onDismiss={removeToast} />
@@ -2632,6 +2660,7 @@ const App: React.FC = () => {
           document.body
       )}
 
+      {nightfallOpen && projectRootPath && <NightfallWorkspace onSceneDirtyChange={onNightfallDirtyChange} key={projectRootPath} root={projectRootPath} dirty={dirtyBlockIds.size > 0 || dirtyEditors.size > 0 || hasUnsavedSettings} onClose={() => setNightfallOpen(false)} />}
       <SettingsModal 
         isOpen={settingsModalOpen} 
         onClose={() => closeSettingsModal()}

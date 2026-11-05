@@ -1,7 +1,8 @@
 import { spawnSync } from 'child_process';
 import console from 'console';
-import { existsSync } from 'fs';
+import { existsSync, mkdtempSync, rmSync } from 'fs';
 import path from 'path';
+import os from 'os';
 import process from 'process';
 import { clearTimeout, setTimeout } from 'timers';
 import { fileURLToPath } from 'url';
@@ -10,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** Path to the Electron main-process entry point, shared by the e2e fixtures
  *  and docs/capture_screenshots.js so both launch the app the same way. */
-export const APP_ENTRY = path.join(__dirname, '..', 'electron.js');
+export const APP_ENTRY = path.join(__dirname, '..', 'bootstrap.cjs');
 
 /** Env vars that must never reach the launched app. ELECTRON_RUN_AS_NODE=1 is
  *  inherited by shells spawned from Electron-based hosts (VS Code, agent
@@ -48,8 +49,19 @@ const appClosed = new WeakMap();
  *  its call log already includes the child's stderr (e.g. "bad option: ..."). */
 export async function launchElectron(electron, options = {}) {
   assertRendererBuilt();
-  const app = await electron.launch({ ...options, env: electronLaunchEnv(options.env) });
+  const ownedProfile = options.env?.NIGHTFALL_USER_DATA_DIR ? null : mkdtempSync(path.join(os.tmpdir(), 'nightfall-e2e-profile-'));
+  const cleanupProfile = () => {
+    if (!ownedProfile) return;
+    const resolved=path.resolve(ownedProfile);
+    if (path.dirname(resolved)!==path.resolve(os.tmpdir()) || !path.basename(resolved).startsWith('nightfall-e2e-profile-')) throw new Error('Unexpected test profile cleanup target');
+    try { rmSync(resolved, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* Antivirus can hold a completed test profile briefly. */ }
+  };
+  let app;
+  try {
+    app = await electron.launch({ ...options, env: electronLaunchEnv({ ...options.env, ...(ownedProfile ? { NIGHTFALL_USER_DATA_DIR: ownedProfile } : {}) }) });
+  } catch (error) { cleanupProfile(); throw error; }
   const closed = new Promise((resolve) => app.once('close', resolve));
+  void closed.then(cleanupProfile);
   appClosed.set(app, closed);
   return app;
 }

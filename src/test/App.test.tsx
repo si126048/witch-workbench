@@ -49,13 +49,13 @@ describe('App', () => {
 
     it('shows the no-project empty state by default', () => {
       renderApp();
-      expect(screen.getByText('No Project Open')).toBeInTheDocument();
+      expect(screen.getByText('开始你的故事')).toBeInTheDocument();
     });
 
-    it('shows "New Project" and "Open Project" buttons when electronAPI is present', () => {
+    it('shows "新建项目" and "打开项目" buttons when electronAPI is present', () => {
       renderApp();
-      expect(screen.getByRole('button', { name: /new project/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /open project/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /新建项目/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /打开项目/ })).toBeInTheDocument();
     });
 
     it('sets data-app-ready attribute after settings load', async () => {
@@ -76,7 +76,7 @@ describe('App', () => {
       renderApp();
       // title effect fires after render
       await waitFor(() => {
-        expect(document.title).toBe(`Vangard Studio ${process.env.APP_VERSION}`);
+        expect(document.title).toBe(`夜幕工作台 ${process.env.APP_VERSION}`);
       });
     });
   });
@@ -329,12 +329,12 @@ describe('App', () => {
   describe('no-project empty state', () => {
     it('shows descriptive subtitle', () => {
       renderApp();
-      expect(screen.getByText(/use the file menu or the buttons below/i)).toBeInTheDocument();
+      expect(screen.getByText('打开或创建一个 Ren’Py 项目，组织剧本、素材与演出。')).toBeInTheDocument();
     });
 
     it('does not show recent projects section when list is empty', () => {
       renderApp();
-      expect(screen.queryByText(/recent projects/i)).not.toBeInTheDocument();
+      expect(screen.queryByText('最近项目')).not.toBeInTheDocument();
     });
 
     it('shows recent projects when settings include them', async () => {
@@ -345,22 +345,22 @@ describe('App', () => {
       installElectronAPI(api);
       renderApp();
       await waitFor(() => {
-        expect(screen.getByText(/recent projects/i)).toBeInTheDocument();
+        expect(screen.getByText('最近项目')).toBeInTheDocument();
       });
       expect(screen.getByText('my-game')).toBeInTheDocument();
     });
 
-    it('clicking New Project opens the project wizard modal', async () => {
+    it('clicking 新建项目 opens the project wizard modal', async () => {
       renderApp();
-      fireEvent.click(screen.getByRole('button', { name: /new project/i }));
+      fireEvent.click(screen.getByRole('button', { name: /新建项目/ }));
       await waitFor(() => {
         expect(screen.getByText(/create new ren'py project/i)).toBeInTheDocument();
       });
     });
 
-    it('clicking Open Project calls openDirectory IPC', () => {
+    it('clicking 打开项目 calls openDirectory IPC', () => {
       renderApp();
-      fireEvent.click(screen.getByRole('button', { name: /open project/i }));
+      fireEvent.click(screen.getByRole('button', { name: /打开项目/ }));
       expect(window.electronAPI?.openDirectory).toHaveBeenCalled();
     });
   });

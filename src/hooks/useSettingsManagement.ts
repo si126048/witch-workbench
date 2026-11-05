@@ -84,7 +84,7 @@ export interface UseSettingsManagementReturn {
 export function useSettingsManagement(): UseSettingsManagementReturn {
   // --- App settings ---
   const [appSettings, updateAppSettings] = useImmer<AppSettings>({
-    theme: 'system',
+    theme: 'dark',
     isLeftSidebarOpen: true,
     leftSidebarWidth: 250,
     isRightSidebarOpen: true,
@@ -222,7 +222,7 @@ export function useSettingsManagement(): UseSettingsManagementReturn {
    */
   const resetAppSettings = () => {
     updateAppSettings(draft => {
-      draft.theme = 'system';
+      draft.theme = 'dark';
       draft.isLeftSidebarOpen = true;
       draft.leftSidebarWidth = 250;
       draft.isRightSidebarOpen = true;

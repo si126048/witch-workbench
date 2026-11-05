@@ -1,0 +1,48 @@
+const zh = {
+  appName: "夜幕工作台",
+  team: "团队同步",
+  scene: "场景演出",
+  close: "关闭",
+  refresh: "刷新",
+  welcome: "开始你的故事",
+  welcomeDescription: "打开或创建一个 Ren’Py 项目，组织剧本、素材与演出。",
+  newProject: "新建项目",
+  openProject: "打开项目",
+  recentProjects: "最近项目",
+  fetch: "获取远端",
+  pull: "快进拉取",
+  push: "推送分支",
+  merge: "合并跟踪分支",
+  commit: "提交所选文件",
+  branch: "创建任务分支",
+  rules: "配置 Git LFS",
+  noProject: "先打开一个游戏项目",
+  noGit: "当前目录不是独立 Git 仓库，请先用 Git 初始化或克隆项目。",
+  auth: "认证由系统 Git 凭据管理器或 SSH 提供。离线仍可保存与提交。",
+};
+const en: Record<keyof typeof zh, string> = {
+  appName: "Nightfall Workbench",
+  team: "Team sync",
+  scene: "Scene direction",
+  close: "Close",
+  refresh: "Refresh",
+  welcome: "Start your story",
+  welcomeDescription:
+    "Open or create a Ren’Py project to organize scripts, assets and direction.",
+  newProject: "New Project",
+  openProject: "Open Project",
+  recentProjects: "Recent Projects",
+  fetch: "Fetch",
+  pull: "Fast-forward pull",
+  push: "Push branch",
+  merge: "Merge tracking branch",
+  commit: "Commit selected files",
+  branch: "Create task branch",
+  rules: "Configure Git LFS",
+  noProject: "Open a game project first",
+  noGit: "Open an independent Git working copy.",
+  auth: "Credentials are managed by system Git or SSH. Local saves and commits work offline.",
+};
+export function nt(key: keyof typeof zh, language: "zh" | "en" = "zh") {
+  return (language === "zh" ? zh[key] : en[key]) ?? en[key];
+}

@@ -1,3 +1,4 @@
+import type { NightfallAPI } from './nightfallTypes';
 /**
  * @file types.ts
  * @description Central type definitions for the Vangard Ren'Py IDE.
@@ -1706,6 +1707,7 @@ export interface CreateProjectOptions {
 declare global {
   interface Window {
     electronAPI?: {
+          nightfall?: NightfallAPI;
           getStartupArgs?: () => Promise<{ projectPath: string | null }>;
           openDirectory: () => Promise<string | null>;
           createProject?: () => Promise<string | null>;

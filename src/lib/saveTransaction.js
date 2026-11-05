@@ -90,15 +90,17 @@ async function writeJournal(rootPath, journal, ops) {
  * `options.ops` replaces the filesystem primitives (used by the crash tests);
  * `options.beforeRename(absPath)` runs just before each target is replaced.
  */
-export async function commitSaveTransaction(rootPath, entries, options = {}) {
+async function commitSaveTransactionImpl(rootPath, entries, options = {}) {
     const ops = { ...defaultOps, ...options.ops };
     const beforeRename = options.beforeRename ?? (() => {});
 
     // Never start a new transaction on top of an unfinished one.
-    const prior = await recoverSaveTransaction(rootPath, { ops });
+    const prior = await recoverSaveTransactionImpl(rootPath, { ops });
     if (prior.status === 'failed') {
         throw new Error(`A previous save could not be completed and must be resolved first: ${prior.error}`);
     }
+    // Executed under the shared project transaction queue, before touching a journal.
+    await options.validateBeforeStage?.();
 
     // Last write wins if the same target appears twice (they would share a temp file).
     const byTarget = new Map();
@@ -174,7 +176,7 @@ async function applyCommitted(rootPath, journalEntries, ops, beforeRename = () =
  * where `files` are project-relative target paths. On 'failed' the journal is
  * left in place so recovery is retried next time and no data is discarded.
  */
-export async function recoverSaveTransaction(rootPath, options = {}) {
+async function recoverSaveTransactionImpl(rootPath, options = {}) {
     const ops = { ...defaultOps, ...options.ops };
     const beforeRename = options.beforeRename ?? (() => {});
     const journalPath = journalPathFor(rootPath);
@@ -203,4 +205,22 @@ export async function recoverSaveTransaction(rootPath, options = {}) {
     } catch (err) {
         return { status: 'failed', files, error: err.message };
     }
+}
+
+// Every caller shares this queue, including editor Save All and scene/team services.
+// A second transaction must never mistake an in-flight journal for a crashed save.
+const transactionQueues = new Map();
+function serializeTransaction(rootPath, operation) {
+    const key = path.resolve(rootPath).toLowerCase();
+    const previous = transactionQueues.get(key) ?? Promise.resolve();
+    const next = previous.catch(() => {}).then(operation);
+    transactionQueues.set(key, next);
+    void next.finally(() => { if (transactionQueues.get(key) === next) transactionQueues.delete(key); }).catch(() => {});
+    return next;
+}
+export function commitSaveTransaction(rootPath, entries, options = {}) {
+    return serializeTransaction(rootPath, () => commitSaveTransactionImpl(rootPath, entries, options));
+}
+export function recoverSaveTransaction(rootPath, options = {}) {
+    return serializeTransaction(rootPath, () => recoverSaveTransactionImpl(rootPath, options));
 }

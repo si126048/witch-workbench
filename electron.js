@@ -1,3 +1,4 @@
+import { registerNightfallHandlers } from './src/lib/nightfallService.js';
 import { logger, electronLog } from './src/lib/logger.main.js';
 import { isAppImageRuntime, shouldDisableSandbox } from './src/lib/sandboxProbe.js';
 import { classifyFsReadError } from './src/lib/fsErrorClassification.js';
@@ -25,8 +26,7 @@ if (isAppImageRuntime()) {
 
 import { app, BrowserWindow, ipcMain, dialog, Menu, protocol, shell, safeStorage, globalShortcut, Notification } from 'electron';
 
-import electronUpdaterPkg from 'electron-updater';
-const { autoUpdater } = electronUpdaterPkg;
+// Nightfall v1 uses manual updates; never contacts upstream release feeds.
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
@@ -43,6 +43,11 @@ import { atomicWriteFile, cleanupStaleTempFiles } from './src/lib/atomicFileWrit
 import { commitSaveTransaction, recoverSaveTransaction } from './src/lib/saveTransaction.js';
 import { writeSnapshot, clearSnapshot, listPending, discardPending, sweepExpired, createSessionRegistry } from './src/lib/recoveryStore.js';
 
+if (!globalThis.__nightfallBootstrap) {
+  app.setName('Nightfall Workbench');
+  app.setPath('userData', process.env.NIGHTFALL_USER_DATA_DIR || path.join(app.getPath('appData'), 'nightfall-workbench'));
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -51,7 +56,7 @@ let generateGuiImages = null;
 let sharpLoadError = null;
 
 // Register custom protocol privileges BEFORE app is ready
-protocol.registerSchemesAsPrivileged([
+if (!globalThis.__nightfallBootstrap) protocol.registerSchemesAsPrivileged([
   { 
       scheme: 'media', 
       privileges: { 
@@ -967,14 +972,6 @@ async function updateApplicationMenu() {
                 }
             },
             { type: 'separator' },
-            {
-                label: 'Check for Updates',
-                click: () => {
-                    if (app.isPackaged) {
-                        autoUpdater.checkForUpdates().catch(err => logger.error('Auto-update check failed:', err));
-                    }
-                }
-            },
             { type: 'separator' },
             ...(process.platform !== 'darwin' ? [{
                 label: 'About',
@@ -1001,7 +998,7 @@ async function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: path.join(__dirname, 'vangard.png')
+    icon: path.join(__dirname, 'nightfall.png')
   });
 
   mainWindowRef = mainWindow;
@@ -1119,7 +1116,7 @@ async function createPopoutWindow(tabId, tabType) {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: path.join(__dirname, 'vangard.png'),
+    icon: path.join(__dirname, 'nightfall.png'),
   });
 
   win.popoutTabType = tabType;
@@ -1222,6 +1219,17 @@ function applyContentSecurityPolicy(session) {
 }
 
 app.whenReady().then(async () => {
+  registerNightfallHandlers({
+    ipcMain, getRoot: () => currentProjectRoot,
+    recoveryRoot: path.join(app.getPath('userData'), 'scene-recovery'),
+    authorizeProject: vetProjectRoot,
+    chooseCloneDirectory: async () => {
+      const result = await dialog.showOpenDialog(mainWindowRef, { title: '为团队工作副本选择空文件夹', properties: ['openDirectory', 'createDirectory'] });
+      return result.canceled ? null : result.filePaths[0];
+    },
+    isTrusted: sender => sender === mainWindowRef?.webContents,
+    sendProgress: text => { if (mainWindowRef && !mainWindowRef.isDestroyed()) mainWindowRef.webContents.send('nightfall:progress', text); },
+  });
   sweepExpired({ recoveryDir }).catch(err => logger.warn('Recovery snapshot expiry sweep failed:', err));
   // Trust the --project CLI flag as a vetted root up front (see
   // vettedProjectRoots above) -- it's process.argv, not renderer input.
@@ -2183,50 +2191,8 @@ app.whenReady().then(async () => {
 
   createWindow();
 
-  // --- Auto-updater ---
-  // Only run in packaged builds; skip in dev to avoid noise.
-  if (app.isPackaged) {
-    autoUpdater.on('update-available', (info) => {
-      if (mainWindowRef) mainWindowRef.webContents.send('update-available', info.version);
-    });
-    autoUpdater.on('update-not-available', () => {
-      if (mainWindowRef) mainWindowRef.webContents.send('update-not-available');
-    });
-    autoUpdater.on('update-downloaded', (info) => {
-      if (mainWindowRef) mainWindowRef.webContents.send('update-downloaded', info.version);
-    });
-    autoUpdater.on('error', (err) => {
-      const msg = err?.message ?? '';
-      // Transient server errors (5xx) from GitHub — log as warning, don't surface to user.
-      const isTransient = /HttpError:\s*5\d{2}/.test(msg);
-      // No latest.yml means no release on this channel yet — treat as up to date.
-      const isNoRelease = msg.includes('latest.yml');
-      if (isTransient) {
-        logger.warn('Auto-updater: transient server error, will retry next launch', err);
-        return;
-      }
-      if (isNoRelease) {
-        logger.info('Auto-updater: no release published yet, skipping update check');
-        if (mainWindowRef) mainWindowRef.webContents.send('update-not-available');
-        return;
-      }
-      logger.error('Auto-updater error:', err);
-      if (mainWindowRef) {
-        mainWindowRef.webContents.send('update-error');
-      }
-    });
-    // Delay the initial check so it doesn't compete with app startup.
-    setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 5000);
-  }
+  // Automatic updates are intentionally disabled in Nightfall v1.
 
-  ipcMain.on('install-update', () => {
-    try {
-      autoUpdater.quitAndInstall();
-    } catch (error) {
-      logger.error('Failed to install update:', error);
-      dialog.showErrorBox('Update Failed', `Could not install update: ${error.message}`);
-    }
-  });
 
   ipcMain.handle('shell:openExternal', async (_event, url) => {
     const urlErr = validateExternalUrl(url);

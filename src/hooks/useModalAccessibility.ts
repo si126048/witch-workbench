@@ -54,7 +54,7 @@ export function useModalAccessibility({ isOpen, onClose, titleId, contentRef: ex
       if (e.key === 'Tab' && contentRef.current) {
         const focusableElements = Array.from(
           contentRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-        ).filter(el => !el.hasAttribute('disabled'));
+        ).filter(el => !el.matches(':disabled') && !el.closest('[hidden], .hidden, [aria-hidden="true"]'));
 
         if (focusableElements.length === 0) return;
 

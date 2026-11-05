@@ -1,3 +1,4 @@
+import WorkbenchIcon from './WorkbenchIcon';
 /**
  * @file StoryCanvas.tsx
  * @description Main visual canvas for editing Ren'Py projects.
@@ -1165,8 +1166,8 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
         {blocks.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div className="bg-secondary border border-primary rounded-xl shadow-xl p-8 max-w-sm text-center pointer-events-auto">
-            <div className="text-4xl mb-3">📄</div>
-            <h3 className="text-lg font-bold text-primary mb-1">✨ Your story begins here</h3>
+            <div className="mb-3 flex justify-center"><WorkbenchIcon name="document" className="h-10 w-10 text-slate-400" /></div>
+            <h3 className="text-lg font-bold text-primary mb-1">从第一个场景开始</h3>
             <p className="text-sm text-secondary mb-4">Press N or click 'New Scene' to create your opening.</p>
             <div className="text-xs text-secondary space-y-1 text-left bg-primary/5 rounded-lg p-3 mb-2">
               <div><kbd className="font-mono bg-primary/10 px-1 rounded">N</kbd> — New scene</div>

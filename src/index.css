@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Nightfall's focused production surfaces use quieter controls and scrollbars. */
+.nightfall-workspace { color-scheme: dark; }
+.nightfall-workspace ::-webkit-scrollbar { width: 8px; height: 8px; }
+.nightfall-workspace ::-webkit-scrollbar-track { background: #0f172a; }
+.nightfall-workspace ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+.nightfall-workspace input[type="range"] { accent-color: #6ee7b7; }
+.nightfall-workspace button:focus-visible,
+.nightfall-workspace input:focus-visible,
+.nightfall-workspace select:focus-visible { outline: 2px solid #6ee7b7; outline-offset: 3px; }
+
 /* --- Layout Reset --- */
 html, body, #root {
   height: 100%;

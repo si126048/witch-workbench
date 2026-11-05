@@ -27,7 +27,7 @@ if (typeof globalThis.FileSystemDirectoryHandle === 'undefined') {
 // Individual tests that need it should import and install the mock from
 // test/mocks/electronAPI.ts. We explicitly set it to undefined here to
 // match the browser-fallback code path in the app.
-Object.defineProperty(window, 'electronAPI', {
+if (typeof window !== 'undefined') Object.defineProperty(window, 'electronAPI', {
   value: undefined,
   writable: true,
   configurable: true,
@@ -45,12 +45,12 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
 
 // Pointer capture APIs are not implemented in jsdom — stub them so canvas
 // pointer-down handlers don't throw when tests fire pointer events.
-if (!HTMLElement.prototype.setPointerCapture) {
+if (typeof HTMLElement !== 'undefined' && !HTMLElement.prototype.setPointerCapture) {
   HTMLElement.prototype.setPointerCapture = function () {};
 }
-if (!HTMLElement.prototype.releasePointerCapture) {
+if (typeof HTMLElement !== 'undefined' && !HTMLElement.prototype.releasePointerCapture) {
   HTMLElement.prototype.releasePointerCapture = function () {};
 }
-if (!HTMLElement.prototype.hasPointerCapture) {
+if (typeof HTMLElement !== 'undefined' && !HTMLElement.prototype.hasPointerCapture) {
   HTMLElement.prototype.hasPointerCapture = function () { return false; };
 }

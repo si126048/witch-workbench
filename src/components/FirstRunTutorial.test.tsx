@@ -17,14 +17,14 @@ describe('FirstRunTutorial', () => {
 
   it('shows the welcome modal on a fresh install (no completion flag in localStorage)', async () => {
     render(<FirstRunTutorial onComplete={vi.fn()} />);
-    expect(await screen.findByText('Welcome to Vangard Studio!', {}, { timeout: 2000 })).toBeTruthy();
+    expect(await screen.findByText('欢迎使用夜幕工作台', {}, { timeout: 2000 })).toBeTruthy();
   });
 
   it('does not show the welcome modal when the tutorial was already completed', async () => {
     localStorage.setItem(TUTORIAL_STORAGE_KEY, 'true');
     render(<FirstRunTutorial onComplete={vi.fn()} />);
     await new Promise(resolve => setTimeout(resolve, 1100));
-    expect(screen.queryByText('Welcome to Vangard Studio!')).toBeNull();
+    expect(screen.queryByText('欢迎使用夜幕工作台')).toBeNull();
   });
 
   it('sets the completion flag and calls onComplete when skipped', async () => {
@@ -43,7 +43,7 @@ describe('FirstRunTutorial', () => {
     localStorage.setItem(TUTORIAL_STORAGE_KEY, 'true');
     render(<FirstRunTutorial onComplete={vi.fn()} forceShow />);
     await waitFor(() => {
-      expect(screen.getByText('Welcome to Vangard Studio!')).toBeTruthy();
+      expect(screen.getByText('欢迎使用夜幕工作台')).toBeTruthy();
     });
   });
 });

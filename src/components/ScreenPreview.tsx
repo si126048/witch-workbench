@@ -1,3 +1,4 @@
+import WorkbenchIcon from './WorkbenchIcon';
 /**
  * ScreenPreview — Read-only HTML/CSS approximation of a Ren'Py screen.
  *
@@ -218,7 +219,7 @@ function PreviewWidget({
       if (widget.imagePath) {
         return (
           <div style={{ ...base, width: imgFallbackW, height: imgFallbackH, border: `${Math.max(1, r(2))}px dashed #f59e0b`, borderRadius: br, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', fontSize: fsSm, gap: r(4) }}>
-            <span style={{ fontSize: r(24) }}>⚠</span>
+            <WorkbenchIcon name="alert" className="h-6 w-6" />
             <span style={{ maxWidth: r(160), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{widget.imagePath.split('/').pop()}</span>
           </div>
         );
@@ -315,7 +316,7 @@ function PreviewWidget({
     case 'imagemap':
       return (
         <div style={{ ...base, border: `${Math.max(1, r(2))}px solid #047857`, borderRadius: br, padding: r(8), minWidth: r(200), minHeight: r(150), background: 'rgba(4,120,87,0.04)' }}>
-          <div style={{ fontSize: r(11), color: '#6ee7b7', fontFamily: 'monospace', marginBottom: r(4) }}>🗺 imagemap</div>
+          <div style={{ fontSize: r(11), color: '#6ee7b7', fontFamily: 'monospace', marginBottom: r(4) }}>Image map</div>
           {children}
         </div>
       );
@@ -353,7 +354,7 @@ function PreviewWidget({
     case 'on':
       return (
         <div style={{ ...base, border: `${Math.max(1, r(1))}px dashed #ca8a04`, borderRadius: br, padding: `${r(6)}px ${r(14)}px`, background: 'rgba(202,138,4,0.07)', fontSize: r(16), color: '#fde68a', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
-          ⚡ on "{widget.onEvent ?? ''}"
+          Event: "{widget.onEvent ?? ''}"
         </div>
       );
     case 'default':

@@ -78,3 +78,10 @@ docs/marketing/.venv-chatterbox/
 .worktrees/
 .superpowers/
 bench-results/
+
+# Local workbench validation and Beads locks
+.beads.gate.lock
+acceptance-output/
+delivery/
+
+.beads/.auto-import-issues.jsonl
