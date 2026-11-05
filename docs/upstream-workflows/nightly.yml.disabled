@@ -1,0 +1,154 @@
+name: Nightly Build
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  schedule:
+    - cron: '0 4 * * *' # 4am UTC daily
+  workflow_dispatch:
+
+jobs:
+  gate:
+    name: Release Gate
+    # Canonical gate: CONTRIBUTING.md § Release Gate / npm run gate.
+    uses: ./.github/workflows/gate.yml
+
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    needs: gate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+          - os: ubuntu-latest
+            platform: linux
+          - os: macos-latest
+            platform: macos-arm64
+          - os: macos-15-intel
+            platform: macos-intel
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and package
+        # --publish=never: see release.yml's identical flag -- electron-builder
+        # otherwise tries to auto-publish itself (package.json's build.publish
+        # config) independent of this workflow's own "Publish Nightly Release"
+        # step, creating a stray draft release per run.
+        run: npm run dist -- --publish=never
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rename release artifacts to static names
+        shell: bash
+        run: |
+          PLATFORM="${{ matrix.platform }}"
+          mkdir -p final-artifacts
+          # We move files to a new folder with generic names (no version, no date)
+          for f in release/*.exe release/*.dmg release/*.AppImage release/*.deb release/*.zip; do
+            [ -f "$f" ] || continue
+            ext="${f##*.}"
+            mv "$f" "final-artifacts/Vangard_Studio_Nightly_${PLATFORM}.${ext}"
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          # This name is internal to this specific workflow run
+          name: build-artifacts-${{ matrix.platform }}
+          path: final-artifacts/*
+
+  publish:
+    name: Publish Nightly Release
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          # This downloads ALL artifacts from the 'build' jobs
+          path: artifacts
+          merge-multiple: true
+
+      - name: Verify and List Artifacts
+        # This step helps you see in the logs exactly what was downloaded
+        run: |
+          echo "Files downloaded:"
+          ls -R artifacts/
+
+      - name: Compute SHA256 checksums
+        run: |
+          cd artifacts
+          # Use a clean list to avoid self-referencing if this runs twice
+          rm -f SHA256SUMS.txt
+          sha256sum * > SHA256SUMS.txt
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          CHANGES=$(git log --since="25 hours ago" --pretty=format:"- %s (%h)" --no-merges)
+          if [ -z "$CHANGES" ]; then
+            CHANGES="- No new commits in the last 24 hours"
+          fi
+          echo "changes<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Publish rolling nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: nightly
+          # Forces the tag to point to the current commit of the nightly run
+          target_commitish: ${{ github.sha }}
+          name: "Nightly Build (Latest)"
+          prerelease: true
+          make_latest: false
+          overwrite_files: true
+          fail_on_unmatched_files: true
+          body: |
+            > ⚠️ **Pre-release for power users.** 
+            > This release is updated every 24 hours. Files here always reflect the latest `main` branch.
+
+            ## Changes in the last 24 hours
+            ${{ steps.changelog.outputs.changes }}
+
+            ## Platform downloads
+            | Platform | Filename |
+            |---|---|
+            | macOS (Apple Silicon) | `Vangard_Studio_Nightly_macos-arm64.dmg` |
+            | macOS (Intel) | `Vangard_Studio_Nightly_macos-intel.dmg` |
+            | Windows | `Vangard_Studio_Nightly_win.exe` |
+            | Linux (Universal) | `Vangard_Studio_Nightly_linux.AppImage` |
+            | Linux (Debian/Ubuntu) | `Vangard_Studio_Nightly_linux.deb` |
+
+            **Checksums:** See `SHA256SUMS.txt` below.
+          files: |
+            artifacts/*.exe
+            artifacts/*.dmg
+            artifacts/*.AppImage
+            artifacts/*.deb
+            artifacts/SHA256SUMS.txt
