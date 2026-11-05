@@ -12,6 +12,7 @@ import { useDualPane } from '@/contexts/DualPaneContext';
 type SaveStatus = 'saving' | 'saved' | 'error';
 
 interface ToolbarProps {
+  onOpenTeamHub?: () => void;
   onOpenNightfall?: () => void;
   activeCanvasType: 'story' | 'route' | 'choice' | 'notecard' | null;
   projectRootPath: string | null;
@@ -64,6 +65,7 @@ const ToolbarButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
 const Toolbar: React.FC<ToolbarProps> = ({
   projectRootPath,
   onOpenNightfall,
+  onOpenTeamHub,
   activeCanvasType,
   hasUnsavedSettings,
   saveStatus,
@@ -139,6 +141,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
       {/* ── Far left: logo ── */}
       <div className="flex items-center shrink-0">
         <WorkbenchIcon name="moon" className="h-6 w-6 text-emerald-300" /><span className="ml-2 font-semibold text-primary">夜幕</span><button className="ml-4 flex items-center gap-2 px-3 py-2 rounded bg-slate-800 text-emerald-300 text-sm disabled:opacity-40" disabled={!projectRootPath} onClick={onOpenNightfall}><WorkbenchIcon name="layers" />制作工作台</button>
+        {onOpenTeamHub && <ToolbarButton onClick={onOpenTeamHub} title="团队协作启动" aria-label="团队协作启动"><WorkbenchIcon name="branch" /></ToolbarButton>}
         <div className="h-6 w-px bg-primary shrink-0 ml-3" />
       </div>
 

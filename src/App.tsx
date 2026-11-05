@@ -1,5 +1,6 @@
 import { nt } from './lib/nightfallStrings';
 import CloneProjectButton from './components/CloneProjectButton';
+import TeamHub from './components/TeamHub';
 import NightfallWorkspace from './components/NightfallWorkspace';
 // REVIEW: App.tsx is the app's central state hub (see CLAUDE.md's State Hub
 // table) and was as large as ~5,300 lines pre-1.0; a tracked refactor
@@ -2102,6 +2103,7 @@ const App: React.FC = () => {
     untitledFiles, updateUntitledContent, setUntitledDirty, saveUntitledFile,
   });
   const [nightfallOpen, setNightfallOpen] = useState(false);
+  const [teamHubOpen, setTeamHubOpen] = useState(false);
   const focusedTabId = activePaneId === 'secondary' && splitLayout !== 'none'
     ? secondaryActiveTabId
     : activeTabId;
@@ -2194,6 +2196,7 @@ const App: React.FC = () => {
       data-project-ready={(!isLoading && !isInitialAnalysisPending && !!projectRootPath) ? "true" : undefined}
       className={`fixed inset-0 flex flex-col bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 ${appSettings.theme}`}>
       <Toolbar
+        onOpenTeamHub={() => setTeamHubOpen(true)}
         onOpenNightfall={() => setNightfallOpen(true)}
         activeCanvasType={activeCanvasType}
         projectRootPath={projectRootPath}
@@ -2323,6 +2326,7 @@ const App: React.FC = () => {
                       {nt('openProject')}
                     </button>
                     {window.electronAPI?.nightfall && <CloneProjectButton onOpen={handleOpenWithRenpyCheck} />}
+                    {window.electronAPI?.nightfall?.hub && <button className="px-4 py-2 rounded-md border border-emerald-700 text-emerald-300 bg-emerald-950/40" onClick={() => setTeamHubOpen(true)}>团队协作启动</button>}
                   </div>
                 )}
                 {appSettings.recentProjects.length > 0 && (
@@ -2555,7 +2559,7 @@ const App: React.FC = () => {
       {isLoading && <LoadingOverlay progress={loadingProgress} message={loadingMessage} onCancel={handleCancelLoad} />}
       {isInitialAnalysisPending && !isLoading && <AnalysisOverlay blockCount={blocks.length} progress={analysisProgress} />}
       
-      <div className={`fixed bottom-4 right-4 z-[9999] flex flex-col space-y-2 pointer-events-none ${nightfallOpen ? "hidden" : ""}`}>
+      <div className={`fixed bottom-4 right-4 z-[9999] flex flex-col space-y-2 pointer-events-none ${nightfallOpen || teamHubOpen ? "hidden" : ""}`}>
         {toasts.map(toast => (
           <div key={toast.id} className="pointer-events-auto">
             <Toast toast={toast} onDismiss={removeToast} />
@@ -2661,6 +2665,7 @@ const App: React.FC = () => {
       )}
 
       {nightfallOpen && projectRootPath && <NightfallWorkspace onSceneDirtyChange={onNightfallDirtyChange} key={projectRootPath} root={projectRootPath} dirty={dirtyBlockIds.size > 0 || dirtyEditors.size > 0 || hasUnsavedSettings} onClose={() => setNightfallOpen(false)} />}
+      {window.electronAPI?.nightfall?.hub && <TeamHub open={teamHubOpen} setOpen={setTeamHubOpen} root={projectRootPath} dirty={nightfallDirtyRef.current || dirtyBlockIds.size > 0 || dirtyEditors.size > 0 || hasUnsavedSettings} onOpen={handleOpenWithRenpyCheck} sdkPath={appSettings.renpyPath} onSave={async () => { await handleSaveAll(); }} onSdk={async () => { const selected = await window.electronAPI!.selectRenpy(); if (selected) updateAppSettings(draft => { draft.renpyPath = selected; }); }} />}
       <SettingsModal 
         isOpen={settingsModalOpen} 
         onClose={() => closeSettingsModal()}

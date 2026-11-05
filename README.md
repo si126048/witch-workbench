@@ -2,7 +2,7 @@
 
 Windows 本地 Ren’Py 制作工作台，基于 Vangard Studio。使用 Electron、React、TypeScript 和 Monaco，增加中文深色制作界面、版本化场景演出及 Git / Git LFS 团队同步。无需专用协作后端。
 
-本版为 0.1.0，手动升级、未签名 Windows 安装包。实际验证范围和限制见随交付提供的验收记录，不将未验证能力视为生产可用。
+本版为 0.2.0，手动升级、未签名 Windows 安装包。新增负责人建队、成员加入包和日常启动快捷方式；实际验证范围和限制见随交付提供的验收记录，不将未验证能力视为生产可用。
 
 ## 使用与分发
 
@@ -11,7 +11,7 @@ Windows 本地 Ren’Py 制作工作台，基于 Vangard Studio。使用 Electro
 - [上游版权声明](NOTICE-NIGHTFALL.md) 与 [AGPL 许可证](LICENSE)
 - [保留的上游说明](docs/UPSTREAM_README.md)
 
-安装包位于本机构建的 `release/Nightfall_Workbench_Windows_0.1.0.exe`。交付目录 `delivery` 包含分发材料。尚未上传公共下载站点；负责人可将安装包、匹配源码、许可证、说明书和校验文件放入团队网盘或自己仓库的 Releases。游戏项目使用独立仓库，成员分别克隆工作副本。
+安装包位于本机构建的 `release/Nightfall_Workbench_Windows_0.2.0.exe`。新版交付目录为 `delivery/0.2.0`，旧的 0.1.0 材料保留。尚未上传公共下载站点；负责人可将安装包、匹配源码、许可证、说明书和校验文件放入团队网盘或自己仓库的 Releases。游戏项目使用独立仓库，成员分别克隆工作副本。团队启动向导用法见说明书第 11 节。
 
 ## 开发与验证
 

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
 import { execFile, spawn } from "node:child_process";
-const installer = path.resolve("release/Nightfall_Workbench_Windows_0.1.0.exe");
+const installer = path.resolve("release/Nightfall_Workbench_Windows_0.2.0.exe");
 const cache = path.resolve("../.cache/witch-tools");
 const target = path.join(cache, "installed-nightfall");
 if (path.dirname(target) !== cache)
@@ -63,6 +63,7 @@ try {
         : reject(new Error(`Installed application test exited ${code}`)),
     );
   });
+  await execute(path.join(process.env.SystemRoot || 'C:/Windows', 'System32/WindowsPowerShell/v1.0/powershell.exe'), ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.resolve('scripts/verify-team-launcher.ps1'), '-LauncherPath', path.join(target, 'resources/team-launcher/Start-Team.ps1'), '-ExpectedExecutable', executable]);
   verified = true;
   await fs.mkdir("acceptance-output", { recursive: true });
   await fs.writeFile(

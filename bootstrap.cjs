@@ -23,6 +23,30 @@ protocol.registerSchemesAsPrivileged([
   },
 ]);
 globalThis.__nightfallBootstrap = true;
+function teamArgument(argv) {
+  const combined = argv.find((argument) => argument.startsWith("--team="));
+  if (combined) return combined.slice("--team=".length) || null;
+  const index = argv.indexOf("--team");
+  const value = index >= 0 ? argv[index + 1] : null;
+  return value && !value.startsWith("--") ? value : null;
+}
+globalThis.__nightfallTeamRequest = teamArgument(process.argv);
+const primaryInstance = app.requestSingleInstanceLock({
+  teamRequest: globalThis.__nightfallTeamRequest,
+});
+if (!primaryInstance) app.exit(0);
+else
+  app.on(
+    "second-instance",
+    (_event, _argv, _workingDirectory, additionalData) => {
+      // Chromium may reorder argv; additionalData preserves the original request.
+      globalThis.__nightfallTeamRequest =
+        typeof additionalData?.teamRequest === "string"
+          ? additionalData.teamRequest
+          : null;
+      app.emit("nightfall-team-request");
+    },
+  );
 
 let reporting = false;
 function fatal(error) {
@@ -46,4 +70,4 @@ function fatal(error) {
 }
 process.on("uncaughtException", fatal);
 process.on("unhandledRejection", fatal);
-import("./electron.js").catch(fatal);
+if (primaryInstance) import("./electron.js").catch(fatal);

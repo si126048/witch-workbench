@@ -2,6 +2,8 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   nightfall: {
+    hub: (action, ...args) => ipcRenderer.invoke('nightfall:hub-' + action, ...args),
+    onTeamRequest: callback => { const handler = () => callback(); ipcRenderer.on('nightfall:team-request', handler); return () => ipcRenderer.removeListener('nightfall:team-request', handler); },
     clone: remote => ipcRenderer.invoke('nightfall:clone', remote),
     init: () => ipcRenderer.invoke('nightfall:init'),
     status: () => ipcRenderer.invoke('nightfall:status'),

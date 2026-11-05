@@ -71,6 +71,11 @@ export interface RulesPreview {
 export type BridgeResult<T> =
   { ok: true; value: T } | { ok: false; error: string };
 export interface NightfallAPI {
+  hub<K extends keyof TeamHubCommands>(
+    action: K,
+    ...args: TeamHubCommands[K]["args"]
+  ): Promise<BridgeResult<TeamHubCommands[K]["result"]>>;
+  onTeamRequest(callback: () => void): () => void;
   clone(remote: string): Promise<BridgeResult<string | null>>;
   init(): Promise<BridgeResult<string>>;
   status(): Promise<BridgeResult<TeamStatus>>;
@@ -97,4 +102,38 @@ export interface NightfallAPI {
   >;
   sceneDraftClear(id: string): Promise<BridgeResult<void>>;
   onProgress(callback: (text: string) => void): () => void;
+}
+
+export interface TeamProfile {
+  kind: "nightfall-team";
+  version: 1;
+  name: string;
+  remote: string;
+  branch: string;
+  sdkVersion: string;
+}
+export interface TeamLaunch {
+  profile: TeamProfile;
+  root: string | null;
+}
+export interface TeamReadiness {
+  git: string | null;
+  lfs: string | null;
+  name: string;
+  email: string;
+}
+export interface TeamHubCommands {
+  environment: { args: []; result: TeamReadiness };
+  import: { args: []; result: TeamProfile | null };
+  startup: { args: []; result: TeamLaunch | null };
+  recent: { args: []; result: TeamLaunch[] };
+  configure: { args: [TeamProfile]; result: TeamProfile };
+  export: { args: [TeamProfile, boolean]; result: string | null };
+  join: { args: [TeamProfile]; result: TeamLaunch | null };
+  identity: { args: [string, string, string]; result: void };
+  daily: {
+    args: [string];
+    result: { root: string; warning: string; status: TeamStatus };
+  };
+  shortcut: { args: [string, TeamProfile]; result: string | null };
 }

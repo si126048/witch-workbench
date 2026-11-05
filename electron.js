@@ -1,4 +1,5 @@
 import { registerNightfallHandlers } from './src/lib/nightfallService.js';
+import { registerTeamHub } from './src/lib/teamHubService.js';
 import { logger, electronLog } from './src/lib/logger.main.js';
 import { isAppImageRuntime, shouldDisableSandbox } from './src/lib/sandboxProbe.js';
 import { classifyFsReadError } from './src/lib/fsErrorClassification.js';
@@ -1219,6 +1220,18 @@ function applyContentSecurityPolicy(session) {
 }
 
 app.whenReady().then(async () => {
+  registerTeamHub({
+    ipcMain, isTrusted: sender => sender === mainWindowRef?.webContents,
+    getRoot: () => currentProjectRoot, guardRoot: guardVettedProjectRoot, authorizeProject: vetProjectRoot,
+    userData: app.getPath('userData'), baseDirectory: app.getPath('home'),
+    resources: app.isPackaged ? path.join(process.resourcesPath, 'team-launcher') : path.join(__dirname, 'resources/team-launcher'),
+    consumeStartup: () => { const request = globalThis.__nightfallTeamRequest; globalThis.__nightfallTeamRequest = null; return request; },
+    chooseDirectory: async title => { const result = await dialog.showOpenDialog(mainWindowRef, { title, properties: ['openDirectory', 'createDirectory'] }); return result.canceled ? null : result.filePaths[0]; },
+    chooseFile: async (title, filters) => { const result = await dialog.showOpenDialog(mainWindowRef, { title, filters, properties: ['openFile'] }); return result.canceled ? null : result.filePaths[0]; },
+    chooseSave: async (title, defaultPath, filters) => { const result = await dialog.showSaveDialog(mainWindowRef, { title, defaultPath, filters }); return result.canceled ? null : result.filePath; },
+    shortcut: async (destination, launch) => { const prefix = app.isPackaged ? '' : `"${path.join(__dirname, 'bootstrap.cjs')}" `; if (!shell.writeShortcutLink(destination, 'create', { target: process.execPath, args: `${prefix}--team "${launch}"`, description: '夜幕团队项目：获取远端状态并打开本地工作副本' })) throw new Error('快捷方式创建失败。'); },
+  });
+  app.on('nightfall-team-request', () => { if (mainWindowRef && !mainWindowRef.isDestroyed()) { mainWindowRef.show(); mainWindowRef.focus(); mainWindowRef.webContents.send('nightfall:team-request'); } });
   registerNightfallHandlers({
     ipcMain, getRoot: () => currentProjectRoot,
     recoveryRoot: path.join(app.getPath('userData'), 'scene-recovery'),
