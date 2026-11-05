@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ImageThumbnail.tsx
  * @description Single image tile in the `ImageManager` grid view (~60 lines).
@@ -36,7 +37,7 @@ const ImageThumbnail: React.FC<ImageThumbnailProps> = ({ image, isSelected, onSe
       {image.dataUrl ? (
         <img src={image.dataUrl} alt={image.fileName} className="w-full h-full object-cover" loading="lazy" />
       ) : (
-         <div className="w-full h-full flex items-center justify-center text-red-500" title="Image URL not available">
+         <div className="w-full h-full flex items-center justify-center text-red-500" title={uiText("Image URL not available")}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
         </div>
       )}

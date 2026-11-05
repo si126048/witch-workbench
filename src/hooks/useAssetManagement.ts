@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file useAssetManagement.ts
  * @description Custom hook for managing project assets (images and audios)
@@ -248,11 +249,11 @@ export function useAssetManagement({
               return next;
             });
             if (cancelled) {
-              addToast('Scan cancelled — showing partial results.', 'warning');
+              addToast(uiText("Scan cancelled — showing partial results."), 'warning');
             } else if (truncated) {
-              addToast('Scan stopped early: too many files in that directory. Showing partial results.', 'warning');
+              addToast(uiText("Scan stopped early: too many files in that directory. Showing partial results."), 'warning');
             } else if (errors && errors.length > 0) {
-              addToast(`Skipped ${errors.length} file${errors.length === 1 ? '' : 's'} that could not be read.`, 'warning');
+              addToast(uiText("Skipped {value0} file{value1} that could not be read.", { value0: errors.length, value1: errors.length === 1 ? '' : 's' }), 'warning');
             }
           } finally {
             perfRecorders.recordScanEnd();
@@ -264,7 +265,7 @@ export function useAssetManagement({
         }
       } catch (err) {
         logger.error('Failed to scan image directory:', err);
-        addToast('Failed to scan image directory', 'error');
+        addToast(uiText("Failed to scan image directory"), 'error');
       }
     }
   }, [addToast, perfRecorders, setHasUnsavedSettings, setIsScanningAssets]);
@@ -333,7 +334,7 @@ export function useAssetManagement({
         setFileSystemTree(freshTree);
       } catch (err) {
         logger.error('Failed to copy images to project:', err);
-        addToast('Failed to copy images to project', 'error');
+        addToast(uiText("Failed to copy images to project"), 'error');
       }
     }
   }, [projectRootPath, addToast, setFileSystemTree]);
@@ -360,11 +361,11 @@ export function useAssetManagement({
               return next;
             });
             if (cancelled) {
-              addToast('Scan cancelled — showing partial results.', 'warning');
+              addToast(uiText("Scan cancelled — showing partial results."), 'warning');
             } else if (truncated) {
-              addToast('Scan stopped early: too many files in that directory. Showing partial results.', 'warning');
+              addToast(uiText("Scan stopped early: too many files in that directory. Showing partial results."), 'warning');
             } else if (errors && errors.length > 0) {
-              addToast(`Skipped ${errors.length} file${errors.length === 1 ? '' : 's'} that could not be read.`, 'warning');
+              addToast(uiText("Skipped {value0} file{value1} that could not be read.", { value0: errors.length, value1: errors.length === 1 ? '' : 's' }), 'warning');
             }
           } finally {
             perfRecorders.recordScanEnd();
@@ -376,7 +377,7 @@ export function useAssetManagement({
         }
       } catch (err) {
         logger.error('Failed to scan audio directory:', err);
-        addToast('Failed to scan audio directory', 'error');
+        addToast(uiText("Failed to scan audio directory"), 'error');
       }
     }
   }, [addToast, perfRecorders, setHasUnsavedSettings, setIsScanningAssets]);
@@ -445,7 +446,7 @@ export function useAssetManagement({
         setFileSystemTree(freshTree);
       } catch (err) {
         logger.error('Failed to copy audio to project:', err);
-        addToast('Failed to copy audio to project', 'error');
+        addToast(uiText("Failed to copy audio to project"), 'error');
       }
     }
   }, [projectRootPath, addToast, setFileSystemTree]);
@@ -520,13 +521,13 @@ export function useAssetManagement({
           }
           return next;
         });
-        addToast('Image copied to project', 'success');
+        addToast(uiText("Image copied to project"), 'success');
         const freshTree = await window.electronAPI.refreshProjectTree(projectRootPath);
         setFileSystemTree(freshTree);
       }
     } catch (err) {
       logger.error('Failed to copy image to project:', err);
-      addToast('Failed to copy image to project', 'error');
+      addToast(uiText("Failed to copy image to project"), 'error');
     }
   }, [projectRootPath, addToast, setFileSystemTree, setImages]);
 
@@ -564,7 +565,7 @@ export function useAssetManagement({
       return newImage;
     } catch (err) {
       logger.error('Failed to import portrait image:', err);
-      addToast('Failed to import portrait image', 'error');
+      addToast(uiText("Failed to import portrait image"), 'error');
       return null;
     }
   }, [projectRootPath, addToast, setFileSystemTree, setImages]);
@@ -639,13 +640,13 @@ export function useAssetManagement({
           }
           return next;
         });
-        addToast('Audio copied to project', 'success');
+        addToast(uiText("Audio copied to project"), 'success');
         const freshTree = await window.electronAPI.refreshProjectTree(projectRootPath);
         setFileSystemTree(freshTree);
       }
     } catch (err) {
       logger.error('Failed to copy audio to project:', err);
-      addToast('Failed to copy audio to project', 'error');
+      addToast(uiText("Failed to copy audio to project"), 'error');
     }
   }, [projectRootPath, addToast, setFileSystemTree, setAudios]);
 

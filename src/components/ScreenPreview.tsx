@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import WorkbenchIcon from './WorkbenchIcon';
 /**
  * ScreenPreview — Read-only HTML/CSS approximation of a Ren'Py screen.
@@ -173,7 +174,7 @@ function PreviewWidget({
       const tfs = sp?.fontSize != null ? r(sp.fontSize) : fs;
       return (
         <div style={{ ...base, color: sp?.color ?? '#d1d5db', fontSize: tfs, fontWeight: sp?.bold ? 'bold' : undefined, fontStyle: sp?.italic ? 'italic' : undefined, padding: `${r(6)}px ${r(12)}px`, border: `${Math.max(1, r(1))}px solid #6b7280`, borderRadius: br, background: sp?.background, display: 'inline-block', whiteSpace: 'nowrap' }}>
-          {widget.text || 'Label'}
+          {widget.text || uiText("Label")}
         </div>
       );
     }
@@ -184,7 +185,7 @@ function PreviewWidget({
       const padY = sp?.ypadding != null ? r(sp.ypadding) : r(10);
       return (
         <div style={{ ...base, background: sp?.background ?? '#c2410c', color: sp?.color ?? 'white', padding: `${padY}px ${padX}px`, borderRadius: br, fontSize: tfs, fontWeight: sp?.bold ? 'bold' : undefined, fontStyle: sp?.italic ? 'italic' : undefined, display: 'inline-block', whiteSpace: 'nowrap' }}>
-          {widget.text || 'Button'}
+          {widget.text || uiText("Button")}
         </div>
       );
     }
@@ -226,8 +227,7 @@ function PreviewWidget({
       }
       return (
         <div style={{ ...base, width: imgFallbackW, height: imgFallbackH, border: `${Math.max(1, r(2))}px dashed #059669`, borderRadius: br, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6ee7b7', fontSize: fsSm }}>
-          add image
-        </div>
+          {uiText("add image")}</div>
       );
     }
     case 'imagebutton':
@@ -316,7 +316,7 @@ function PreviewWidget({
     case 'imagemap':
       return (
         <div style={{ ...base, border: `${Math.max(1, r(2))}px solid #047857`, borderRadius: br, padding: r(8), minWidth: r(200), minHeight: r(150), background: 'rgba(4,120,87,0.04)' }}>
-          <div style={{ fontSize: r(11), color: '#6ee7b7', fontFamily: 'monospace', marginBottom: r(4) }}>Image map</div>
+          <div style={{ fontSize: r(11), color: '#6ee7b7', fontFamily: 'monospace', marginBottom: r(4) }}>{uiText("Image map")}</div>
           {children}
         </div>
       );
@@ -348,13 +348,12 @@ function PreviewWidget({
     case 'dismiss':
       return (
         <div style={{ ...base, border: `${Math.max(1, r(1))}px dashed #b91c1c`, borderRadius: br, padding: `${r(6)}px ${r(14)}px`, background: 'rgba(185,28,28,0.08)', fontSize: fsSm, color: '#fca5a5', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
-          ✕ dismiss
-        </div>
+          {uiText("✕ dismiss")}</div>
       );
     case 'on':
       return (
         <div style={{ ...base, border: `${Math.max(1, r(1))}px dashed #ca8a04`, borderRadius: br, padding: `${r(6)}px ${r(14)}px`, background: 'rgba(202,138,4,0.07)', fontSize: r(16), color: '#fde68a', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
-          Event: "{widget.onEvent ?? ''}"
+          {uiText("Event: \"")}{widget.onEvent ?? ''}"
         </div>
       );
     case 'default':
@@ -483,20 +482,20 @@ export default function ScreenPreview({ composition, className, styleMap }: Scre
         <button
           onClick={zoomOut}
           disabled={!canZoomOut}
-          title="Zoom out"
+          title={uiText("Zoom out")}
           className="px-2 py-0.5 rounded text-gray-400 hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed text-sm font-mono leading-none"
         >−</button>
         <button
           onClick={resetFit}
-          title="Fit to panel width"
+          title={uiText("Fit to panel width")}
           className={`px-2 py-0.5 rounded text-xs font-mono leading-none min-w-[52px] text-center ${manualScale == null ? 'bg-blue-900 text-blue-300' : 'text-gray-400 hover:bg-gray-800'}`}
         >
-          {manualScale == null ? 'fit' : `${Math.round(scale * 100)}%`}
+          {manualScale == null ? uiText("fit") : `${Math.round(scale * 100)}%`}
         </button>
         <button
           onClick={zoomIn}
           disabled={!canZoomIn}
-          title="Zoom in"
+          title={uiText("Zoom in")}
           className="px-2 py-0.5 rounded text-gray-400 hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed text-sm font-mono leading-none"
         >+</button>
         <span className="text-xs text-gray-600 ml-1 font-mono">{Math.round(scale * 100)}%</span>

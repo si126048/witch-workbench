@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback } from 'react';
 import type { Block, ClipboardState, FileSystemTreeNode, Position } from '@/types';
 import { produce } from 'immer';
@@ -100,7 +101,7 @@ export function useFileSystemManager({
             if (name.toLowerCase().endsWith('.rpy')) {
                 const content = ''; // Empty content for newly created files
                 blockId = addBlock(relativePath, content, undefined, { markDirty: false });
-                addToast(`Created block for ${name}`, 'success');
+                addToast(uiText("Created block for {value0}", { value0: name }), 'success');
             }
         }
         const projData = await window.electronAPI.loadProject(projectRootPath);
@@ -108,7 +109,7 @@ export function useFileSystemManager({
         return { blockId, relativePath };
     } catch (err) {
         logger.error('Failed to create file/folder:', err);
-        addToast(`Failed to create ${type}: ${name}`, 'error');
+        addToast(uiText("Failed to create {value0}: {value1}", { value0: type, value1: name }), 'error');
         return null;
     }
   }, [projectRootPath, addBlock, addToast, setFileSystemTree]);
@@ -143,7 +144,7 @@ export function useFileSystemManager({
           setFileSystemTree(projData.tree);
       } catch (err) {
           logger.error('Failed to rename:', err);
-          addToast('Failed to rename file', 'error');
+          addToast(uiText("Failed to rename file"), 'error');
       }
   }, [projectRootPath, blocks, updateBlock, addToast, setFileSystemTree]);
 
@@ -167,7 +168,7 @@ export function useFileSystemManager({
                   await handleRefreshProject();
               } catch (err) {
                   logger.error('Failed to delete:', err);
-                  addToast('Failed to delete file(s)', 'error');
+                  addToast(uiText("Failed to delete file(s)"), 'error');
               }
       });
   }, [projectRootPath, addToast, openDeleteConfirmModal, handleRefreshProject]);
@@ -203,7 +204,7 @@ export function useFileSystemManager({
           setFileSystemTree(projData.tree);
       } catch (err) {
           logger.error('Failed to move file(s):', err);
-          addToast('Failed to move file(s)', 'error');
+          addToast(uiText("Failed to move file(s)"), 'error');
       }
   }, [projectRootPath, blocks, updateBlock, addToast, setFileSystemTree]);
 
@@ -231,7 +232,7 @@ export function useFileSystemManager({
           setFileSystemTree(projData.tree);
       } catch (err) {
           logger.error('Failed to paste:', err);
-          addToast('Failed to paste file(s)', 'error');
+          addToast(uiText("Failed to paste file(s)"), 'error');
       }
   }, [clipboard, projectRootPath, addToast, setClipboard, setFileSystemTree]);
 

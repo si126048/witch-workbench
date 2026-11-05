@@ -1,8 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+const { version } = JSON.parse(await fs.readFile('package.json', 'utf8'));
+
 import crypto from "node:crypto";
 import { execFile, spawn } from "node:child_process";
-const installer = path.resolve("release/Nightfall_Workbench_Windows_0.2.0.exe");
+const installer = path.resolve(`release/Nightfall_Workbench_Windows_${version}.exe`);
 const cache = path.resolve("../.cache/witch-tools");
 const target = path.join(cache, "installed-nightfall");
 if (path.dirname(target) !== cache)

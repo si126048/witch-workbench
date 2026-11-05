@@ -1,3 +1,4 @@
+import { uiText } from "./uiText.js";
 /**
  * @file renpyCompletionProvider.ts
  * @description Context-aware completion provider for Ren'Py language in Monaco editor.
@@ -203,11 +204,11 @@ const SCREEN_WIDGET_SNIPPETS: { label: string; insertText: string; detail: strin
   { label: 'draggroup', insertText: 'draggroup:\n    $0', detail: 'Container for draggable widgets' },
   { label: 'transform', insertText: 'transform ${1:name}:\n    $0', detail: 'Inline transform' },
   { label: 'imagemap', insertText: 'imagemap:\n    ground "${1:ground.png}"\n    $0', detail: 'Image map widget' },
-  { label: 'hotspot', insertText: 'hotspot (${1:0}, ${2:0}, ${3:100}, ${4:100}) action ${5:Return()}', detail: 'Clickable hotspot on imagemap' },
+  { label: uiText("hotspot"), insertText: 'hotspot (${1:0}, ${2:0}, ${3:100}, ${4:100}) action ${5:Return()}', detail: 'Clickable hotspot on imagemap' },
   { label: 'hotbar', insertText: 'hotbar (${1:0}, ${2:0}, ${3:100}, ${4:20}) value ${5:VariableValue("var", 0, 100)}', detail: 'Bar-style hotspot' },
   { label: 'default', insertText: 'default ${1:var} = ${2:value}', detail: 'Screen-local variable' },
   { label: 'on', insertText: 'on "${1:show}" action ${2:None}', detail: 'Screen event handler' },
-  { label: 'dismiss', insertText: 'dismiss action ${1:Return()}', detail: 'Dismissable overlay area' },
+  { label: uiText("dismiss"), insertText: 'dismiss action ${1:Return()}', detail: 'Dismissable overlay area' },
   { label: 'nearrect', insertText: 'nearrect focus "${1:id}":\n    $0', detail: 'Positioned near another widget' },
   { label: 'showif', insertText: 'showif ${1:condition}:\n    $0', detail: 'Conditionally shown content' },
 ];

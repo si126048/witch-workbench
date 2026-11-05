@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file AnalysisOverlay.tsx
  * @description Full-screen overlay displayed while `useRenpyAnalysis` is running (~50 lines).
@@ -27,10 +28,9 @@ const AnalysisOverlay: React.FC<AnalysisOverlayProps> = ({ blockCount, progress 
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">Preparing your project...</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">{uiText("Preparing your project...")}</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Analyzing {blockCount} script {blockCount === 1 ? 'file' : 'files'} and building the story graph.
-          {blockCount > 50 && ' This may take a moment for large projects.'}
+          {("" + uiText("Analyzing") + " ")}{blockCount} {(" " + uiText("script") + " ")}{blockCount === 1 ? uiText("file") : uiText("files")} {(" " + uiText("and building the story graph.") + "")}{blockCount > 50 && (" " + uiText("This may take a moment for large projects.") + "")}
         </p>
         <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 overflow-hidden">
           <div
@@ -39,7 +39,7 @@ const AnalysisOverlay: React.FC<AnalysisOverlayProps> = ({ blockCount, progress 
           />
         </div>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">
-          {progress ? `${phase}... ${percent}%` : 'The application will be ready when analysis is complete.'}
+          {progress ? `${phase}... ${percent}%` : uiText("The application will be ready when analysis is complete.")}
         </p>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file StickyNote.tsx
  * @description Draggable sticky-note canvas element rendered on `StoryCanvas` (~100 lines).
@@ -54,8 +55,8 @@ const StickyNote = React.memo(forwardRef<HTMLDivElement, StickyNoteProps>(({ not
                 className="w-3 h-3 rounded-full border border-black/10 hover:scale-125 transition-transform"
                 style={{ backgroundColor: 'currentColor', opacity: 0.5 }}
                 onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
-                title="Change Color"
-                aria-label="Change note color"
+                title={uiText("Change Color")}
+                aria-label={uiText("Change note color")}
             ></button>
             {isColorPickerOpen && (
                 <div className="absolute top-5 left-0 bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 rounded p-1 flex gap-1 z-50">
@@ -74,8 +75,8 @@ const StickyNote = React.memo(forwardRef<HTMLDivElement, StickyNoteProps>(({ not
         <button
             onClick={(e) => { e.stopPropagation(); deleteNote(note.id); }}
             className="text-black/30 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
-            title="Delete Note"
-            aria-label="Delete note"
+            title={uiText("Delete Note")}
+            aria-label={uiText("Delete note")}
         >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
         </button>
@@ -84,7 +85,7 @@ const StickyNote = React.memo(forwardRef<HTMLDivElement, StickyNoteProps>(({ not
         className="w-full h-full bg-transparent p-2 resize-none focus:outline-none text-gray-800 dark:text-gray-100 text-sm font-medium leading-relaxed"
         value={note.content}
         onChange={(e) => updateNote(note.id, { content: e.target.value })}
-        placeholder="Type a note..."
+        placeholder={uiText("Type a note...")}
         onPointerDown={(e) => e.stopPropagation()} // Prevent dragging when clicking textarea
         onKeyDown={(e) => e.stopPropagation()} // Keep canvas shortcuts (WASD/QE pan, etc.) from firing while typing
       />

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file CanvasNavControls.tsx
  * @description Fit-to-screen and go-to-start navigation buttons for canvas views (~50 lines).
@@ -29,8 +30,8 @@ const CanvasNavControls: React.FC<CanvasNavControlsProps> = ({
     {hasStart && onGoToStart && (
       <button
         onClick={onGoToStart}
-        title="Go to start label"
-        aria-label="Go to start label"
+        title={uiText("Go to start label")}
+        aria-label={uiText("Go to start label")}
         className="h-9 w-9 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center shadow"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -41,7 +42,7 @@ const CanvasNavControls: React.FC<CanvasNavControlsProps> = ({
     <button
       onClick={onFit}
       title={fitTitle}
-      aria-label="Fit all to screen"
+      aria-label={uiText("Fit all to screen")}
       className="h-9 w-9 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center shadow"
     >
       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

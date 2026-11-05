@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
@@ -37,7 +38,7 @@ export function useLoadingState({ isWorkerPending, addToast }: UseLoadingStatePa
     setIsLoading(false);
     setLoadingMessage('');
     setLoadingProgress(0);
-    addToast('Project loading cancelled.', 'info');
+    addToast(uiText("Project loading cancelled."), 'info');
   }, [addToast]);
 
   return {

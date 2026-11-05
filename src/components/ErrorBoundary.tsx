@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ErrorBoundary.tsx
  * @description React class-based error boundary that wraps the entire application (~60 lines).
@@ -53,10 +54,9 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             </svg>
           </div>
           <div>
-            <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
+            <h1 className="text-2xl font-bold mb-2">{uiText("Something went wrong")}</h1>
             <p className="text-gray-400 text-sm">
-              Vangard Studio encountered an unexpected error. Your project files are safe — reload to recover.
-            </p>
+              {uiText("Vangard Studio encountered an unexpected error. Your project files are safe — reload to recover.")}</p>
           </div>
           {this.state.error && (
             <pre className="text-left bg-gray-800 rounded-lg p-4 text-xs text-red-300 overflow-auto max-h-40 border border-gray-700">
@@ -67,8 +67,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             onClick={this.handleReload}
             className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors"
           >
-            Reload Vangard Studio
-          </button>
+            {uiText("Reload Vangard Studio")}</button>
         </div>
       </div>
     );

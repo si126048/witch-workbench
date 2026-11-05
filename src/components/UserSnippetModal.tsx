@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file UserSnippetModal.tsx
  * @description Modal for creating and editing custom Ren'Py code snippets (~110 lines).
@@ -61,10 +62,10 @@ const UserSnippetModal: React.FC<UserSnippetModalProps> = ({ isOpen, onClose, on
     const trimmedPrefix = prefix.trim();
     const trimmedCode = code.trim();
 
-    if (!trimmedTitle) { setError('Title is required.'); return; }
-    if (!trimmedPrefix) { setError('Prefix is required.'); return; }
-    if (!/^[a-zA-Z0-9_]+$/.test(trimmedPrefix)) { setError('Prefix should only contain letters, numbers, and underscores.'); return; }
-    if (!trimmedCode) { setError('Code is required.'); return; }
+    if (!trimmedTitle) { setError(uiText("Title is required.")); return; }
+    if (!trimmedPrefix) { setError(uiText("Prefix is required.")); return; }
+    if (!/^[a-zA-Z0-9_]+$/.test(trimmedPrefix)) { setError(uiText("Prefix should only contain letters, numbers, and underscores.")); return; }
+    if (!trimmedCode) { setError(uiText("Code is required.")); return; }
 
     onSave({
       id: existingSnippet?.id || createId('snippet'),
@@ -95,26 +96,26 @@ const UserSnippetModal: React.FC<UserSnippetModalProps> = ({ isOpen, onClose, on
       >
         <header className="p-4 border-b border-gray-200 dark:border-gray-700">
           <h2 id="snippet-modal-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            {existingSnippet ? 'Edit Snippet' : 'New Snippet'}
+            {existingSnippet ? uiText("Edit Snippet") : uiText("New Snippet")}
           </h2>
         </header>
 
         <main className="p-6 space-y-4" onKeyDown={handleKeyDown}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{uiText("Title")}</label>
             <input
               ref={titleInputRef}
               type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}
-              placeholder="My Custom Snippet"
+              placeholder={uiText("My Custom Snippet")}
               className="w-full p-2 rounded bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Prefix <span className="text-xs text-gray-400">(trigger word for autocomplete)</span>
+              {("" + uiText("Prefix") + " ")}<span className="text-xs text-gray-400">{uiText("(trigger word for autocomplete)")}</span>
             </label>
             <input
               type="text"
@@ -126,18 +127,18 @@ const UserSnippetModal: React.FC<UserSnippetModalProps> = ({ isOpen, onClose, on
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description <span className="text-xs text-gray-400">(optional)</span></label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{("" + uiText("Description") + " ")}<span className="text-xs text-gray-400">{uiText("(optional)")}</span></label>
             <input
               type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
-              placeholder="A brief description of what this snippet does"
+              placeholder={uiText("A brief description of what this snippet does")}
               className="w-full p-2 rounded bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Code</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{uiText("Code")}</label>
             <textarea
               value={code}
               onChange={e => setCode(e.target.value)}
@@ -156,7 +157,7 @@ const UserSnippetModal: React.FC<UserSnippetModalProps> = ({ isOpen, onClose, on
               className="rounded"
             />
             <label htmlFor="use-placeholders" className="text-sm text-gray-600 dark:text-gray-300">
-              Use tab-stop placeholders (<code className="text-xs bg-gray-100 dark:bg-gray-700 px-1 rounded">$1</code>, <code className="text-xs bg-gray-100 dark:bg-gray-700 px-1 rounded">$2</code>, <code className="text-xs bg-gray-100 dark:bg-gray-700 px-1 rounded">$0</code>)
+              {uiText("Use tab-stop placeholders (")}<code className="text-xs bg-gray-100 dark:bg-gray-700 px-1 rounded">$1</code>, <code className="text-xs bg-gray-100 dark:bg-gray-700 px-1 rounded">$2</code>, <code className="text-xs bg-gray-100 dark:bg-gray-700 px-1 rounded">$0</code>)
             </label>
           </div>
 
@@ -168,13 +169,12 @@ const UserSnippetModal: React.FC<UserSnippetModalProps> = ({ isOpen, onClose, on
             onClick={onClose}
             className="px-4 py-2 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
           >
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
           <button
             onClick={handleSave}
             className="px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded shadow-sm"
           >
-            {existingSnippet ? 'Save Changes' : 'Create Snippet'}
+            {existingSnippet ? uiText("Save Changes") : uiText("Create Snippet")}
           </button>
         </footer>
       </div>

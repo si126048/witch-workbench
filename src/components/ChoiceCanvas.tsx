@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import StickyNoteComponent from './StickyNote';
 import CanvasContextMenu from './CanvasContextMenu';
@@ -766,7 +767,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
           key={`parent-${p.nodeId}`}
           data-nodeid={p.nodeId} data-label={p.label}
           data-nav={p.nodeId}
-          role="button" aria-label={`Navigate to parent: ${p.label}`}
+          role="button" aria-label={uiText("Navigate to parent: {value0}", { value0: p.label })}
           style={{ cursor: 'pointer', ...fadeInStyle(50 + idx * 30) }}
         >
           <rect x={px + 2} y={p.y + 2} width={LEFT_W} height={LEFT_H} rx={7} fill="rgba(0,0,0,0.05)" />
@@ -792,7 +793,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
               "{trunc(p.snippet, 20)}"
             </text>
           )}
-          <title>{`${p.label} — click to navigate`}</title>
+          <title>{uiText("{value0} — click to navigate", { value0: p.label })}</title>
         </g>,
       );
     });
@@ -833,7 +834,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
 
         // Choice pill
         nodeEls.push(
-          <g key={`pill-${slot.key}`} data-nav={slot.targetId} role="button" aria-label={`Choice: ${slot.choiceText ?? slot.targetLabel}`} style={{ cursor: 'pointer', ...fadeInStyle(rightDelay) }}>
+          <g key={`pill-${slot.key}`} data-nav={slot.targetId} role="button" aria-label={uiText("Choice: {value0}", { value0: slot.choiceText ?? slot.targetLabel })} style={{ cursor: 'pointer', ...fadeInStyle(rightDelay) }}>
             <rect x={PILL_X} y={pillY} width={PILL_W} height={PILL_H} rx={PILL_H / 2} fill={color} opacity={0.92} />
             {/* Choice text */}
             <text
@@ -859,7 +860,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
 
         // Target mini-card
         nodeEls.push(
-          <g key={`tgt-${slot.key}`} data-nodeid={slot.targetId} data-label={slot.targetLabel} data-nav={slot.targetId} role="button" aria-label={`Navigate to: ${slot.targetLabel}`} style={{ cursor: 'pointer', ...fadeInStyle(rightDelay + 50) }}>
+          <g key={`tgt-${slot.key}`} data-nodeid={slot.targetId} data-label={slot.targetLabel} data-nav={slot.targetId} role="button" aria-label={uiText("Navigate to: {value0}", { value0: slot.targetLabel })} style={{ cursor: 'pointer', ...fadeInStyle(rightDelay + 50) }}>
             <rect x={tgtX + 2} y={tCardY + 2} width={TARGET_W} height={TARGET_H} rx={7} fill="rgba(0,0,0,0.05)" />
             <rect x={tgtX} y={tCardY} width={TARGET_W} height={TARGET_H} rx={7}
               className="fill-white dark:fill-gray-800"
@@ -883,7 +884,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
                 "{trunc(slot.targetSnippet, 20)}"
               </text>
             )}
-            <title>{`${slot.targetLabel} — click to navigate`}</title>
+            <title>{uiText("{value0} — click to navigate", { value0: slot.targetLabel })}</title>
           </g>,
         );
 
@@ -902,7 +903,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
           />,
         );
         nodeEls.push(
-          <g key={`direct-${slot.key}`} data-nodeid={slot.targetId} data-label={slot.targetLabel} data-nav={slot.targetId} role="button" aria-label={`Navigate to: ${slot.targetLabel}`} style={{ cursor: 'pointer', ...fadeInStyle(rightDelay) }}>
+          <g key={`direct-${slot.key}`} data-nodeid={slot.targetId} data-label={slot.targetLabel} data-nav={slot.targetId} role="button" aria-label={uiText("Navigate to: {value0}", { value0: slot.targetLabel })} style={{ cursor: 'pointer', ...fadeInStyle(rightDelay) }}>
             <rect x={tgtX + 2} y={tCardY + 2} width={TARGET_W} height={TARGET_H} rx={7} fill="rgba(0,0,0,0.05)" />
             <rect x={tgtX} y={tCardY} width={TARGET_W} height={TARGET_H} rx={7}
               className="fill-white dark:fill-gray-800 stroke-gray-300 dark:stroke-gray-600"
@@ -929,7 +930,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
             {slot.isCall && (
               <text x={TARGET_CX} y={tCardY - 9} textAnchor="middle" fontSize={8} className="fill-gray-400 dark:fill-gray-500 pointer-events-none">call</text>
             )}
-            <title>{`${slot.targetLabel} — click to navigate`}</title>
+            <title>{uiText("{value0} — click to navigate", { value0: slot.targetLabel })}</title>
           </g>,
         );
       }
@@ -946,7 +947,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
 
       {/* ── Toolbar ── */}
       <div className="cc-controls flex-none flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-xs z-10">
-        <span className="font-semibold text-gray-600 dark:text-gray-300">Walkthrough Debugger</span>
+        <span className="font-semibold text-gray-600 dark:text-gray-300">{uiText("Walkthrough Debugger")}</span>
         <div className="w-px h-4 bg-gray-200 dark:bg-gray-600 shrink-0" />
 
         {/* Current node indicator */}
@@ -966,10 +967,9 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
               ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300'
               : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
           }`}
-          title="Show/hide panel overlays"
+          title={uiText("Show/hide panel overlays")}
         >
-          Panels
-        </button>
+          {uiText("Panels")}</button>
 
         {/* Snippets toggle */}
         <button
@@ -980,8 +980,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
               : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
           }`}
         >
-          Snippets
-        </button>
+          {uiText("Snippets")}</button>
       </div>
 
       {/* ── Breadcrumb trail ── */}
@@ -990,7 +989,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
           {breadcrumbTrail.length >= MAX_BREADCRUMBS && (
             <span
               className="shrink-0 text-indigo-400 dark:text-indigo-500 font-semibold"
-              title="Earlier breadcrumbs truncated"
+              title={uiText("Earlier breadcrumbs truncated")}
             >
               …
             </span>
@@ -1013,19 +1012,19 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
       )}
 
       {/* ── Canvas ── */}
-      <div ref={canvasAreaRef} role="application" aria-label="Walkthrough debugger canvas" className="flex-1 relative overflow-hidden">
+      <div ref={canvasAreaRef} role="application" aria-label={uiText("Walkthrough debugger canvas")} className="flex-1 relative overflow-hidden">
 
         {/* ── Toolbox (left) ── */}
-        <CanvasToolbox label="Walkthrough Debugger">
+        <CanvasToolbox label={uiText("Walkthrough Debugger")}>
           {/* Go to Label */}
           <div className="p-3 flex flex-col gap-1.5">
-            <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Jump to Label</h4>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{uiText("Jump to Label")}</h4>
             <input
               value={labelSearchQuery}
               onChange={e => { setLabelSearchQuery(e.target.value); setShowLabelSearchResults(true); }}
               onFocus={() => setShowLabelSearchResults(true)}
               onKeyDown={e => e.stopPropagation()} // Keep canvas shortcuts (WASD/QE pan, etc.) from firing while typing
-              placeholder="Search labels…"
+              placeholder={uiText("Search labels…")}
               className="w-full rounded-md border border-gray-200 dark:border-gray-700 bg-transparent px-2 py-1.5 text-sm"
             />
             {showLabelSearchResults && labelSearchQuery.trim() && (
@@ -1037,10 +1036,10 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
                     onClick={() => { navigateTo(n.id); setShowLabelSearchResults(false); setLabelSearchQuery(''); }}
                   >
                     <div className="font-mono text-gray-900 dark:text-gray-100">{n.label}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">{n.containerName ?? 'Unknown file'}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">{n.containerName ?? uiText("Unknown file")}</div>
                   </button>
                 )) : (
-                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">No matching labels.</div>
+                  <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">{uiText("No matching labels.")}</div>
                 )}
               </div>
             )}
@@ -1048,40 +1047,34 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
 
           {/* Legend */}
           <div className="p-3 border-t border-gray-200 dark:border-gray-700 space-y-1.5 text-xs text-gray-600 dark:text-gray-400">
-            <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">Three-Panel Layout</h4>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">{uiText("Three-Panel Layout")}</h4>
             <div className="flex items-center gap-2">
               <div className="w-5 h-4 rounded bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 shrink-0" />
-              Left: previous nodes
-            </div>
+              {uiText("Left: previous nodes")}</div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-4 rounded bg-indigo-100 dark:bg-indigo-900/30 border-2 border-indigo-400 dark:border-indigo-600 shrink-0" />
-              Center: current node
-            </div>
+              {uiText("Center: current node")}</div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-4 rounded bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700 shrink-0" />
-              Right: choices &amp; targets
-            </div>
+              {uiText("Right: choices & targets")}</div>
 
-            <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2 mt-3">Elements</h4>
+            <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2 mt-3">{uiText("Elements")}</h4>
             <div className="flex items-center gap-2">
               <div className="w-5 h-3.5 rounded-full bg-indigo-600 shrink-0" />
-              Choice pill
-            </div>
+              {uiText("Choice pill")}</div>
             <div className="flex items-center gap-2">
               <span className="text-amber-500 text-base leading-none shrink-0">⚠</span>
-              Conditional choice (if …)
-            </div>
+              {uiText("Conditional choice (if …)")}</div>
             <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500">
-              Click any node or pill to navigate · shift-drag to pan · toggle "Panels" to show/hide regions
-            </div>
+              {uiText("Click any node or pill to navigate · shift-drag to pan · toggle \"Panels\" to show/hide regions")}</div>
           </div>
         </CanvasToolbox>
 
         {isEmpty ? (
           <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-400 dark:text-gray-500">
             {labelNodes.length === 0
-              ? 'No labels found. Open a project to see the walkthrough.'
-              : 'No entry point found.'}
+              ? uiText("No labels found. Open a project to see the walkthrough.")
+              : uiText("No entry point found.")}
           </div>
         ) : (
           <svg
@@ -1124,8 +1117,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
                     className="fill-blue-600 dark:fill-blue-400 pointer-events-none"
                     style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
                   >
-                    Previous Nodes
-                  </text>
+                    {uiText("Previous Nodes")}</text>
 
                   {/* Center panel - Current */}
                   <rect
@@ -1143,8 +1135,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
                     className="fill-indigo-700 dark:fill-indigo-300 pointer-events-none"
                     style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
                   >
-                    Current Node
-                  </text>
+                    {uiText("Current Node")}</text>
 
                   {/* Right panel - Choices */}
                   <rect
@@ -1162,8 +1153,7 @@ const ChoiceCanvas: React.FC<ChoiceCanvasProps> = ({
                     className="fill-purple-600 dark:fill-purple-400 pointer-events-none"
                     style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
                   >
-                    Choices &amp; Targets
-                  </text>
+                    {uiText("Choices & Targets")}</text>
                 </g>
               )}
 

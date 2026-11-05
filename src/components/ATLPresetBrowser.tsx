@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ATLPresetBrowser.tsx
  * @description Grid browser for the built-in ATL animation preset library (`atlPresetLibrary.ts`).
@@ -75,7 +76,7 @@ const ATLPresetBrowser: React.FC<ATLPresetBrowserProps> = ({ onInsertAtCursor })
       <div className="relative">
         <input
           type="text"
-          placeholder="Search animations..."
+          placeholder={uiText("Search animations...")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full px-3 py-2 pl-9 rounded-md border border-primary bg-secondary text-primary placeholder-secondary focus:outline-none focus:ring-2 focus:ring-accent"
@@ -99,8 +100,7 @@ const ATLPresetBrowser: React.FC<ATLPresetBrowserProps> = ({ onInsertAtCursor })
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="h-3 w-3" fill="currentColor">
             <path d="M10 2.5l2.35 4.76 5.25.76-3.8 3.7.9 5.23L10 14.6l-4.7 2.35.9-5.23-3.8-3.7 5.25-.76z" />
           </svg>
-          Favorites
-        </button>
+          {uiText("Favorites")}</button>
         {allTags.map(tag => {
           const isSelected = selectedTags.has(tag);
           return (
@@ -122,21 +122,20 @@ const ATLPresetBrowser: React.FC<ATLPresetBrowserProps> = ({ onInsertAtCursor })
             onClick={() => { setSelectedTags(new Set()); setSearchQuery(''); setFavoritesOnly(false); }}
             className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
           >
-            Clear Filters
-          </button>
+            {uiText("Clear Filters")}</button>
         )}
       </div>
 
       <div className="text-xs text-secondary">
-        {filteredPresets.length} {filteredPresets.length === 1 ? 'animation' : 'animations'}
-        {(selectedTags.size > 0 || searchQuery || favoritesOnly) && ` (filtered from ${ATL_PRESETS.length})`}
+        {filteredPresets.length} {filteredPresets.length === 1 ? uiText("animation") : uiText("animations")}
+        {(selectedTags.size > 0 || searchQuery || favoritesOnly) && (" " + uiText("(filtered from {value0})", { value0: ATL_PRESETS.length }) + "")}
       </div>
 
       {/* Preset Grid */}
       {filteredPresets.length === 0 ? (
         <div className="text-center py-12 text-secondary">
-          <p className="text-sm">No animations found</p>
-          <p className="text-xs mt-1">Try adjusting your search or filters</p>
+          <p className="text-sm">{uiText("No animations found")}</p>
+          <p className="text-xs mt-1">{uiText("Try adjusting your search or filters")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -157,7 +156,7 @@ const ATLPresetBrowser: React.FC<ATLPresetBrowserProps> = ({ onInsertAtCursor })
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); toggleFavorite(statId); }}
-                    aria-label={stat.favorite ? `Unfavorite ${preset.title}` : `Favorite ${preset.title}`}
+                    aria-label={stat.favorite ? uiText("Unfavorite {value0}", { value0: preset.title }) : uiText("Favorite {value0}", { value0: preset.title })}
                     className={`p-0.5 rounded transition-colors flex-shrink-0 ${stat.favorite ? 'text-amber-500' : 'text-secondary hover:text-amber-500'}`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="h-3.5 w-3.5" fill={stat.favorite ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={1.5}>
@@ -245,7 +244,7 @@ const ATLPresetParameterModal: React.FC<ATLPresetParameterModalProps> = ({ prese
             <h2 id="atl-preset-modal-title" className="text-lg font-bold text-gray-900 dark:text-gray-100">{preset.title}</h2>
             <p className="text-xs text-secondary mt-0.5">{preset.description}</p>
           </div>
-          <button ref={closeButtonRef} onClick={onClose} aria-label="Close" className="text-secondary hover:text-primary p-1">
+          <button ref={closeButtonRef} onClick={onClose} aria-label={uiText("Close")} className="text-secondary hover:text-primary p-1">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -284,7 +283,7 @@ const ATLPresetParameterModal: React.FC<ATLPresetParameterModalProps> = ({ prese
           ))}
 
           <div>
-            <span className="text-xs font-medium text-secondary">Preview</span>
+            <span className="text-xs font-medium text-secondary">{uiText("Preview")}</span>
             <pre className="bg-gray-800 dark:bg-gray-900 text-white p-2 rounded text-xs font-mono whitespace-pre-wrap max-h-40 overflow-auto mt-1">
               <code>{code}</code>
             </pre>
@@ -293,15 +292,12 @@ const ATLPresetParameterModal: React.FC<ATLPresetParameterModalProps> = ({ prese
 
         <footer className="bg-gray-50 dark:bg-gray-700 p-4 rounded-b-lg flex justify-end items-center space-x-3">
           <button onClick={onClose} className="px-4 py-2 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
           <button onClick={handleCopy} className="px-4 py-2 text-sm font-bold text-white bg-green-600 hover:bg-green-700 rounded shadow-sm">
-            Copy
-          </button>
+            {uiText("Copy")}</button>
           {onInsertAtCursor && (
             <button onClick={handleInsert} className="px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded shadow-sm">
-              Insert to Editor
-            </button>
+              {uiText("Insert to Editor")}</button>
           )}
         </footer>
       </div>

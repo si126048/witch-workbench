@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file PoseKeyframeEditor.tsx
  * @description Modal for precisely editing one `PoseKeyframe`'s time, its
@@ -78,8 +79,8 @@ const PoseKeyframeEditor: React.FC<PoseKeyframeEditorProps> = ({ keyframe, prope
         onClick={e => e.stopPropagation()}
       >
         <header className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-          <h2 id="pose-keyframe-editor-title" className="text-lg font-bold text-gray-900 dark:text-gray-100">Keyframe</h2>
-          <button ref={closeButtonRef} onClick={onClose} aria-label="Close" className="text-secondary hover:text-primary p-1">
+          <h2 id="pose-keyframe-editor-title" className="text-lg font-bold text-gray-900 dark:text-gray-100">{uiText("Keyframe")}</h2>
+          <button ref={closeButtonRef} onClick={onClose} aria-label={uiText("Close")} className="text-secondary hover:text-primary p-1">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -89,7 +90,7 @@ const PoseKeyframeEditor: React.FC<PoseKeyframeEditorProps> = ({ keyframe, prope
         <main className="p-4 space-y-4">
           <div>
             <label htmlFor="pkf-time" className="flex items-center justify-between text-xs font-medium text-secondary mb-1">
-              <span>Time (seconds)</span>
+              <span>{uiText("Time (seconds)")}</span>
               <span className="font-mono text-primary">{time.toFixed(2)}</span>
             </label>
             <input
@@ -128,7 +129,7 @@ const PoseKeyframeEditor: React.FC<PoseKeyframeEditorProps> = ({ keyframe, prope
 
           {!isFirstKeyframe && (
             <div>
-              <label htmlFor="pkf-easing" className="block text-xs font-medium text-secondary mb-1">Easing (arriving from the previous keyframe)</label>
+              <label htmlFor="pkf-easing" className="block text-xs font-medium text-secondary mb-1">{uiText("Easing (arriving from the previous keyframe)")}</label>
               <select
                 id="pkf-easing"
                 value={easing}
@@ -143,28 +144,24 @@ const PoseKeyframeEditor: React.FC<PoseKeyframeEditorProps> = ({ keyframe, prope
 
         <footer className="bg-gray-50 dark:bg-gray-700 p-4 rounded-b-lg flex justify-between items-center">
           <button onClick={() => setShowDeleteConfirm(true)} className="px-3 py-2 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded">
-            Delete
-          </button>
+            {uiText("Delete")}</button>
           <div className="space-x-3">
             <button onClick={onClose} className="px-4 py-2 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">
-              Cancel
-            </button>
+              {uiText("Cancel")}</button>
             <button onClick={handleSave} className="px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded shadow-sm">
-              Save
-            </button>
+              {uiText("Save")}</button>
           </div>
         </footer>
       </div>
 
       {showDeleteConfirm && (
         <ConfirmModal
-          title="Delete Keyframe"
-          confirmText="Delete"
+          title={uiText("Delete Keyframe")}
+          confirmText={uiText("Delete")}
           onClose={() => setShowDeleteConfirm(false)}
           onConfirm={() => { setShowDeleteConfirm(false); onDelete(); }}
         >
-          Delete this keyframe? This cannot be undone.
-        </ConfirmModal>
+          {uiText("Delete this keyframe? This cannot be undone.")}</ConfirmModal>
       )}
     </div>,
     document.body

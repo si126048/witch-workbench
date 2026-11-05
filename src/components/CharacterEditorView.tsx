@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file CharacterEditorView.tsx
  * @description Form-based editor for creating and modifying Ren'Py characters (~250 lines).
@@ -227,23 +228,22 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
     return (
         <div className="w-full h-full flex flex-col bg-gray-100 dark:bg-gray-900 overflow-hidden">
             <header className="flex-none h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
-                <h2 className="text-xl font-bold">{isNew ? 'New Character' : `Editing: ${character.name}`}</h2>
+                <h2 className="text-xl font-bold">{isNew ? uiText("New Character") : uiText("Editing: {value0}", { value0: character.name })}</h2>
                 <button onClick={handleSave} className="px-6 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-colors">
-                    Save Changes
-                </button>
+                    {uiText("Save Changes")}</button>
             </header>
             <main className="flex-grow p-6 overflow-y-auto overscroll-contain grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
 
                 {/* Left Column — Primary Attributes */}
                 <div className="space-y-4">
-                    <h3 className="text-lg font-semibold border-b pb-2 border-gray-300 dark:border-gray-700">Primary Attributes</h3>
+                    <h3 className="text-lg font-semibold border-b pb-2 border-gray-300 dark:border-gray-700">{uiText("Primary Attributes")}</h3>
 
                     <div>
-                        <label className="text-sm font-medium">Portrait</label>
+                        <label className="text-sm font-medium">{uiText("Portrait")}</label>
                         <div
                             role="button"
                             tabIndex={0}
-                            aria-label="Character portrait — drop an image or double-click to choose one"
+                            aria-label={uiText("Character portrait — drop an image or double-click to choose one")}
                             onDragOver={(e) => { e.preventDefault(); setIsPortraitDragOver(true); }}
                             onDragLeave={() => setIsPortraitDragOver(false)}
                             onDrop={handlePortraitDrop}
@@ -251,39 +251,39 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
                             className={`relative mt-1 w-[512px] max-w-full aspect-square rounded bg-white dark:bg-gray-700 border-2 border-dashed flex items-center justify-center overflow-hidden ${isPortraitDragOver ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30' : 'border-gray-300 dark:border-gray-600'}`}
                         >
                             {portraitDataUrl ? (
-                                <img src={portraitDataUrl} alt="Character portrait" className="w-full h-full object-contain object-center" />
+                                <img src={portraitDataUrl} alt={uiText("Character portrait")} className="w-full h-full object-contain object-center" />
                             ) : (
                                 <div className="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-500 select-none px-4 text-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" viewBox="0 0 24 24" fill="none">
                                         <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5"/>
                                         <path d="M4 20c0-4.418 3.582-7 8-7s8 2.582 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                                     </svg>
-                                    <span className="text-sm">Drag an image here or double-click to choose one</span>
+                                    <span className="text-sm">{uiText("Drag an image here or double-click to choose one")}</span>
                                 </div>
                             )}
                             {portraitPath && (
                                 <button
                                     type="button"
                                     onClick={(e) => { e.stopPropagation(); setPortraitPath(''); }}
-                                    title="Remove portrait"
-                                    aria-label="Remove portrait"
+                                    title={uiText("Remove portrait")}
+                                    aria-label={uiText("Remove portrait")}
                                     className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center text-sm leading-none"
                                 >
                                     ×
                                 </button>
                             )}
                         </div>
-                        <HelpText>Reference image shown in the editor only — not used in generated Ren&apos;Py code.</HelpText>
+                        <HelpText>{uiText("Reference image shown in the editor only — not used in generated Ren'Py code.")}</HelpText>
                     </div>
 
                     <div>
-                        <label htmlFor="character-editor-name" className="text-sm font-medium">Display Name</label>
-                        <input id="character-editor-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g., Eileen"
+                        <label htmlFor="character-editor-name" className="text-sm font-medium">{uiText("Display Name")}</label>
+                        <input id="character-editor-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder={uiText("e.g., Eileen")}
                             className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500" />
                     </div>
 
                     <div>
-                        <label htmlFor="character-editor-tag" className="text-sm font-medium">Code Tag</label>
+                        <label htmlFor="character-editor-tag" className="text-sm font-medium">{uiText("Code Tag")}</label>
                         <input
                             id="character-editor-tag"
                             type="text"
@@ -293,24 +293,23 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
                             className={`w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border ${tagError ? 'border-red-500' : (!isNew && tag !== character?.tag) ? 'border-amber-400 dark:border-amber-500' : 'border-gray-300 dark:border-gray-600'} focus:ring-indigo-500 focus:border-indigo-500`}
                         />
                         {tagError && <p className="text-red-500 text-xs mt-1">{tagError}</p>}
-                        {!isNew && tag === character?.tag && <HelpText>Changing this tag will rename it across all script files when you save.</HelpText>}
+                        {!isNew && tag === character?.tag && <HelpText>{uiText("Changing this tag will rename it across all script files when you save.")}</HelpText>}
                         {!isNew && tag !== character?.tag && (
                             <p className="text-xs text-amber-500 dark:text-amber-400 mt-1">
-                                Saving will rename &ldquo;{character?.tag}&rdquo; to &ldquo;{tag}&rdquo; in all script files.
-                            </p>
+                                {uiText("Saving will rename “")}{character?.tag}{uiText("” to “")}{tag}{uiText("” in all script files.")}</p>
                         )}
                     </div>
 
                     {/* Colors */}
                     <div className="flex items-start gap-4">
                         <div className="flex-1">
-                            <label className="text-sm font-medium">Name Color</label>
+                            <label className="text-sm font-medium">{uiText("Name Color")}</label>
                             <ColorDropTarget value={color} onChange={setColor}
                                 className="w-full mt-1 h-10 p-1 rounded border border-gray-300 dark:border-gray-600" />
                         </div>
                         <div className="flex-1">
                             <label className="text-sm font-medium flex items-center justify-between">
-                                <span>Dialogue Color</span>
+                                <span>{uiText("Dialogue Color")}</span>
                                 <label className="flex items-center gap-1 text-xs font-normal text-gray-500 dark:text-gray-400 cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -318,43 +317,41 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
                                         onChange={e => setOverrideWhatColor(e.target.checked)}
                                         className="h-3 w-3 rounded"
                                     />
-                                    Override
-                                </label>
+                                    {uiText("Override")}</label>
                             </label>
                             {overrideWhatColor ? (
                                 <ColorDropTarget value={what_color} onChange={setWhatColor}
                                     className="w-full mt-1 h-10 p-1 rounded border border-gray-300 dark:border-gray-600" />
                             ) : (
                                 <div className="w-full mt-1 h-10 rounded border border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center text-xs text-gray-400 dark:text-gray-500 select-none">
-                                    Theme default
-                                </div>
+                                    {uiText("Theme default")}</div>
                             )}
                         </div>
                     </div>
 
                     <div>
-                        <label className="text-sm font-medium">Image Tag</label>
+                        <label className="text-sm font-medium">{uiText("Image Tag")}</label>
                         <input
                             type="text"
                             value={imageSearch}
                             onChange={e => setImageSearch(e.target.value)}
-                            placeholder="Search image tags…"
+                            placeholder={uiText("Search image tags…")}
                             className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                         />
                         <select value={image} onChange={e => setImage(e.target.value)}
                             className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
                             size={imageOptions.length > 0 ? Math.min(imageOptions.length + 1, 6) : 2}
                         >
-                            <option value="">{imageSearch ? `${imageOptions.length} result${imageOptions.length !== 1 ? 's' : ''}` : '— type to search —'}</option>
+                            <option value="">{imageSearch ? uiText("{value0} result{value1}", { value0: imageOptions.length, value1: imageOptions.length !== 1 ? 's' : '' }) : uiText("— type to search —")}</option>
                             {imageOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                         </select>
-                        <HelpText>Associates this character with an image tag for side images.</HelpText>
+                        <HelpText>{uiText("Associates this character with an image tag for side images.")}</HelpText>
                     </div>
 
                     <div>
-                        <label className="text-sm font-medium">Profile / Notes</label>
+                        <label className="text-sm font-medium">{uiText("Profile / Notes")}</label>
                         <textarea value={profile} onChange={e => setProfile(e.target.value)}
-                            placeholder="A cheerful and optimistic young artist..." rows={8}
+                            placeholder={uiText("A cheerful and optimistic young artist...")} rows={8}
                             className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500" />
                     </div>
                 </div>
@@ -368,14 +365,13 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
                         <svg className={`w-4 h-4 flex-none transition-transform ${advancedExpanded ? '' : '-rotate-90'}`} viewBox="0 0 12 12" fill="none">
                             <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        Advanced Properties
-                    </button>
+                        {uiText("Advanced Properties")}</button>
 
                     {advancedExpanded && (
                         <div className="space-y-5">
                             {/* Name label formatting */}
                             <div className="space-y-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Name Label</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Name Label")}</p>
                                 {renderTextInput('Name Prefix', who_prefix, setWhoPrefix, 'e.g., "',
                                     'Text inserted before the character name in dialogue. Example: setting this to " produces "Eileen says…')}
                                 {renderTextInput('Name Suffix', who_suffix, setWhoSuffix, 'e.g., :',
@@ -384,7 +380,7 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
 
                             {/* Dialogue text formatting */}
                             <div className="space-y-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Dialogue Text</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Dialogue Text")}</p>
                                 {renderTextInput('Dialogue Prefix', what_prefix, setWhatPrefix, 'e.g., «',
                                     'Text inserted before every line this character speaks.')}
                                 {renderTextInput('Dialogue Suffix', what_suffix, setWhatSuffix, 'e.g., »',
@@ -393,32 +389,32 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
 
                             {/* Slow text */}
                             <div className="space-y-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Text Speed</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Text Speed")}</p>
                                 <label className="flex items-center gap-3 cursor-pointer">
                                     <input type="checkbox" checked={slow} onChange={e => setSlow(e.target.checked)}
                                         className="h-4 w-4 rounded focus:ring-indigo-500" style={{ accentColor: 'rgb(79 70 229)' }} />
-                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Use Slow Text</span>
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{uiText("Use Slow Text")}</span>
                                 </label>
                                 {slow && (
                                     <div className="pl-7 space-y-3">
                                         <div>
-                                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Text Speed (chars/sec)</label>
+                                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{uiText("Text Speed (chars/sec)")}</label>
                                             <input
                                                 type="number"
                                                 min={1}
                                                 value={slow_speed}
                                                 onChange={e => setSlowSpeed(e.target.value === '' ? '' : Number(e.target.value))}
-                                                placeholder="Leave empty for Ren'Py default"
+                                                placeholder={uiText("Leave empty for Ren'Py default")}
                                                 className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
                                             />
-                                            <HelpText>Characters revealed per second. Leave empty to use the project default.</HelpText>
+                                            <HelpText>{uiText("Characters revealed per second. Leave empty to use the project default.")}</HelpText>
                                         </div>
                                         <label className="flex items-center gap-3 cursor-pointer">
                                             <input type="checkbox" checked={slow_abortable} onChange={e => setSlowAbortable(e.target.checked)}
                                                 className="h-4 w-4 rounded focus:ring-indigo-500" style={{ accentColor: 'rgb(79 70 229)' }} />
                                             <div>
-                                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Player can skip slow text</span>
-                                                <HelpText>When checked, clicking during slow text reveals the full line immediately.</HelpText>
+                                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{uiText("Player can skip slow text")}</span>
+                                                <HelpText>{uiText("When checked, clicking during slow text reveals the full line immediately.")}</HelpText>
                                             </div>
                                         </label>
                                     </div>
@@ -427,15 +423,15 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
 
                             {/* Click-to-continue */}
                             <div className="space-y-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Click-to-Continue</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Click-to-Continue")}</p>
                                 {renderTextInput('CTC Displayable', ctc, setCtc, 'e.g., ctc_arrow',
                                     'Name of a Ren\'Py displayable shown at the end of dialogue while waiting for the player to click.')}
                                 <div>
-                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">CTC Position</label>
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{uiText("CTC Position")}</label>
                                     <select value={ctc_position} onChange={e => setCtcPosition(e.target.value as 'nestled' | 'fixed')}
                                         className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
-                                        <option value="nestled">nestled — inline after the last word</option>
-                                        <option value="fixed">fixed — at a fixed screen position</option>
+                                        <option value="nestled">{uiText("nestled — inline after the last word")}</option>
+                                        <option value="fixed">{uiText("fixed — at a fixed screen position")}</option>
                                     </select>
                                 </div>
                             </div>
@@ -445,17 +441,17 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
                     {/* Usage Locations */}
                     {character && (
                         <div className="space-y-3">
-                            <h3 className="text-lg font-semibold border-b pb-2 border-gray-300 dark:border-gray-700">Usage Locations</h3>
+                            <h3 className="text-lg font-semibold border-b pb-2 border-gray-300 dark:border-gray-700">{uiText("Usage Locations")}</h3>
                             {usageLocations.length === 0 ? (
-                                <p className="text-sm text-gray-400 dark:text-gray-500">No dialogue found for this character yet.</p>
+                                <p className="text-sm text-gray-400 dark:text-gray-500">{uiText("No dialogue found for this character yet.")}</p>
                             ) : (
                                 <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
                                     <table className="w-full text-sm">
                                         <thead>
                                             <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-xs">
-                                                <th className="px-3 py-2 text-left font-semibold">File</th>
-                                                <th className="px-3 py-2 text-left font-semibold">Label</th>
-                                                <th className="px-3 py-2 text-right font-semibold w-16">Lines</th>
+                                                <th className="px-3 py-2 text-left font-semibold">{uiText("File")}</th>
+                                                <th className="px-3 py-2 text-left font-semibold">{uiText("Label")}</th>
+                                                <th className="px-3 py-2 text-right font-semibold w-16">{uiText("Lines")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -472,7 +468,7 @@ const CharacterEditorView: React.FC<CharacterEditorViewProps> = ({ character, on
                                                     }}
                                                     tabIndex={0}
                                                     role="button"
-                                                    title="Open in editor"
+                                                    title={uiText("Open in editor")}
                                                 >
                                                     <td className="px-3 py-2 text-xs text-gray-700 dark:text-gray-300 truncate max-w-[160px]" title={loc.filePath}>{loc.fileName}</td>
                                                     <td className="px-3 py-2 font-mono text-xs text-gray-700 dark:text-gray-300">{loc.label ?? '—'}</td>

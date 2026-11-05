@@ -7,6 +7,10 @@
 
 import '@testing-library/jest-dom/vitest';
 
+// Preserve the inherited English contracts; Chinese-specific suites explicitly select zh-CN.
+if (typeof document !== 'undefined') document.documentElement.lang = 'en';
+process.env.NIGHTFALL_UI_LANGUAGE = 'en';
+
 type GlobalFsTypes = typeof globalThis & {
   FileSystemFileHandle?: typeof FileSystemFileHandle;
   FileSystemDirectoryHandle?: typeof FileSystemDirectoryHandle;

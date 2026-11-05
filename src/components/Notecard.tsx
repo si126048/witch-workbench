@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file Notecard.tsx
  * @description Draggable, resizable, colorable card rendered on NotecardCanvas, styled as a
@@ -67,8 +68,8 @@ const Notecard = React.memo(forwardRef<HTMLDivElement, NotecardProps>(({ card, u
             className="w-3 h-3 rounded-full border border-black/20 hover:scale-125 transition-transform flex-shrink-0"
             style={{ backgroundColor: TAB_COLORS[card.color] }}
             onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
-            title="Change Color"
-            aria-label="Change notecard color"
+            title={uiText("Change Color")}
+            aria-label={uiText("Change notecard color")}
           />
           {isColorPickerOpen && (
             <div className="absolute top-5 left-0 bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 rounded p-1 flex gap-1 z-50">
@@ -105,8 +106,8 @@ const Notecard = React.memo(forwardRef<HTMLDivElement, NotecardProps>(({ card, u
         <button
           onClick={(e) => { e.stopPropagation(); deleteCard(card.id); }}
           className="text-black/30 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
-          title="Delete Notecard"
-          aria-label="Delete notecard"
+          title={uiText("Delete Notecard")}
+          aria-label={uiText("Delete notecard")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
         </button>
@@ -119,7 +120,7 @@ const Notecard = React.memo(forwardRef<HTMLDivElement, NotecardProps>(({ card, u
           value={bodyDraft}
           onChange={(e) => setBodyDraft(e.target.value)}
           onBlur={commitBody}
-          placeholder="Type a note..."
+          placeholder={uiText("Type a note...")}
           onPointerDown={(e) => e.stopPropagation()}
         />
       ) : (
@@ -134,7 +135,7 @@ const Notecard = React.memo(forwardRef<HTMLDivElement, NotecardProps>(({ card, u
       <div
         className="link-handle absolute top-1/2 -right-2 -translate-y-1/2 w-4 h-4 rounded-full bg-indigo-500 border-2 border-white dark:border-gray-800 cursor-crosshair opacity-0 group-hover:opacity-100 hover:opacity-100"
         style={{ zIndex: 3 }}
-        title="Drag to link to another notecard"
+        title={uiText("Drag to link to another notecard")}
         onPointerDown={(e) => { e.stopPropagation(); onStartLinkDrag(card.id, e.clientX, e.clientY); }}
       />
       <div className="resize-handle absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize" style={{ zIndex: 2 }} />

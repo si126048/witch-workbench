@@ -31,7 +31,22 @@ export default defineConfig(({ mode }) => {
   
   return {
     // React plugin for JSX transformation
-    plugins: [react()],
+    plugins: [react(), {
+      name: 'nightfall-monaco-chinese',
+      enforce: 'pre',
+      transform(code, id) {
+        if (!id.replaceAll('\\', '/').endsWith('/monaco-editor/esm/vs/nls.js')) return;
+        // Monaco 0.45's ESM build uses English defaults. Route its formatting
+        // through the matching, bundled official Simplified Chinese catalog.
+        // No network translation or DOM mutation is involved.
+        return {
+          code: `import { monacoText } from ${JSON.stringify(resolve(__dirname, 'src/lib/monacoText.js').replaceAll('\\', '/'))};\n` +
+            code.replace(/_format\(message, args\)/g, '_format(monacoText(message), args)')
+              .replace('function _format(monacoText(message), args)', 'function _format(message, args)'),
+          map: null,
+        };
+      },
+    }],
     // Use relative paths for assets (supports Electron/standalone builds)
     base: './',
     // Path alias resolution for imports

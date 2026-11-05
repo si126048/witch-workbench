@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import type { SceneSprite } from '@/types';
@@ -26,7 +27,7 @@ const RESET: Partial<SceneSprite> = {
 
 const PRESET_CATEGORIES: PresetCategory[] = [
     {
-        label: 'Environmental & Time of Day',
+        label: uiText("Environmental & Time of Day"),
         presets: [
             { name: 'Night',             swatch: '#444466',                                            apply: { ...RESET, colorMode: 'tint', tintColor: '#444466', brightness: -0.1 } },
             { name: 'Sunset',            swatch: '#ffcc99',                                            apply: { ...RESET, colorMode: 'tint', tintColor: '#ffcc99', brightness: 0.05 } },
@@ -36,7 +37,7 @@ const PRESET_CATEGORIES: PresetCategory[] = [
         ],
     },
     {
-        label: 'Flashbacks & Memory',
+        label: uiText("Flashbacks & Memory"),
         presets: [
             { name: 'Classic Sepia',   swatch: 'linear-gradient(135deg, #704214, #f5e4c3)',            apply: { ...RESET, colorMode: 'colorize', colorizeBlack: '#704214', colorizeWhite: '#f5e4c3' } },
             { name: 'Greyscale',       swatch: 'linear-gradient(135deg, #222, #ddd)',                  apply: { ...RESET, saturation: 0 } },
@@ -45,7 +46,7 @@ const PRESET_CATEGORIES: PresetCategory[] = [
         ],
     },
     {
-        label: 'Character State',
+        label: uiText("Character State"),
         presets: [
             { name: 'Silhouette',       swatch: '#000000',                                            apply: { ...RESET, brightness: -1.0 } },
             { name: 'Dimmed (Inactive)', swatch: '#555566',                                           apply: { ...RESET, brightness: -0.2, saturation: 0.8 } },
@@ -55,7 +56,7 @@ const PRESET_CATEGORIES: PresetCategory[] = [
         ],
     },
     {
-        label: 'Horror & Special Effects',
+        label: uiText("Horror & Special Effects"),
         presets: [
             { name: 'Invert',         swatch: 'linear-gradient(135deg, #ff0066, #00ffcc, #ffcc00)',   apply: { ...RESET, invert: 1.0 } },
             { name: 'Blood Red',      swatch: 'linear-gradient(135deg, #220000, #ff0000)',            apply: { ...RESET, colorMode: 'colorize', colorizeBlack: '#220000', colorizeWhite: '#ff0000' } },
@@ -64,7 +65,7 @@ const PRESET_CATEGORIES: PresetCategory[] = [
         ],
     },
     {
-        label: 'UI & Technical',
+        label: uiText("UI & Technical"),
         presets: [
             { name: 'Disabled',          swatch: '#888888',                                           apply: { ...RESET, saturation: 0, brightness: -0.1 } },
             { name: 'Highlighted / Glow', swatch: 'linear-gradient(135deg, #ffffaa, #ffffff)',        apply: { ...RESET, brightness: 0.2, contrast: 1.1 } },
@@ -119,7 +120,7 @@ const MatrixPresetPopover: React.FC<Props> = ({ onApply }) => {
                 <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
-                <span>Presets</span>
+                <span>{uiText("Presets")}</span>
                 <svg className="w-2.5 h-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>

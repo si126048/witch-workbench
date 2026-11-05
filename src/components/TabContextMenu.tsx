@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file TabContextMenu.tsx
  * @description Right-click context menu for editor tabs (~100 lines).
@@ -75,33 +76,28 @@ const TabContextMenu: React.FC<TabContextMenuProps> = ({
           disabled={isProtectedTab}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Close
-        </button>
+          {uiText("Close")}</button>
         <button
           onClick={() => handleAction(() => onCloseOthers(tabId))}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Close Others
-        </button>
+          {uiText("Close Others")}</button>
         <button
           onClick={() => handleAction(() => onCloseLeft(tabId))}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Close to the Left
-        </button>
+          {uiText("Close to the Left")}</button>
         <button
           onClick={() => handleAction(() => onCloseRight(tabId))}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Close to the Right
-        </button>
+          {uiText("Close to the Right")}</button>
         <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
         <button
           onClick={() => handleAction(onCloseAll)}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Close All
-        </button>
+          {uiText("Close All")}</button>
         <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
         {splitLayout === 'none' && !isProtectedTab && (
           <>
@@ -109,14 +105,12 @@ const TabContextMenu: React.FC<TabContextMenuProps> = ({
               onClick={() => handleAction(() => onSplitRight?.(tabId))}
               className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
             >
-              Open in Split Right
-            </button>
+              {uiText("Open in Split Right")}</button>
             <button
               onClick={() => handleAction(() => onSplitBottom?.(tabId))}
               className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
             >
-              Open in Split Bottom
-            </button>
+              {uiText("Open in Split Bottom")}</button>
           </>
         )}
         {splitLayout !== 'none' && !isProtectedTab && (
@@ -134,8 +128,7 @@ const TabContextMenu: React.FC<TabContextMenuProps> = ({
               onClick={() => handleAction(() => onPopOut(tabId))}
               className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
             >
-              Pop Out to Window
-            </button>
+              {uiText("Pop Out to Window")}</button>
           </>
         )}
         {filePath && (
@@ -151,8 +144,7 @@ const TabContextMenu: React.FC<TabContextMenuProps> = ({
               onClick={() => handleAction(() => onCopyPath?.(filePath))}
               className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
             >
-              Copy Path
-            </button>
+              {uiText("Copy Path")}</button>
           </>
         )}
       </div>

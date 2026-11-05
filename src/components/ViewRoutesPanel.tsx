@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ViewRoutesPanel.tsx
  * @description Route-highlighting toggle list for `RouteCanvas` (~120 lines).
@@ -47,9 +48,9 @@ const ViewRoutesPanel: React.FC<ViewRoutesPanelProps> = ({
           embedded ? '' : 'border-b border-gray-200 dark:border-gray-600'
         }`}
         onClick={() => setIsCollapsed(v => !v)}
-        title="Auto-detected distinct execution paths through the story"
+        title={uiText("Auto-detected distinct execution paths through the story")}
       >
-        <span>Routes ({routes.length}{routesTruncated ? '+' : ''})</span>
+        <span>{uiText("Routes (")}{routes.length}{routesTruncated ? '+' : ''})</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={`h-4 w-4 text-gray-400 transition-transform ${isCollapsed ? '-rotate-90' : ''}`}
@@ -81,18 +82,17 @@ const ViewRoutesPanel: React.FC<ViewRoutesPanelProps> = ({
                     <span className="text-amber-600 dark:text-amber-400">{labels.endLabel}</span>
                   </span>
                 ) : (
-                  <span>Route {route.id + 1}</span>
+                  <span>{("" + uiText("Route") + " ")}{route.id + 1}</span>
                 )}
               </label>
             );
           })}
           {routesTruncated && (
             <p className="text-xs text-amber-500 dark:text-amber-400 text-center p-2">
-              Showing first {routes.length} routes. Large project route limit reached.
-            </p>
+              {("" + uiText("Showing first") + " ")}{routes.length} {(" " + uiText("routes. Large project route limit reached.") + "")}</p>
           )}
           {routes.length === 0 && (
-            <p className="text-xs text-gray-400 dark:text-gray-500 text-center p-2">No distinct routes found.</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 text-center p-2">{uiText("No distinct routes found.")}</p>
           )}
         </div>
       )}

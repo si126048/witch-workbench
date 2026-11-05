@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file CrashLogModal.tsx
  * @description Dismissible modal showing the traceback.txt Ren'Py wrote after the game process
@@ -34,7 +35,7 @@ const CrashLogModal: React.FC<CrashLogModalProps> = ({ isOpen, tracebackText, on
         onClick={e => e.stopPropagation()}
       >
         <header className="px-6 py-5 border-b border-primary">
-          <h2 id="crash-log-title" className="text-xl font-bold">Game Crashed — traceback.txt</h2>
+          <h2 id="crash-log-title" className="text-xl font-bold">{uiText("Game Crashed — traceback.txt")}</h2>
         </header>
         <main className="px-6 py-6 overflow-auto">
           <pre className="text-xs font-mono whitespace-pre-wrap text-secondary bg-tertiary rounded p-4 border border-primary">
@@ -42,13 +43,12 @@ const CrashLogModal: React.FC<CrashLogModalProps> = ({ isOpen, tracebackText, on
           </pre>
         </main>
         <footer className="bg-header px-6 py-4 rounded-b-lg flex justify-end items-center space-x-4 border-t border-primary">
-          <CopyButton text={tracebackText} label="Copy Traceback" size="md" />
+          <CopyButton text={tracebackText} label={uiText("Copy Traceback")} size="md" />
           <button
             onClick={onClose}
             className="bg-tertiary hover:bg-tertiary-hover text-primary font-bold py-2 px-4 rounded transition duration-200 border border-primary"
           >
-            Close
-          </button>
+            {uiText("Close")}</button>
         </footer>
       </div>
     </div>,

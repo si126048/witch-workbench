@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback, useState } from 'react';
 import type { RefObject } from 'react';
 import type { AppSettings, Block, RenpyAnalysisResult } from '@/types';
@@ -62,7 +63,7 @@ export function useEditorSelectionActions({
 
     const sanitizedBase = sanitizeFileName(selectedText);
     if (!sanitizedBase) {
-      addToast('Selected text has no usable characters for a file name.', 'error');
+      addToast(uiText("Selected text has no usable characters for a file name."), 'error');
       return;
     }
 
@@ -89,7 +90,7 @@ export function useEditorSelectionActions({
   const handleCreateVariableFromSelection = useCallback((selectedText: string) => {
     const sanitized = sanitizeIdentifier(selectedText, true);
     if (!sanitized) {
-      addToast('Selected text has no usable characters for a variable name.', 'error');
+      addToast(uiText("Selected text has no usable characters for a variable name."), 'error');
       return;
     }
     const nameWasSanitized = sanitized !== selectedText.trim();
@@ -115,7 +116,7 @@ export function useEditorSelectionActions({
     // form field itself opens empty and the existing "tag required" validation catches it.
     const tabTag = sanitizedTag || 'new';
     if (sanitizedTag && analysisResult.characters.has(sanitizedTag)) {
-      addToast(`Character '${rawName}' already exists — opening it.`, 'info');
+      addToast(uiText("Character '{value0}' already exists — opening it.", { value0: rawName }), 'info');
     }
     handleOpenCharacterEditor(tabTag, { initialTag: sanitizedTag, initialName: rawName });
   }, [addToast, analysisResult.characters, handleOpenCharacterEditor]);

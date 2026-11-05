@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback } from 'react';
 import type React from 'react';
 import type { Block, RenpyAnalysisResult, Variable, FileSystemTreeNode, Position } from '@/types';
@@ -35,7 +36,7 @@ export function useStoryElementsPanel({
     const existing = blocks.find(b => b.filePath === targetFile);
     if (existing) {
       updateBlock(existing.id, { content: existing.content + '\n' + varContent });
-      addToast(`Added variable ${v.name} to variables.rpy`, 'success');
+      addToast(uiText("Added variable {value0} to variables.rpy", { value0: v.name }), 'success');
     } else if (window.electronAPI && projectRootPath) {
       try {
         const fullPath = await window.electronAPI.path.join(projectRootPath, 'game', 'variables.rpy') as string;
@@ -44,17 +45,17 @@ export function useStoryElementsPanel({
           addBlock(targetFile, varContent, undefined, { markDirty: false });
           const projData = await window.electronAPI.loadProject(projectRootPath);
           setFileSystemTree(projData.tree);
-          addToast(`Created variables.rpy and added variable ${v.name}`, 'success');
+          addToast(uiText("Created variables.rpy and added variable {value0}", { value0: v.name }), 'success');
         } else {
           const errorMsg = typeof res.error === 'string' ? res.error : 'Unknown error';
           throw new Error(errorMsg);
         }
       } catch (e) {
-        addToast(`Failed to create variables.rpy: ${formatErrorMessage(e)}`, 'error');
+        addToast(uiText("Failed to create variables.rpy: {value0}", { value0: formatErrorMessage(e) }), 'error');
       }
     } else {
       addBlock(targetFile, varContent);
-      addToast(`Added variable ${v.name} to variables.rpy`, 'success');
+      addToast(uiText("Added variable {value0} to variables.rpy", { value0: v.name }), 'success');
     }
   }, [blocks, updateBlock, addToast, projectRootPath, addBlock, setFileSystemTree]);
 
@@ -62,13 +63,13 @@ export function useStoryElementsPanel({
     const escapeForRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const oldVar = analysisResult.variables.get(oldName);
     if (!oldVar) {
-      addToast(`Error: Cannot find definition for variable '${oldName}'.`, 'error');
+      addToast(uiText("Error: Cannot find definition for variable '{value0}'.", { value0: oldName }), 'error');
       return;
     }
 
     const defBlock = blocks.find(b => b.id === oldVar.definedInBlockId);
     if (!defBlock) {
-      addToast(`Error: Cannot find the file containing variable '${oldName}'.`, 'error');
+      addToast(uiText("Error: Cannot find the file containing variable '{value0}'.", { value0: oldName }), 'error');
       return;
     }
 
@@ -78,7 +79,7 @@ export function useStoryElementsPanel({
     );
 
     if (!defRegex.test(defBlock.content)) {
-      addToast(`Error: Could not locate the declaration of '${oldName}' in the source file.`, 'error');
+      addToast(uiText("Error: Could not locate the declaration of '{value0}' in the source file.", { value0: oldName }), 'error');
       return;
     }
 
@@ -109,10 +110,10 @@ export function useStoryElementsPanel({
         }
       });
 
-      addToast(`Renamed "${oldName}" to "${newName}" in ${renamedFileCount} file(s).`, 'success');
+      addToast(uiText("Renamed \"{value0}\" to \"{value1}\" in {value2} file(s).", { value0: oldName, value1: newName, value2: renamedFileCount }), 'success');
     } else {
       updateBlock(defBlock.id, { content: newDefContent });
-      addToast(`Variable "${oldName}" updated.`, 'success');
+      addToast(uiText("Variable \"{value0}\" updated.", { value0: oldName }), 'success');
     }
   }, [analysisResult.variables, blocks, updateBlock, addToast]);
 

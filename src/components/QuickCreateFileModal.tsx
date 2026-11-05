@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file QuickCreateFileModal.tsx
  * @description Lightweight modal for confirming/editing a filename generated
@@ -51,14 +52,13 @@ const QuickCreateFileModal: React.FC<QuickCreateFileModalProps> = ({ isOpen, dir
         onClick={e => e.stopPropagation()}
       >
         <header className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 id="quick-create-file-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">New File</h2>
+          <h2 id="quick-create-file-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">{uiText("New File")}</h2>
         </header>
 
         <main className="p-6 space-y-4">
           <div>
             <label htmlFor="quick-create-file-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              File Name
-            </label>
+              {uiText("File Name")}</label>
             <div className="flex items-center">
               <input
                 ref={inputRef}
@@ -75,13 +75,12 @@ const QuickCreateFileModal: React.FC<QuickCreateFileModalProps> = ({ isOpen, dir
             </div>
             {collidingWithExisting && (
               <p className="text-xs text-amber-500 dark:text-amber-400 mt-1">
-                A file named <span className="font-mono">{baseName}{extension}</span> already exists in this directory — choose a different name or Cancel.
-              </p>
+                {("" + uiText("A file named") + " ")}<span className="font-mono">{baseName}{extension}</span> {(" " + uiText("already exists in this directory — choose a different name or Cancel.") + "")}</p>
             )}
           </div>
 
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            Creating in: <span className="font-mono bg-gray-100 dark:bg-gray-700 px-1 rounded">{directoryPath || '(project root)'}</span>
+            {("" + uiText("Creating in:") + " ")}<span className="font-mono bg-gray-100 dark:bg-gray-700 px-1 rounded">{directoryPath || uiText("(project root)")}</span>
           </div>
         </main>
 
@@ -90,14 +89,12 @@ const QuickCreateFileModal: React.FC<QuickCreateFileModalProps> = ({ isOpen, dir
             onClick={onClose}
             className="px-4 py-2 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
           >
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
           <button
             onClick={handleConfirm}
             className="px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded shadow-sm"
           >
-            Create
-          </button>
+            {uiText("Create")}</button>
         </footer>
       </div>
     </div>

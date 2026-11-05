@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file StatusBar.tsx
  * @description Bottom status strip showing project health and activity indicators (~80 lines).
@@ -52,18 +53,18 @@ const StatusBar: React.FC<StatusBarProps> = ({
   // Priority: save error > saving > scanning > analysis pending > idle
   const activity = (() => {
     if (saveStatus === 'error') {
-      return { spinner: false, color: 'text-red-400', label: 'Save failed — check file permissions' };
+      return { spinner: false, color: 'text-red-400', label: uiText("Save failed — check file permissions") };
     }
     if (saveStatus === 'saving') {
-      return { spinner: true, color: 'text-blue-400', label: 'Saving...' };
+      return { spinner: true, color: 'text-blue-400', label: uiText("Saving...") };
     }
     if (isScanningAssets) {
-      return { spinner: true, color: 'text-indigo-400', label: 'Scanning assets...' };
+      return { spinner: true, color: 'text-indigo-400', label: uiText("Scanning assets...") };
     }
     if (isAnalysisPending) {
-      return { spinner: true, color: 'text-indigo-400', label: 'Analyzing...' };
+      return { spinner: true, color: 'text-indigo-400', label: uiText("Analyzing...") };
     }
-    return { spinner: false, color: 'text-secondary', label: 'Ready' };
+    return { spinner: false, color: 'text-secondary', label: uiText("Ready") };
   })();
 
   return (
@@ -76,11 +77,10 @@ const StatusBar: React.FC<StatusBarProps> = ({
           <button
             onClick={onCancelScan}
             className="ml-1 px-1.5 rounded hover:bg-black/10 text-secondary hover:text-primary transition-colors"
-            aria-label="Cancel scan"
-            title="Cancel scan"
+            aria-label={uiText("Cancel scan")}
+            title={uiText("Cancel scan")}
           >
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
         )}
       </div>
 
@@ -96,8 +96,8 @@ const StatusBar: React.FC<StatusBarProps> = ({
                 setShowContextMenu(!showContextMenu);
               }}
               className="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer"
-              title={`View screenshots (${screenshotCount} captured)`}
-              aria-label={`View screenshots (${screenshotCount} captured)`}
+              title={uiText("View screenshots ({value0} captured)", { value0: screenshotCount })}
+              aria-label={uiText("View screenshots ({value0} captured)", { value0: screenshotCount })}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
@@ -122,8 +122,7 @@ const StatusBar: React.FC<StatusBarProps> = ({
                     }}
                     className="w-full px-3 py-1.5 hover:bg-primary/10 text-left transition-colors"
                   >
-                    Open Screenshots Folder
-                  </button>
+                    {uiText("Open Screenshots Folder")}</button>
                   <button
                     onClick={async () => {
                       onCopyLatestScreenshotPath?.();
@@ -131,19 +130,17 @@ const StatusBar: React.FC<StatusBarProps> = ({
                     }}
                     className="w-full px-3 py-1.5 hover:bg-primary/10 text-left transition-colors"
                   >
-                    Copy Latest Screenshot Path
-                  </button>
+                    {uiText("Copy Latest Screenshot Path")}</button>
                   <button
                     onClick={() => {
-                      if (confirm(`Clear all ${screenshotCount} screenshots?`)) {
+                      if (confirm(uiText("Clear all {value0} screenshots?", { value0: screenshotCount }))) {
                         onClearScreenshots?.();
                       }
                       setShowContextMenu(false);
                     }}
                     className="w-full px-3 py-1.5 hover:bg-red-500/10 text-red-400 text-left transition-colors"
                   >
-                    Clear All Screenshots
-                  </button>
+                    {uiText("Clear All Screenshots")}</button>
                 </div>
               </>
             )}
@@ -154,7 +151,7 @@ const StatusBar: React.FC<StatusBarProps> = ({
             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
             </svg>
-            {errorCount} error{errorCount !== 1 ? 's' : ''}
+            {errorCount} {(" " + uiText("error") + "")}{errorCount !== 1 ? 's' : ''}
           </span>
         )}
         {warningCount > 0 && (
@@ -162,18 +159,18 @@ const StatusBar: React.FC<StatusBarProps> = ({
             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
             </svg>
-            {warningCount} warning{warningCount !== 1 ? 's' : ''}
+            {warningCount} {(" " + uiText("warning") + "")}{warningCount !== 1 ? 's' : ''}
           </span>
         )}
         {activeFileLineCount !== null && (() => {
           const severity = getFileSizeSeverity(activeFileLineCount, fileSizeThresholds);
           return (
             <span className={`flex items-center gap-1 ${getFileSizeSeverityTextClass(severity)}`}>
-              {activeFileLineCount.toLocaleString()} lines ({getFileSizeSeverityLabel(severity)})
+              {activeFileLineCount.toLocaleString()} {(" " + uiText("lines (") + "")}{getFileSizeSeverityLabel(severity)})
             </span>
           );
         })()}
-        <span>{blockCount} file{blockCount !== 1 ? 's' : ''}</span>
+        <span>{blockCount} {(" " + uiText("file") + "")}{blockCount !== 1 ? 's' : ''}</span>
         <span className="border-l border-primary pl-3 opacity-50">
           v{process.env.APP_VERSION}
           {process.env.BUILD_NUMBER && process.env.BUILD_NUMBER !== 'dev' && (

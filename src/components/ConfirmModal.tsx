@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ConfirmModal.tsx
  * @description Generic confirmation dialog with Cancel, optional secondary action, and Confirm buttons (~70 lines).
@@ -32,7 +33,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   children, 
   onConfirm, 
   onClose, 
-  confirmText = 'Confirm',
+  confirmText = uiText("Confirm"),
   confirmClassName = 'bg-red-600 hover:bg-red-700',
   secondaryAction
 }) => {
@@ -62,8 +63,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             onClick={onClose}
             className="bg-tertiary hover:bg-tertiary-hover text-primary font-bold py-2 px-4 rounded transition duration-200 border border-primary"
           >
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
           {secondaryAction && (
             <button
               onClick={secondaryAction.onClick}

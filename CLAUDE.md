@@ -1,3 +1,7 @@
+# Public fork privacy rule
+
+This repository is public. Keep internal task databases, personal paths, and private team notes out of source, release assets, and public Git refs. Use an explicitly configured private Dolt remote named `internal`; run `bd dolt push --remote internal --no-adopt`. Never adopt public `origin` for internal task sync. If no private remote is configured, keep the database local and report that constraint. This privacy rule overrides the generic sync examples below.
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.

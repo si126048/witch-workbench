@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file useTabContentRenderer.tsx
  * @description Custom hook for rendering editor tab labels, tab content, and the tab bar
@@ -600,7 +601,7 @@ export function useTabContentRenderer(params: UseTabContentRendererParams): UseT
                 {diagnosticsResult.errorCount}
               </span>
             )}
-            <button onClick={(e) => handleCloseTab(tab.id, paneId, e)} aria-label="Close tab" className="ml-2 opacity-0 group-hover:opacity-100 hover:text-red-500 rounded-full p-0.5">
+            <button onClick={(e) => handleCloseTab(tab.id, paneId, e)} aria-label={uiText("Close tab")} className="ml-2 opacity-0 group-hover:opacity-100 hover:text-red-500 rounded-full p-0.5">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
             </button>
             {((tab.blockId && (dirtyBlockIds.has(tab.blockId) || dirtyEditors.has(tab.blockId))) || (tab.type === 'untitled' && untitledFiles.get(tab.id)?.isDirty)) && <div className="w-2 h-2 ml-2 bg-blue-500 rounded-full flex-none" />}
@@ -611,14 +612,14 @@ export function useTabContentRenderer(params: UseTabContentRendererParams): UseT
       <div className="flex items-center flex-none border-l border-gray-200 dark:border-gray-700">
         <button
           onClick={() => scrollRef.current?.scrollBy({ left: -150, behavior: 'smooth' })}
-          title="Scroll tabs left"
+          title={uiText("Scroll tabs left")}
           className="px-1 py-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
         >
           <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
         <button
           onClick={() => scrollRef.current?.scrollBy({ left: 150, behavior: 'smooth' })}
-          title="Scroll tabs right"
+          title={uiText("Scroll tabs right")}
           className="px-1 py-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
         >
           <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none"><path d="M4.5 2L8.5 6L4.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -626,10 +627,10 @@ export function useTabContentRenderer(params: UseTabContentRendererParams): UseT
         {paneId === 'primary' && splitLayout === 'none' && (
           <>
             <div className="w-px h-4 bg-gray-200 dark:bg-gray-700 mx-0.5" />
-            <button onClick={() => handleCreateSplit('right')} title="Split Right" className="p-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <button onClick={() => handleCreateSplit('right')} title={uiText("Split Right")} className="p-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
               <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="6" height="12" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="9" y="2" width="6" height="12" rx="1" stroke="currentColor" strokeWidth="1.5"/></svg>
             </button>
-            <button onClick={() => handleCreateSplit('bottom')} title="Split Below" className="p-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <button onClick={() => handleCreateSplit('bottom')} title={uiText("Split Below")} className="p-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
               <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="2" y="9" width="12" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/></svg>
             </button>
           </>
@@ -637,7 +638,7 @@ export function useTabContentRenderer(params: UseTabContentRendererParams): UseT
         {paneId === 'primary' && splitLayout !== 'none' && (
           <>
             <div className="w-px h-4 bg-gray-200 dark:bg-gray-700 mx-0.5" />
-            <button onClick={handleClosePrimaryPane} title="Close Pane (moves tabs to other pane)" className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <button onClick={handleClosePrimaryPane} title={uiText("Close Pane (moves tabs to other pane)")} className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
             </button>
           </>
@@ -645,7 +646,7 @@ export function useTabContentRenderer(params: UseTabContentRendererParams): UseT
         {paneId === 'secondary' && (
           <>
             <div className="w-px h-4 bg-gray-200 dark:bg-gray-700 mx-0.5" />
-            <button onClick={handleCloseSecondaryPane} title="Close Pane (moves tabs to other pane)" className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <button onClick={handleCloseSecondaryPane} title={uiText("Close Pane (moves tabs to other pane)")} className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
             </button>
           </>

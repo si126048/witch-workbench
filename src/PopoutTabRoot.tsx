@@ -1,3 +1,4 @@
+import { uiText } from "./lib/uiText.js";
 /**
  * @file PopoutTabRoot.tsx
  * @description Root component for a detached ("popped-out") tab window.
@@ -56,10 +57,9 @@ function PopoutChrome({ title, children }: { title: string; children: React.Reac
         <button
           onClick={closePopout}
           className="text-xs px-2 py-1 rounded text-gray-600 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600"
-          title="Move this tab back into the main window"
+          title={uiText("Move this tab back into the main window")}
         >
-          Redock
-        </button>
+          {uiText("Redock")}</button>
       </div>
       <div className="flex-1 min-h-0">{children}</div>
     </div>
@@ -79,10 +79,9 @@ function PopoutCanvasChrome({ children }: { children: React.ReactNode }) {
       <button
         onClick={closePopout}
         className="absolute bottom-3 left-3 z-[9999] text-xs px-2.5 py-1.5 rounded shadow-lg bg-gray-800/90 text-white hover:bg-indigo-600 dark:bg-gray-700/90 dark:hover:bg-indigo-600"
-        title="Move this tab back into the main window"
+        title={uiText("Move this tab back into the main window")}
       >
-        Redock
-      </button>
+        {uiText("Redock")}</button>
     </div>
   );
 }
@@ -197,14 +196,13 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
   if (!snapshot) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
-        Loading...
-      </div>
+        {uiText("Loading...")}</div>
     );
   }
 
   if (snapshot.kind === 'editor' && editorAnalysisResult) {
     return (
-      <PopoutChrome title={snapshot.block.title || 'Untitled'}>
+      <PopoutChrome title={snapshot.block.title || uiText("Untitled")}>
         <EditorView
           block={snapshot.block}
           blocks={[snapshot.block]}
@@ -253,7 +251,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
   if (snapshot.kind === 'untitled' && editorAnalysisResult) {
     const syntheticBlock: Block = { id: snapshot.tabId, content: snapshot.content, position: { x: 0, y: 0 }, width: 320, height: 200, title: snapshot.title };
     return (
-      <PopoutChrome title={snapshot.title ?? 'Untitled'}>
+      <PopoutChrome title={snapshot.title ?? uiText("Untitled")}>
         <EditorView
           block={syntheticBlock}
           blocks={[syntheticBlock]}
@@ -332,7 +330,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
 
   if (snapshot.kind === 'character' && characterAnalysisResult) {
     return (
-      <PopoutChrome title={snapshot.character?.name ? `Char: ${snapshot.character.name}` : `Char: ${snapshot.characterTag}`}>
+      <PopoutChrome title={snapshot.character?.name ? uiText("Char: {value0}", { value0: snapshot.character.name }) : uiText("Char: {value0}", { value0: snapshot.characterTag })}>
         <CharacterEditorView
           character={snapshot.character}
           onSave={(char, oldTag) => { void callHandler('handleUpdateCharacter', char, oldTag); }}
@@ -355,7 +353,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
 
   if (snapshot.kind === 'diagnostics') {
     return (
-      <PopoutChrome title="Diagnostics">
+      <PopoutChrome title={uiText("Diagnostics")}>
         <DiagnosticsPanel
           diagnostics={snapshot.diagnostics}
           blocks={fromLightBlocks(snapshot.blocks)}
@@ -381,7 +379,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
 
   if (snapshot.kind === 'translations') {
     return (
-      <PopoutChrome title="Translations">
+      <PopoutChrome title={uiText("Translations")}>
         <TranslationDashboard
           translationData={snapshot.translationData}
           blocks={fromLightBlocks(snapshot.blocks)}
@@ -400,7 +398,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
 
   if (snapshot.kind === 'stats') {
     return (
-      <PopoutChrome title="Stats">
+      <PopoutChrome title={uiText("Stats")}>
         <StatsView
           blocks={snapshot.blocks}
           analysisResult={snapshot.analysisResult}
@@ -425,7 +423,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
 
   if (snapshot.kind === 'screen-preview') {
     return (
-      <PopoutChrome title="Screen Preview">
+      <PopoutChrome title={uiText("Screen Preview")}>
         <ScreenPreviewTab
           screens={snapshot.screens}
           blocks={snapshot.blocks}
@@ -634,8 +632,7 @@ const PopoutTabRoot: React.FC<PopoutTabRootProps> = ({ tabId }) => {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
-      This tab type can&apos;t be shown in a detached window.
-    </div>
+      {uiText("This tab type can't be shown in a detached window.")}</div>
   );
 };
 

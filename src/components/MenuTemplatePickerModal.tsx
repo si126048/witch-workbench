@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file MenuTemplatePickerModal.tsx
  * @description Modal for selecting a menu template to insert into the editor.
@@ -89,12 +90,11 @@ export function MenuTemplatePickerModal({
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-primary">
           <h2 id="template-picker-title" className="text-xl font-bold">
-            Insert Menu Template
-          </h2>
+            {uiText("Insert Menu Template")}</h2>
           <button
             onClick={onClose}
             className="text-secondary hover:text-primary"
-            aria-label="Close"
+            aria-label={uiText("Close")}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -108,7 +108,7 @@ export function MenuTemplatePickerModal({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search templates..."
+            placeholder={uiText("Search templates...")}
             className="w-full px-3 py-2 bg-tertiary border border-primary rounded text-primary placeholder-secondary"
           />
         </div>
@@ -119,7 +119,7 @@ export function MenuTemplatePickerModal({
           <div className="w-64 border-r border-primary overflow-y-auto">
             {filteredTemplates.length === 0 ? (
               <p className="p-4 text-sm text-secondary italic">
-                {searchQuery ? 'No templates match your search' : 'No templates available'}
+                {searchQuery ? uiText("No templates match your search") : uiText("No templates available")}
               </p>
             ) : (
               <ul>
@@ -140,7 +140,7 @@ export function MenuTemplatePickerModal({
                         <p className="text-xs text-secondary truncate mt-1">{template.description}</p>
                       )}
                       <p className="text-xs text-secondary mt-1">
-                        {template.choices.length} choice{template.choices.length !== 1 ? 's' : ''}
+                        {template.choices.length} {(" " + uiText("choice") + "")}{template.choices.length !== 1 ? 's' : ''}
                       </p>
                     </button>
                   </li>
@@ -153,15 +153,14 @@ export function MenuTemplatePickerModal({
           <div className="flex-1 flex flex-col p-4 bg-tertiary">
             {selectedTemplate ? (
               <>
-                <h3 className="text-sm font-semibold mb-2 text-secondary">Preview</h3>
+                <h3 className="text-sm font-semibold mb-2 text-secondary">{uiText("Preview")}</h3>
                 <pre className="flex-1 p-3 bg-secondary rounded border border-primary overflow-auto text-sm font-mono text-primary">
                   {generatePreview(selectedTemplate)}
                 </pre>
               </>
             ) : (
               <div className="flex-1 flex items-center justify-center text-secondary">
-                Select a template to preview
-              </div>
+                {uiText("Select a template to preview")}</div>
             )}
           </div>
         </div>
@@ -172,15 +171,13 @@ export function MenuTemplatePickerModal({
             onClick={onClose}
             className="px-4 py-2 bg-tertiary hover:bg-tertiary-hover rounded"
           >
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
           <button
             onClick={handleInsert}
             disabled={!selectedTemplate}
             className="px-4 py-2 bg-accent hover:bg-accent-hover rounded disabled:opacity-50 disabled:cursor-not-allowed text-white"
           >
-            Insert
-          </button>
+            {uiText("Insert")}</button>
         </div>
       </div>
     </div>,

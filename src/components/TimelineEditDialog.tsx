@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file TimelineEditDialog.tsx
  * @description Modal for fully editing one `SpriteTimeline`: name, property
@@ -142,8 +143,8 @@ const TimelineEditDialog: React.FC<TimelineEditDialogProps> = ({
         onClick={e => e.stopPropagation()}
       >
         <header className="px-4 py-3 border-b border-primary flex items-center justify-between">
-          <h2 id="timeline-edit-dialog-title" className="text-lg font-bold">Edit Timeline</h2>
-          <button onClick={onClose} aria-label="Close" className="text-secondary hover:text-primary p-1">
+          <h2 id="timeline-edit-dialog-title" className="text-lg font-bold">{uiText("Edit Timeline")}</h2>
+          <button onClick={onClose} aria-label={uiText("Close")} className="text-secondary hover:text-primary p-1">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -155,7 +156,7 @@ const TimelineEditDialog: React.FC<TimelineEditDialogProps> = ({
             type="text"
             value={timeline.name}
             onChange={e => setName(e.target.value)}
-            aria-label="Timeline name"
+            aria-label={uiText("Timeline name")}
             className="w-full text-sm font-semibold rounded border border-primary bg-secondary text-primary px-2 py-1"
           />
 
@@ -192,8 +193,7 @@ const TimelineEditDialog: React.FC<TimelineEditDialogProps> = ({
 
           <div className="flex items-center gap-3">
             <label className="flex items-center gap-1 text-xs text-secondary">
-              Duration
-              <input type="number" min={0.1} step={0.1} value={timeline.duration} onChange={e => setDuration(Number(e.target.value))} className="w-16 text-xs rounded border border-primary bg-secondary text-primary px-1 py-0.5" />
+              {uiText("Duration")}<input type="number" min={0.1} step={0.1} value={timeline.duration} onChange={e => setDuration(Number(e.target.value))} className="w-16 text-xs rounded border border-primary bg-secondary text-primary px-1 py-0.5" />
               s
             </label>
             <label className="flex items-center gap-1 text-xs text-secondary">
@@ -201,20 +201,19 @@ const TimelineEditDialog: React.FC<TimelineEditDialogProps> = ({
                 type="checkbox"
                 checked={timeline.loop}
                 disabled={!canLoop}
-                title={!canLoop ? 'Only the last timeline in a sequential sequence can loop.' : undefined}
+                title={!canLoop ? uiText("Only the last timeline in a sequential sequence can loop.") : undefined}
                 onChange={e => setLoop(e.target.checked)}
               />
-              Loop
-            </label>
+              {uiText("Loop")}</label>
           </div>
 
           {timeline.properties.length === 0 ? (
-            <p className="text-xs text-secondary italic py-2">Pick at least one property to start keyframing</p>
+            <p className="text-xs text-secondary italic py-2">{uiText("Pick at least one property to start keyframing")}</p>
           ) : (
             <div
               ref={rulerRef}
               role="button"
-              aria-label="Add keyframe"
+              aria-label={uiText("Add keyframe")}
               onClick={handleRulerClick}
               onPointerMove={handleDotPointerMove}
               onPointerUp={handleDotPointerUp}
@@ -224,7 +223,7 @@ const TimelineEditDialog: React.FC<TimelineEditDialogProps> = ({
                 <button
                   key={kf.id}
                   type="button"
-                  aria-label={`keyframe at ${kf.time.toFixed(2)}s`}
+                  aria-label={uiText("keyframe at {value0}s", { value0: kf.time.toFixed(2) })}
                   onPointerDown={(e) => handleDotPointerDown(e, kf.id)}
                   onClick={(e) => handleDotClick(e, kf.id)}
                   style={{ left: `${timeline.duration > 0 ? (kf.time / timeline.duration) * 100 : 0}%` }}

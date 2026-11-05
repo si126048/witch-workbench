@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * ScreenPreviewTab — singleton tab that shows a read-only ScreenPreview for
  * whichever Ren'Py `screen` block the Monaco cursor is currently inside.
@@ -135,11 +136,11 @@ export default function ScreenPreviewTab({
   }, [activeScreen, blocks, projectImages, varMap]);
 
   if (!cursorBlockId || cursorLine == null) {
-    return <Placeholder message="Open a .rpy file and place your cursor inside a screen block." />;
+    return <Placeholder message={uiText("Open a .rpy file and place your cursor inside a screen block.")} />;
   }
 
   if (!activeScreen) {
-    return <Placeholder message="Cursor is not inside a screen block." />;
+    return <Placeholder message={uiText("Cursor is not inside a screen block.")} />;
   }
 
   return (
@@ -153,7 +154,7 @@ export default function ScreenPreviewTab({
       {composition ? (
         <ScreenPreview composition={composition} styleMap={styleMap} />
       ) : (
-        <Placeholder message={`Could not parse screen "${activeScreen.name}".`} />
+        <Placeholder message={uiText("Could not parse screen \"{value0}\".", { value0: activeScreen.name })} />
       )}
     </div>
   );

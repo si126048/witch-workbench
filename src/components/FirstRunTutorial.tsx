@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import WorkbenchIcon from './WorkbenchIcon';
 /**
  * @file FirstRunTutorial.tsx
@@ -24,43 +25,43 @@ interface TourStep {
 const TOUR_STEPS: TourStep[] = [
   {
     id: 'welcome',
-    title: 'Getting Started',
-    message: "First, let's open or create a project. Click the folder icon in the top-left to get started.",
+    title: uiText("Getting Started"),
+    message: uiText("First, let's open or create a project. Click the folder icon in the top-left to get started."),
     targetSelector: '[data-tutorial="project-menu"]',
     position: 'bottom',
   },
   {
     id: 'canvas-types',
-    title: 'Three Canvas Types',
-    message: 'Ren\'IDE has three ways to visualize your visual novel: Project (organize script files), Flow (trace narrative flow), and Choices (player decisions). Switch between them here.',
+    title: uiText("Three Canvas Types"),
+    message: uiText("Ren'IDE has three ways to visualize your visual novel: Project (organize script files), Flow (trace narrative flow), and Choices (player decisions). Switch between them here."),
     targetSelector: '[data-tutorial="canvas-tabs"]',
     position: 'bottom',
   },
   {
     id: 'story-canvas',
-    title: 'Project Canvas',
-    message: 'This is your Project Canvas — your visual novel at a glance. Each block is a script file.',
+    title: uiText("Project Canvas"),
+    message: uiText("This is your Project Canvas — your visual novel at a glance. Each block is a script file."),
     targetSelector: '[data-tutorial="story-canvas"]',
     position: 'bottom',
   },
   {
     id: 'new-scene',
-    title: 'Create Scene',
-    message: 'Press N or click here to create a new scene',
+    title: uiText("Create Scene"),
+    message: uiText("Press N or click here to create a new scene"),
     targetSelector: '[data-tutorial="new-scene-button"]',
     position: 'bottom',
   },
   {
     id: 'story-elements',
-    title: 'Story Elements',
-    message: 'Characters, images, audio, and other story elements live here',
+    title: uiText("Story Elements"),
+    message: uiText("Characters, images, audio, and other story elements live here"),
     targetSelector: '[data-tutorial="story-elements"]',
     position: 'left',
   },
   {
     id: 'ready',
-    title: "You're Ready!",
-    message: "That's it! Press Cmd+G (or Ctrl+G) anytime to jump to a label. Happy storytelling!",
+    title: uiText("You're Ready!"),
+    message: uiText("That's it! Press Cmd+G (or Ctrl+G) anytime to jump to a label. Happy storytelling!"),
     targetSelector: '', // No target, will be shown as centered modal
     position: 'bottom',
   },
@@ -274,25 +275,21 @@ const FirstRunTutorial: React.FC<FirstRunTutorialProps> = ({ onComplete, forceSh
               欢迎使用夜幕工作台
             </h2>
             <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed mb-2">
-              Want a quick tour to get started?
-            </p>
+              {uiText("Want a quick tour to get started?")}</p>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
-              We'll show you how to create your first project and navigate the interface. It only takes 30 seconds.
-            </p>
+              {uiText("We'll show you how to create your first project and navigate the interface. It only takes 30 seconds.")}</p>
           </div>
           <footer className="bg-gray-50 dark:bg-gray-700/50 p-4 flex justify-center gap-3 border-t border-gray-200 dark:border-gray-700">
             <button
               onClick={handleSkip}
               className="px-6 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-100 text-sm font-bold rounded transition-colors shadow-sm"
             >
-              Skip — I'll explore on my own
-            </button>
+              {uiText("Skip — I'll explore on my own")}</button>
             <button
               onClick={handleStartTour}
               className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded transition-colors shadow-sm"
             >
-              Start Tour
-            </button>
+              {uiText("Start Tour")}</button>
           </footer>
         </div>
       </div>
@@ -385,13 +382,12 @@ const FirstRunTutorial: React.FC<FirstRunTutorialProps> = ({ onComplete, forceSh
                 onClick={handleSkip}
                 className="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium transition-colors"
               >
-                Skip
-              </button>
+                {uiText("Skip")}</button>
               <button
                 onClick={handleNext}
                 className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded transition-colors shadow-sm"
               >
-                {isLastStep ? 'Start Creating' : 'Next'}
+                {isLastStep ? uiText("Start Creating") : uiText("Next")}
               </button>
             </div>
           </div>

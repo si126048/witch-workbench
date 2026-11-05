@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file MenuConstructorModal.tsx
  * @description Modal component for visually building Ren'Py menu blocks.
@@ -289,12 +290,12 @@ export function MenuConstructorModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-primary flex-shrink-0">
           <h2 id="menu-constructor-title" className="text-lg font-semibold">
-            {mode === 'edit-template' ? 'Edit Menu Template' : 'Create Menu'}
+            {mode === 'edit-template' ? uiText("Edit Menu Template") : uiText("Create Menu")}
           </h2>
           <button
             onClick={onClose}
             className="text-secondary hover:text-primary"
-            aria-label="Close"
+            aria-label={uiText("Close")}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -309,13 +310,12 @@ export function MenuConstructorModal({
             {/* Menu Statement */}
             <div className="mb-3">
               <label className="block text-xs font-medium mb-1.5 text-secondary">
-                Menu Statement (optional)
-              </label>
+                {uiText("Menu Statement (optional)")}</label>
               <input
                 type="text"
                 value={menuStatement}
                 onChange={(e) => setMenuStatement(e.target.value)}
-                placeholder='e.g., "What will you do?"'
+                placeholder={uiText("e.g., \"What will you do?\"")}
                 className="w-full px-2.5 py-1.5 bg-tertiary border border-primary rounded text-sm text-primary placeholder-secondary"
               />
             </div>
@@ -323,13 +323,12 @@ export function MenuConstructorModal({
             {/* Choices */}
             <div className="mb-3">
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-secondary">Choices</label>
+                <label className="text-xs font-medium text-secondary">{uiText("Choices")}</label>
                 <button
                   onClick={addChoice}
                   className="px-2.5 py-1 bg-accent hover:bg-accent-hover rounded text-xs text-white font-semibold"
                 >
-                  + Add Choice
-                </button>
+                  {uiText("+ Add Choice")}</button>
               </div>
 
               {choices.filter(c => c.text.trim()).length === 0 && (
@@ -338,8 +337,7 @@ export function MenuConstructorModal({
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                   <span className="text-xs text-yellow-800 dark:text-yellow-200">
-                    At least one choice needs text before you can insert the menu.
-                  </span>
+                    {uiText("At least one choice needs text before you can insert the menu.")}</span>
                 </div>
               )}
 
@@ -379,7 +377,7 @@ export function MenuConstructorModal({
                         type="text"
                         value={choice.text}
                         onChange={(e) => updateChoice(choice.id, { text: e.target.value })}
-                        placeholder="Choice text"
+                        placeholder={uiText("Choice text")}
                         className="flex-1 px-2.5 py-1.5 bg-secondary border border-primary rounded text-sm text-primary placeholder-secondary"
                       />
 
@@ -387,8 +385,8 @@ export function MenuConstructorModal({
                         onClick={() => removeChoice(choice.id)}
                         disabled={choices.length === 1}
                         className="p-1 text-red-500 hover:text-red-400 disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
-                        title="Remove choice"
-                        aria-label="Remove choice"
+                        title={uiText("Remove choice")}
+                        aria-label={uiText("Remove choice")}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -402,7 +400,7 @@ export function MenuConstructorModal({
                         type="text"
                         value={choice.condition || ''}
                         onChange={(e) => updateChoice(choice.id, { condition: e.target.value })}
-                        placeholder="Condition (optional)"
+                        placeholder={uiText("Condition (optional)")}
                         className="px-2.5 py-1.5 bg-secondary border border-primary rounded text-xs text-primary placeholder-secondary font-mono"
                         list={`variables-datalist-${choice.id}`}
                       />
@@ -419,7 +417,7 @@ export function MenuConstructorModal({
                             <option value="call">call</option>
                             <option value="pass">pass</option>
                             <option value="return">return</option>
-                            <option value="code">custom code</option>
+                            <option value="code">{uiText("custom code")}</option>
                           </select>
 
                           {(choice.action === 'jump' || choice.action === 'call') && (
@@ -427,7 +425,7 @@ export function MenuConstructorModal({
                               type="text"
                               value={choice.target || ''}
                               onChange={(e) => updateChoice(choice.id, { target: e.target.value })}
-                              placeholder="label name"
+                              placeholder={uiText("label name")}
                               className={`flex-1 px-2.5 py-1.5 bg-secondary rounded text-xs text-primary placeholder-secondary font-mono ${
                                 hasError ? 'border-2 border-red-500' : 'border border-primary'
                               }`}
@@ -450,8 +448,7 @@ export function MenuConstructorModal({
                     {choice.action === 'code' && (
                       <div className="ml-6 mt-2">
                         <label className="block text-xs font-medium mb-1.5 text-secondary">
-                          Custom Code Block
-                        </label>
+                          {uiText("Custom Code Block")}</label>
                         <CodeBlockEditor
                           value={choice.codeBlock || ''}
                           onChange={(value) => updateChoice(choice.id, { codeBlock: value })}
@@ -487,7 +484,7 @@ export function MenuConstructorModal({
                     onChange={(e) => setSaveAsTemplate(e.target.checked)}
                     className="w-3.5 h-3.5"
                   />
-                  <span className="text-xs font-medium">Save as Template</span>
+                  <span className="text-xs font-medium">{uiText("Save as Template")}</span>
                 </label>
 
                 {saveAsTemplate && (
@@ -497,7 +494,7 @@ export function MenuConstructorModal({
                         type="text"
                         value={templateName}
                         onChange={(e) => setTemplateName(e.target.value)}
-                        placeholder="Template name"
+                        placeholder={uiText("Template name")}
                         className={`w-full px-2.5 py-1.5 bg-secondary rounded text-primary placeholder-secondary text-xs ${
                           saveAsTemplate && !templateName.trim() ? 'border-2 border-red-500' : 'border border-primary'
                         }`}
@@ -507,7 +504,7 @@ export function MenuConstructorModal({
                           <svg className="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                           </svg>
-                          <span>Template name is required</span>
+                          <span>{uiText("Template name is required")}</span>
                         </div>
                       )}
                     </div>
@@ -515,7 +512,7 @@ export function MenuConstructorModal({
                       type="text"
                       value={templateDescription}
                       onChange={(e) => setTemplateDescription(e.target.value)}
-                      placeholder="Description (optional)"
+                      placeholder={uiText("Description (optional)")}
                       className="w-full px-2.5 py-1.5 bg-secondary border border-primary rounded text-primary placeholder-secondary text-xs"
                     />
                   </div>
@@ -527,7 +524,7 @@ export function MenuConstructorModal({
             {mode === 'edit-template' && (
               <div className="mt-3 space-y-2">
                 <div>
-                  <label className="block text-xs font-medium mb-1.5 text-secondary">Template Name</label>
+                  <label className="block text-xs font-medium mb-1.5 text-secondary">{uiText("Template Name")}</label>
                   <input
                     type="text"
                     value={templateName}
@@ -541,12 +538,12 @@ export function MenuConstructorModal({
                       <svg className="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
-                      <span>Template name is required</span>
+                      <span>{uiText("Template name is required")}</span>
                     </div>
                   )}
                 </div>
                 <div>
-                  <label className="block text-xs font-medium mb-1.5 text-secondary">Description (optional)</label>
+                  <label className="block text-xs font-medium mb-1.5 text-secondary">{uiText("Description (optional)")}</label>
                   <input
                     type="text"
                     value={templateDescription}
@@ -561,7 +558,7 @@ export function MenuConstructorModal({
           {/* Right: Preview */}
           <div className="w-80 flex flex-col p-4 bg-tertiary">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-semibold text-secondary">Generated Code</h3>
+              <h3 className="text-xs font-semibold text-secondary">{uiText("Generated Code")}</h3>
               <CodeActionButtons code={generatedCode} size="xs" />
             </div>
             <pre className="flex-1 p-2.5 bg-secondary rounded border border-primary overflow-auto text-xs font-mono text-primary leading-relaxed">
@@ -579,10 +576,10 @@ export function MenuConstructorModal({
               </svg>
               <span className="text-xs text-yellow-800 dark:text-yellow-200 font-medium">
                 {choices.filter(c => c.text.trim()).length === 0
-                  ? 'Add at least one choice with text'
+                  ? uiText("Add at least one choice with text")
                   : saveAsTemplate && !templateName.trim()
-                  ? 'Template name is required'
-                  : 'Some choices need a target label'}
+                  ? uiText("Template name is required")
+                  : uiText("Some choices need a target label")}
               </span>
             </div>
           )}
@@ -592,14 +589,13 @@ export function MenuConstructorModal({
               onClick={onClose}
               className="px-4 py-1.5 bg-tertiary hover:bg-tertiary-hover rounded text-sm"
             >
-              Cancel
-            </button>
+              {uiText("Cancel")}</button>
             <button
               onClick={handleInsert}
               disabled={!isValid()}
               className="px-4 py-1.5 bg-accent hover:bg-accent-hover rounded disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold"
             >
-              {mode === 'edit-template' ? 'Update Template' : 'Insert'}
+              {mode === 'edit-template' ? uiText("Update Template") : uiText("Insert")}
             </button>
           </div>
         </div>

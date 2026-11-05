@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useState } from 'react';
 import type { SceneSprite } from '@/types';
 import MatrixPresetPopover from './MatrixPresetPopover';
@@ -15,23 +16,23 @@ interface Props {
 
 const SHADER_DEFS: Record<string, Array<{ name: string; label: string; min: number; max: number; step: number; default: number }>> = {
     'renpy.blur': [
-        { name: 'u_renpy_blur_log2', label: 'Blur (log2)', min: 0, max: 5, step: 0.25, default: 1.0 },
+        { name: 'u_renpy_blur_log2', label: uiText("Blur (log2)"), min: 0, max: 5, step: 0.25, default: 1.0 },
     ],
     'renpy.dissolve': [
-        { name: 'u_renpy_dissolve', label: 'Dissolve', min: 0, max: 1, step: 0.05, default: 0.5 },
+        { name: 'u_renpy_dissolve', label: uiText("Dissolve"), min: 0, max: 1, step: 0.05, default: 0.5 },
     ],
     'renpy.imagedissolve': [
-        { name: 'u_renpy_dissolve_offset',     label: 'Offset',     min: 0,  max: 1, step: 0.05, default: 0   },
-        { name: 'u_renpy_dissolve_multiplier', label: 'Multiplier', min: 0,  max: 2, step: 0.1,  default: 1.0 },
+        { name: 'u_renpy_dissolve_offset',     label: uiText("Offset"),     min: 0,  max: 1, step: 0.05, default: 0   },
+        { name: 'u_renpy_dissolve_multiplier', label: uiText("Multiplier"), min: 0,  max: 2, step: 0.1,  default: 1.0 },
     ],
     'renpy.mask': [
-        { name: 'u_renpy_mask_multiplier', label: 'Multiplier', min: 0,  max: 2,  step: 0.1,  default: 1.0 },
-        { name: 'u_renpy_mask_offset',     label: 'Offset',     min: -1, max: 1,  step: 0.05, default: 0   },
+        { name: 'u_renpy_mask_multiplier', label: uiText("Multiplier"), min: 0,  max: 2,  step: 0.1,  default: 1.0 },
+        { name: 'u_renpy_mask_offset',     label: uiText("Offset"),     min: -1, max: 1,  step: 0.05, default: 0   },
     ],
     // renpy.pixelize is community-documented but not listed in official Ren'Py shader docs.
     // Included because it is widely referenced and the IDE can approximate it in preview.
     'renpy.pixelize': [
-        { name: 'u_amount', label: 'Pixel Size', min: 0.001, max: 0.1, step: 0.001, default: 0.01 },
+        { name: 'u_amount', label: uiText("Pixel Size"), min: 0.001, max: 0.1, step: 0.001, default: 0.01 },
     ],
 };
 
@@ -102,7 +103,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
     if (!activeSprite) {
         return (
             <div className="w-full h-16 flex items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">Select a layer to edit properties</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">{uiText("Select a layer to edit properties")}</p>
             </div>
         );
     }
@@ -182,19 +183,19 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
         <div className="flex flex-wrap items-start gap-3">
 
             {/* Transform */}
-            <ControlGroup label="Transform">
+            <ControlGroup label={uiText("Transform")}>
                 <div className="flex space-x-1">
                     <button
                         onClick={() => u({ flipH: !activeSprite.flipH })}
                         className={`p-1.5 rounded ${activeSprite.flipH ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}
-                        title="Flip Horizontal"
+                        title={uiText("Flip Horizontal")}
                     >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                     </button>
                     <button
                         onClick={() => u({ flipV: !activeSprite.flipV })}
                         className={`p-1.5 rounded ${activeSprite.flipV ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'}`}
-                        title="Flip Vertical"
+                        title={uiText("Flip Vertical")}
                     >
                         <svg className="w-4 h-4 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                     </button>
@@ -202,10 +203,10 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
             </ControlGroup>
 
             {/* Scale & Rotation */}
-            <ControlGroup label="Scale & Rotation">
+            <ControlGroup label={uiText("Scale & Rotation")}>
                 <div className="flex items-center space-x-3">
                     <div className="flex flex-col w-20">
-                        <span className="text-[9px] text-gray-400 mb-0.5">Zoom</span>
+                        <span className="text-[9px] text-gray-400 mb-0.5">{uiText("Zoom")}</span>
                         <input
                             type="number" step="0.1" value={activeSprite.zoom || 1}
                             onChange={e => u({ zoom: Math.max(0.1, parseFloat(e.target.value)) })}
@@ -213,7 +214,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                         />
                     </div>
                     <div className="flex flex-col w-20">
-                        <span className="text-[9px] text-gray-400 mb-0.5">Angle</span>
+                        <span className="text-[9px] text-gray-400 mb-0.5">{uiText("Angle")}</span>
                         <input
                             type="number" value={activeSprite.rotation}
                             onChange={e => u({ rotation: parseInt(e.target.value) })}
@@ -224,16 +225,16 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
             </ControlGroup>
 
             {/* Appearance */}
-            <ControlGroup label="Appearance">
+            <ControlGroup label={uiText("Appearance")}>
                 <div className="flex items-center space-x-3">
                     <SliderRow
-                        label="Opacity" min={0} max={1} step={0.05}
+                        label={uiText("Opacity")} min={0} max={1} step={0.05}
                         value={activeSprite.alpha ?? 1}
                         onChange={v => u({ alpha: v })}
                         onRangeSliderStart={onRangeSliderStart} onRangeSliderEnd={onRangeSliderEnd}
                     />
                     <SliderRow
-                        label="Blur (px)" min={0} max={50} step={1}
+                        label={uiText("Blur (px)")} min={0} max={50} step={1}
                         value={activeSprite.blur ?? 0}
                         onChange={v => u({ blur: v })}
                         onRangeSliderStart={onRangeSliderStart} onRangeSliderEnd={onRangeSliderEnd}
@@ -247,29 +248,29 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
         <div className="flex flex-wrap items-start gap-3">
 
             {/* Color Effects */}
-            <ControlGroup label="Color Effects">
+            <ControlGroup label={uiText("Color Effects")}>
                 <div className="flex flex-col space-y-2">
 
                     {/* Preset picker + mode selector */}
                     <div className="flex items-center gap-2 flex-wrap">
                         <MatrixPresetPopover onApply={u} />
-                        <div className="flex items-center gap-1.5" title={hasAnimatedMatrixFactor ? "Tint/Colorize disabled: this sprite already has a timeline animating a color property (saturation/brightness/contrast/invert) — animating color together with a static tint isn't supported." : undefined}>
-                            <span className="text-[9px] text-gray-400 flex-shrink-0">Mode</span>
+                        <div className="flex items-center gap-1.5" title={hasAnimatedMatrixFactor ? uiText("Tint/Colorize disabled: this sprite already has a timeline animating a color property (saturation/brightness/contrast/invert) — animating color together with a static tint isn't supported.") : undefined}>
+                            <span className="text-[9px] text-gray-400 flex-shrink-0">{uiText("Mode")}</span>
                             <select
                                 value={colorMode}
                                 onChange={e => u({ colorMode: e.target.value as 'none' | 'tint' | 'colorize' })}
                                 className="text-xs p-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                             >
-                                <option value="none">None</option>
-                                <option value="tint" disabled={hasAnimatedMatrixFactor}>Tint</option>
-                                <option value="colorize" disabled={hasAnimatedMatrixFactor}>Colorize</option>
+                                <option value="none">{uiText("None")}</option>
+                                <option value="tint" disabled={hasAnimatedMatrixFactor}>{uiText("Tint")}</option>
+                                <option value="colorize" disabled={hasAnimatedMatrixFactor}>{uiText("Colorize")}</option>
                             </select>
                         </div>
                     </div>
 
                     {colorMode === 'tint' && (
                         <ColorSwatch
-                            label="Tint Color"
+                            label={uiText("Tint Color")}
                             value={activeSprite.tintColor ?? '#ffffff'}
                             onChange={hex => u({ tintColor: hex })}
                         />
@@ -278,12 +279,12 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                     {colorMode === 'colorize' && (
                         <div className="flex space-x-3">
                             <ColorSwatch
-                                label="Shadows"
+                                label={uiText("Shadows")}
                                 value={activeSprite.colorizeBlack ?? '#000000'}
                                 onChange={hex => u({ colorizeBlack: hex })}
                             />
                             <ColorSwatch
-                                label="Highlights"
+                                label={uiText("Highlights")}
                                 value={activeSprite.colorizeWhite ?? '#ffffff'}
                                 onChange={hex => u({ colorizeWhite: hex })}
                             />
@@ -292,7 +293,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
 
                     {colorMode !== 'none' && (
                         <SliderRow
-                            label="Saturation" min={0} max={2} step={0.05}
+                            label={uiText("Saturation")} min={0} max={2} step={0.05}
                             value={saturation}
                             onChange={v => u({ saturation: v })}
                             width="w-40"
@@ -305,7 +306,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                     {/* Brightness / Contrast / Invert — always visible */}
                     <div className="flex items-start gap-3 pt-1.5 border-t border-gray-200 dark:border-gray-600 flex-wrap">
                         <SliderRow
-                            label="Brightness" min={-1} max={1} step={0.05}
+                            label={uiText("Brightness")} min={-1} max={1} step={0.05}
                             value={brightness}
                             onChange={v => u({ brightness: v })}
                             disabled={hasAnimatedMatrixFactor}
@@ -313,7 +314,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                             onRangeSliderStart={onRangeSliderStart} onRangeSliderEnd={onRangeSliderEnd}
                         />
                         <SliderRow
-                            label="Contrast" min={0.1} max={3} step={0.05}
+                            label={uiText("Contrast")} min={0.1} max={3} step={0.05}
                             value={contrast}
                             onChange={v => u({ contrast: v })}
                             disabled={hasAnimatedMatrixFactor}
@@ -321,7 +322,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                             onRangeSliderStart={onRangeSliderStart} onRangeSliderEnd={onRangeSliderEnd}
                         />
                         <SliderRow
-                            label="Invert" min={0} max={1} step={0.1}
+                            label={uiText("Invert")} min={0} max={1} step={0.1}
                             value={invert}
                             onChange={v => u({ invert: v })}
                             width="w-20"
@@ -335,18 +336,18 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
             </ControlGroup>
 
             {/* Shaders */}
-            <ControlGroup label="Shaders">
+            <ControlGroup label={uiText("Shaders")}>
                 <div className="flex flex-col space-y-2">
                     <div className="flex items-center space-x-2">
-                        <span className="text-[9px] text-gray-400 w-12 flex-shrink-0">Shader</span>
+                        <span className="text-[9px] text-gray-400 w-12 flex-shrink-0">{uiText("Shader")}</span>
                         <select
                             value={isCustomShader ? '__custom__' : activeShader}
                             onChange={e => handleShaderChange(e.target.value)}
                             className="text-xs p-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                         >
-                            <option value="">None</option>
+                            <option value="">{uiText("None")}</option>
                             {PREDEFINED_SHADERS.map(s => <option key={s} value={s}>{s}</option>)}
-                            <option value="__custom__">Custom…</option>
+                            <option value="__custom__">{uiText("Custom…")}</option>
                         </select>
                     </div>
 
@@ -356,7 +357,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                             <svg className="w-3 h-3 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
                             </svg>
-                            <span className="text-[9px] text-amber-600 dark:text-amber-400">No IDE preview — effect appears in Ren'Py</span>
+                            <span className="text-[9px] text-amber-600 dark:text-amber-400">{uiText("No IDE preview — effect appears in Ren'Py")}</span>
                         </div>
                     )}
 
@@ -366,7 +367,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                             <svg className="w-3 h-3 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
                             </svg>
-                            <span className="text-[9px] text-blue-500 dark:text-blue-400">Community shader — not in official Ren'Py docs</span>
+                            <span className="text-[9px] text-blue-500 dark:text-blue-400">{uiText("Community shader — not in official Ren'Py docs")}</span>
                         </div>
                     )}
 
@@ -387,7 +388,7 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                     {isCustomShader && (
                         <div className="flex flex-col space-y-1.5">
                             <div className="flex items-center space-x-1.5">
-                                <span className="text-[9px] text-gray-400 w-12 flex-shrink-0">Name</span>
+                                <span className="text-[9px] text-gray-400 w-12 flex-shrink-0">{uiText("Name")}</span>
                                 <input
                                     type="text"
                                     value={customShaderName || activeShader}
@@ -415,14 +416,14 @@ const SceneSpriteProperties: React.FC<Props> = ({ activeSprite, selectedSpriteId
                                     <button
                                         onClick={() => removeCustomUniform(i)}
                                         className="text-red-400 hover:text-red-600 text-xs px-1"
-                                        title="Remove uniform"
+                                        title={uiText("Remove uniform")}
                                     >✕</button>
                                 </div>
                             ))}
                             <button
                                 onClick={addCustomUniform}
                                 className="text-[10px] text-indigo-500 hover:text-indigo-700 text-left"
-                            >+ Add uniform</button>
+                            >{uiText("+ Add uniform")}</button>
                         </div>
                     )}
                 </div>

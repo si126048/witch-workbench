@@ -1,3 +1,4 @@
+import { uiText } from "./src/lib/uiText.js";
 import { registerNightfallHandlers } from './src/lib/nightfallService.js';
 import { registerTeamHub } from './src/lib/teamHubService.js';
 import { logger, electronLog } from './src/lib/logger.main.js';
@@ -744,7 +745,7 @@ async function updateApplicationMenu() {
           if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-recent', path: p });
         }
       }))
-    : [{ label: 'No Recent Projects', enabled: false }];
+    : [{ label: uiText("No Recent Projects"), enabled: false }];
 
   const menuTemplate = [
     ...(process.platform === 'darwin' ? [{
@@ -762,95 +763,95 @@ async function updateApplicationMenu() {
         ]
       }] : []),
     {
-        label: 'File',
+        label: uiText("File"),
         submenu: [
             {
-                label: 'New Project...',
+                label: uiText("New Project..."),
                 accelerator: 'CmdOrCtrl+N',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'new-project' }); }
             },
             {
-                label: 'Open Project...',
+                label: uiText("Open Project..."),
                 accelerator: 'CmdOrCtrl+O',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-project' }); }
             },
             {
-                label: 'Open Recent',
+                label: uiText("Open Recent"),
                 submenu: openRecentSubmenu
             },
             {
                 id: 'new-untitled-file',
-                label: 'New File',
+                label: uiText("New File"),
                 accelerator: 'CmdOrCtrl+Alt+N',
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'new-untitled-file' }); }
             },
             { type: 'separator' },
             {
-                label: 'Save All',
+                label: uiText("Save All"),
                 accelerator: 'CmdOrCtrl+S',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'save-all' }); }
             },
             {
                 id: 'explorer-refresh',
-                label: 'Refresh',
+                label: uiText("Refresh"),
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'explorer-refresh' }); }
             },
             {
                 id: 'open-screenshots-folder',
-                label: 'Open Screenshots Folder',
+                label: uiText("Open Screenshots Folder"),
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-screenshots-folder' }); }
             },
             { type: 'separator' },
             {
                 id: 'explorer-new-file',
-                label: 'New File in Folder',
+                label: uiText("New File in Folder"),
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'explorer-new-file' }); }
             },
             {
                 id: 'explorer-new-folder',
-                label: 'New Folder',
+                label: uiText("New Folder"),
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'explorer-new-folder' }); }
             },
             {
                 id: 'explorer-rename',
-                label: 'Rename',
+                label: uiText("Rename"),
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'explorer-rename' }); }
             },
             {
                 id: 'explorer-delete',
-                label: 'Delete',
+                label: uiText("Delete"),
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'explorer-delete' }); }
             },
             { type: 'separator' },
             ...(process.platform !== 'darwin' ? [{
-                label: 'Settings',
+                label: uiText("Settings"),
                 accelerator: 'CmdOrCtrl+,',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-settings' }); }
             },
             { type: 'separator' }] : []),
             {
                 id: 'run-project',
-                label: 'Run Project',
+                label: uiText("Run Project"),
                 accelerator: 'F5',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'run-project' }); }
             },
             {
                 id: 'stop-project',
-                label: 'Stop Project',
+                label: uiText("Stop Project"),
                 accelerator: 'Shift+F5',
                 enabled: false,
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'stop-project' }); }
             },
             { type: 'separator' },
             {
-                label: 'Close Tab',
+                label: uiText("Close Tab"),
                 accelerator: 'CmdOrCtrl+W',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'close-tab' }); }
             },
@@ -859,7 +860,7 @@ async function updateApplicationMenu() {
         ]
     },
     {
-        label: 'Edit',
+        label: uiText("Edit"),
         submenu: [
             { role: 'undo' },
             { role: 'redo' },
@@ -869,46 +870,46 @@ async function updateApplicationMenu() {
             { role: 'paste' },
             { type: 'separator' },
             {
-                label: 'Find in Files',
+                label: uiText("Find in Files"),
                 accelerator: 'CmdOrCtrl+Shift+F',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'toggle-search' }); }
             },
         ]
     },
     {
-        label: 'View',
+        label: uiText("View"),
         submenu: [
             {
-              label: 'Story Canvas',
+              label: uiText("Story Canvas"),
               click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-static-tab', type: 'canvas' }); }
             },
             {
-              label: 'Route Canvas',
+              label: uiText("Route Canvas"),
               click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-static-tab', type: 'route-canvas' }); }
             },
             {
-              label: 'Choice Canvas',
+              label: uiText("Choice Canvas"),
               click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-static-tab', type: 'choice-canvas' }); }
             },
             {
-                label: 'Diagnostics',
+                label: uiText("Diagnostics"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-static-tab', type: 'diagnostics' }); }
             },
             {
-                label: 'Stats',
+                label: uiText("Stats"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-static-tab', type: 'stats' }); }
             },
             {
-                label: 'Translation Dashboard',
+                label: uiText("Translation Dashboard"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-static-tab', type: 'translations' }); }
             },
             { type: 'separator' },
             {
-                label: 'Toggle Left Sidebar',
+                label: uiText("Toggle Left Sidebar"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'toggle-left-sidebar' }); }
             },
             {
-                label: 'Toggle Right Sidebar',
+                label: uiText("Toggle Right Sidebar"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'toggle-right-sidebar' }); }
             },
             { type: 'separator' },
@@ -933,14 +934,14 @@ async function updateApplicationMenu() {
         ]
     },
     {
-        label: 'Help',
+        label: uiText("Help"),
         submenu: [
             {
-                label: 'Show Tutorial',
+                label: uiText("Show Tutorial"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'show-tutorial' }); }
             },
             {
-                label: 'User Guide',
+                label: uiText("User Guide"),
                 click: () => {
                     shell.openExternal('https://bluemoonfoundry.github.io/bmf-vangard-renpy-ide/').catch(err => {
                         logger.error('Failed to open user guide:', err);
@@ -949,13 +950,13 @@ async function updateApplicationMenu() {
                 }
             },
             {
-                label: 'Keyboard Shortcuts',
+                label: uiText("Keyboard Shortcuts"),
                 accelerator: 'CmdOrCtrl+/',
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-shortcuts' }); }
             },
             { type: 'separator' },
             {
-                label: 'Show Logs',
+                label: uiText("Show Logs"),
                 click: async () => {
                     try {
                         const logPath = electronLog.transports.file.getFile()?.path;
@@ -975,14 +976,19 @@ async function updateApplicationMenu() {
             { type: 'separator' },
             { type: 'separator' },
             ...(process.platform !== 'darwin' ? [{
-                label: 'About',
+                label: uiText("About"),
                 click: (item, focusedWindow) => { if (focusedWindow) focusedWindow.webContents.send('menu-command', { command: 'open-about' }); }
             }] : []),
         ]
     },
   ];
 
-  const menu = Menu.buildFromTemplate(menuTemplate);
+  const roleNames = { undo: 'Undo', redo: 'Redo', cut: 'Cut', copy: 'Copy', paste: 'Paste', quit: 'Quit', reload: 'Reload', forceReload: 'Force Reload', toggleDevTools: 'Developer Tools', resetZoom: 'Actual Size', zoomIn: 'Zoom In', zoomOut: 'Zoom Out', togglefullscreen: 'Toggle Full Screen', window: 'Window', minimize: 'Minimize', zoom: 'Maximize' };
+  const localizeRoles = items => items.map(item => ({ ...item,
+    ...(!item.label && roleNames[item.role] ? { label: uiText(roleNames[item.role]) } : {}),
+    ...(Array.isArray(item.submenu) ? { submenu: localizeRoles(item.submenu) } : {}),
+  }));
+  const menu = Menu.buildFromTemplate(localizeRoles(menuTemplate));
   Menu.setApplicationMenu(menu);
 }
 
@@ -1065,7 +1071,7 @@ async function createWindow() {
       // Show native OS notification (works even if renderer is dead)
       if (Notification.isSupported()) {
         const notification = new Notification({
-          title: 'Screenshot Captured',
+          title: uiText("Screenshot Captured"),
           body: `Saved to .renide/screenshots/`,
           silent: true
         });
@@ -1080,7 +1086,7 @@ async function createWindow() {
       try {
         if (Notification.isSupported()) {
           new Notification({
-            title: 'Screenshot Failed',
+            title: uiText("Screenshot Failed"),
             body: error.message,
             silent: true
           }).show();
@@ -1326,7 +1332,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('dialog:selectImage', async () => {
     try {
       const { canceled, filePaths } = await dialog.showOpenDialog({
-        title: 'Select Portrait Image',
+        title: uiText("Select Portrait Image"),
         properties: ['openFile'],
         filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'webp'] }],
       });
@@ -1354,7 +1360,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('dialog:selectRenpy', async () => {
     try {
       const { canceled, filePaths } = await dialog.showOpenDialog({
-          title: 'Select Ren\'Py SDK Directory',
+          title: uiText("Select Ren'Py SDK Directory"),
           properties: ['openDirectory'],
       });
       if (canceled) {
@@ -1423,7 +1429,7 @@ app.whenReady().then(async () => {
 
   ipcMain.handle('dialog:createProject', async () => {
     const { canceled, filePath } = await dialog.showSaveDialog({
-        title: 'Create New Ren\'Py Project',
+        title: uiText("Create New Ren'Py Project"),
         buttonLabel: 'Create Project',
         defaultPath: path.join(app.getPath('documents'), 'NewRenPyProject')
     });
@@ -1852,7 +1858,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('snippets:exportPack', async (event, suggestedFileName, content) => {
     try {
       const { canceled, filePath } = await dialog.showSaveDialog({
-        title: 'Export Snippet Pack',
+        title: uiText("Export Snippet Pack"),
         defaultPath: suggestedFileName,
         filters: [{ name: 'JSON', extensions: ['json'] }],
       });
@@ -1868,7 +1874,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('snippets:importPack', async () => {
     try {
       const { canceled, filePaths } = await dialog.showOpenDialog({
-        title: 'Import Snippet Pack',
+        title: uiText("Import Snippet Pack"),
         filters: [{ name: 'JSON', extensions: ['json'] }],
         properties: ['openFile'],
       });

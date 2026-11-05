@@ -1,6 +1,6 @@
 {
   "name": "nightfall-workbench",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Blue Moon Foundry Software",
     "email": "support@bluemoonfoundry.com"
@@ -149,7 +149,13 @@
       "category": "Development"
     },
     "extraResources": [
-      { "from": "resources/team-launcher", "to": "team-launcher", "filter": ["**/*"] },
+      {
+        "from": "resources/team-launcher",
+        "to": "team-launcher",
+        "filter": [
+          "**/*"
+        ]
+      },
       {
         "from": "resources/renpy-template",
         "to": "renpy-template",

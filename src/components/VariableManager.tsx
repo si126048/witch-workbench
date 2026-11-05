@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file VariableManager.tsx
  * @description Virtualised list of `default`/`define`/`persistent`/`implicit` variables from project scripts (~200 lines).
@@ -31,22 +32,22 @@ const PERSISTENCE_INFO: Record<'persistent' | 'default' | 'define' | 'implicit',
     persistent: {
         label: 'persistent',
         color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-        tooltip: 'Stored in renpy.persistent — survives new game and quit. Not rolled back.',
+        tooltip: uiText("Stored in renpy.persistent — survives new game and quit. Not rolled back."),
     },
     default: {
         label: 'default',
         color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-        tooltip: 'Saved to save files. Participates in rollback. Resets to initial value only if not in the save.',
+        tooltip: uiText("Saved to save files. Participates in rollback. Resets to initial value only if not in the save."),
     },
     define: {
         label: 'define',
         color: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
-        tooltip: 'Constant — not saved, not rolled back. Value set once at game start and never changes during play.',
+        tooltip: uiText("Constant — not saved, not rolled back. Value set once at game start and never changes during play."),
     },
     implicit: {
         label: 'implicit',
         color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-        tooltip: 'Created by a "$ name = value" assignment, not a real default/define statement. Only exists once that line has run — referencing it earlier will error. Consider converting to "default".',
+        tooltip: uiText("Created by a \"$ name = value\" assignment, not a real default/define statement. Only exists once that line has run — referencing it earlier will error. Consider converting to \"default\"."),
     },
 };
 
@@ -110,33 +111,33 @@ const VariableEditor: React.FC<{
 
     return (
         <div className="bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg space-y-3">
-            <h3 className="font-semibold text-lg">{editing ? 'Edit Variable' : 'Add New Variable'}</h3>
+            <h3 className="font-semibold text-lg">{editing ? uiText("Edit Variable") : uiText("Add New Variable")}</h3>
             {isRename && (
                 <div className="flex items-start gap-2 p-2.5 rounded-md bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-200 text-xs">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                    <span>Saving will rename <code className="font-mono font-semibold">{editing.name}</code> to <code className="font-mono font-semibold">{name}</code> across all project files.</span>
+                    <span>{("" + uiText("Saving will rename") + " ")}<code className="font-mono font-semibold">{editing.name}</code> {(" " + uiText("to") + " ")}<code className="font-mono font-semibold">{name}</code> {(" " + uiText("across all project files.") + "")}</span>
                 </div>
             )}
             <div>
-                <label className="text-sm font-medium">Type</label>
+                <label className="text-sm font-medium">{uiText("Type")}</label>
                 <select value={type} onChange={e => setType(e.target.value as 'define' | 'default')} className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="default">default — saved to save files, rolls back</option>
-                    <option value="define">define — constant, not saved</option>
+                    <option value="default">{uiText("default — saved to save files, rolls back")}</option>
+                    <option value="define">{uiText("define — constant, not saved")}</option>
                 </select>
             </div>
             <div>
-                <label className="text-sm font-medium">Variable Name</label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g., player_score or persistent.seen_ending" className={`w-full mt-1 p-2 rounded bg-white dark:bg-gray-800 border ${nameError ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} focus:ring-indigo-500 focus:border-indigo-500`} />
+                <label className="text-sm font-medium">{uiText("Variable Name")}</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder={uiText("e.g., player_score or persistent.seen_ending")} className={`w-full mt-1 p-2 rounded bg-white dark:bg-gray-800 border ${nameError ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} focus:ring-indigo-500 focus:border-indigo-500`} />
                 {nameError && <p className="text-red-500 text-xs mt-1">{nameError}</p>}
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Use <code className="font-mono">persistent.</code> prefix for cross-save persistent variables.</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{("" + uiText("Use") + " ")}<code className="font-mono">persistent.</code> {(" " + uiText("prefix for cross-save persistent variables.") + "")}</p>
             </div>
             <div>
-                <label className="text-sm font-medium">Initial Value</label>
-                <input type="text" value={initialValue} onChange={e => setInitialValue(e.target.value)} placeholder={`e.g., 0 or "initial_state"`} className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500" />
+                <label className="text-sm font-medium">{uiText("Initial Value")}</label>
+                <input type="text" value={initialValue} onChange={e => setInitialValue(e.target.value)} placeholder={uiText("e.g., 0 or \"initial_state\"")} className="w-full mt-1 p-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
             <div className="flex justify-end space-x-2 pt-2">
-                <button onClick={onCancel} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm font-bold">Cancel</button>
-                <button onClick={handleSave} className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold">Save</button>
+                <button onClick={onCancel} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm font-bold">{uiText("Cancel")}</button>
+                <button onClick={handleSave} className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold">{uiText("Save")}</button>
             </div>
         </div>
     );
@@ -232,7 +233,7 @@ const VariableManager: React.FC<VariableManagerProps> = ({ analysisResult, onAdd
                 </button>
                 {!collapsed && (
                     vars.length === 0
-                        ? <p className="text-xs text-gray-400 dark:text-gray-500 pl-1">None found.</p>
+                        ? <p className="text-xs text-gray-400 dark:text-gray-500 pl-1">{uiText("None found.")}</p>
                         : (
                             <div
                                 ref={containerRef}
@@ -264,23 +265,23 @@ const VariableManager: React.FC<VariableManagerProps> = ({ analysisResult, onAdd
                                                                     ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
                                                                     : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
                                                             }`}
-                                                            title={isUnused ? 'This variable is never referenced in code' : `Referenced ${usageCount} time${usageCount !== 1 ? 's' : ''} in code`}
+                                                            title={isUnused ? uiText("This variable is never referenced in code") : uiText("Referenced {value0} time{value1} in code", { value0: usageCount, value1: usageCount !== 1 ? 's' : '' })}
                                                         >
-                                                            {isUnused ? 'unused' : `${usageCount} use${usageCount !== 1 ? 's' : ''}`}
+                                                            {isUnused ? uiText("unused") : uiText("{value0} use{value1}", { value0: usageCount, value1: usageCount !== 1 ? 's' : '' })}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center space-x-1 flex-shrink-0 pl-2">
                                                     <button
                                                         onClick={() => onFindUsages(variable.name)}
-                                                        title="Find Usages"
+                                                        title={uiText("Find Usages")}
                                                         className="p-1 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded"
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                                     </button>
                                                     <button
                                                         onClick={() => enterEditMode(variable)}
-                                                        title="Edit Variable"
+                                                        title={uiText("Edit Variable")}
                                                         className="p-1 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded"
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
@@ -307,24 +308,21 @@ const VariableManager: React.FC<VariableManagerProps> = ({ analysisResult, onAdd
                                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                             </svg>
                             <div className="flex-1">
-                                <div className="font-medium mb-1">Implicit Variables Detected</div>
+                                <div className="font-medium mb-1">{uiText("Implicit Variables Detected")}</div>
                                 <div>
-                                    This project uses {implicitVarCount} implicit variable definition{implicitVarCount !== 1 ? 's' : ''}
-                                    (shown below under "Implicit"). These are "$ name = value" assignments, not real
-                                    default/define statements — they only exist once that line has run.
-                                </div>
+                                    {("" + uiText("This project uses") + " ")}{implicitVarCount} {(" " + uiText("implicit variable definition") + "")}{implicitVarCount !== 1 ? 's' : ''}
+                                    {uiText("(shown below under \"Implicit\"). These are \"$ name = value\" assignments, not real default/define statements — they only exist once that line has run.")}</div>
                             </div>
                             <div className="flex gap-2 mt-1">
                                 <button
                                     onClick={onOpenDiagnostics}
                                     className="text-blue-700 dark:text-blue-300 underline hover:no-underline text-xs whitespace-nowrap"
                                 >
-                                    View in Diagnostics
-                                </button>
+                                    {uiText("View in Diagnostics")}</button>
                                 <button
                                     onClick={onDismissImplicitVarHint}
                                     className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
-                                    title="Don't show again"
+                                    title={uiText("Don't show again")}
                                 >
                                     ×
                                 </button>
@@ -335,8 +333,7 @@ const VariableManager: React.FC<VariableManagerProps> = ({ analysisResult, onAdd
                     <div className="flex items-center justify-between mb-4">
                         <label htmlFor="variable-filter-toggle" className="flex items-center gap-3 cursor-pointer">
                             <span className="text-sm text-gray-600 dark:text-gray-400 select-none">
-                                Show story variables only
-                            </span>
+                                {uiText("Show story variables only")}</span>
                             <div className="relative inline-flex items-center">
                                 <input
                                     type="checkbox"
@@ -348,18 +345,18 @@ const VariableManager: React.FC<VariableManagerProps> = ({ analysisResult, onAdd
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
                             </div>
                         </label>
-                        <button onClick={() => setMode('add')} className="px-2 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">+ Add</button>
+                        <button onClick={() => setMode('add')} className="px-2 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">{uiText("+ Add")}</button>
                     </div>
 
                     <div>
-                        <VariableList title="Persistent" kind="persistent" vars={persistent} />
-                        <VariableList title="Default" kind="default" vars={defaulted} />
-                        <VariableList title="Defined" kind="define" vars={defined} />
-                        <VariableList title="Implicit" kind="implicit" vars={implicit} />
+                        <VariableList title={uiText("Persistent")} kind="persistent" vars={persistent} />
+                        <VariableList title={uiText("Default")} kind="default" vars={defaulted} />
+                        <VariableList title={uiText("Defined")} kind="define" vars={defined} />
+                        <VariableList title={uiText("Implicit")} kind="implicit" vars={implicit} />
                     </div>
                     {filteredVariables.length === 0 && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
-                            {filterStoryVars ? 'No story variables found.' : 'No variables defined yet.'}
+                            {filterStoryVars ? uiText("No story variables found.") : uiText("No variables defined yet.")}
                         </p>
                     )}
                 </>

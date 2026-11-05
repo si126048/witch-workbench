@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file FileExplorerContextMenu.tsx
  * @description Right-click context menu for nodes in the `FileExplorerPanel` (~110 lines).
@@ -73,8 +74,7 @@ const FileExplorerContextMenu: React.FC<ContextMenuProps> = ({
           onClick={() => handleAction(() => onRefresh(node.path))}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Refresh
-        </button>
+          {uiText("Refresh")}</button>
         <div className="border-t border-gray-200 dark:border-gray-700 -mx-1 my-1"></div>
         {isRpyFile && selectionSize === 1 && (
             <>
@@ -82,8 +82,7 @@ const FileExplorerContextMenu: React.FC<ContextMenuProps> = ({
                     onClick={() => handleAction(() => onCenterOnBlock(node.path))}
                     className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
                 >
-                    Center on Canvas
-                </button>
+                    {uiText("Center on Canvas")}</button>
                 <div className="border-t border-gray-200 dark:border-gray-700 -mx-1 my-1"></div>
             </>
         )}
@@ -91,28 +90,25 @@ const FileExplorerContextMenu: React.FC<ContextMenuProps> = ({
           onClick={() => handleAction(() => onNewFile(targetPathForNewItems))}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          New File...
-        </button>
+          {uiText("New File...")}</button>
         <button
           onClick={() => handleAction(() => onNewFolder(targetPathForNewItems))}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          New Folder...
-        </button>
+          {uiText("New Folder...")}</button>
         <div className="border-t border-gray-200 dark:border-gray-700 -mx-1 my-1"></div>
         <button
           onClick={() => handleAction(() => onRename(node.path))}
           disabled={!node.path || selectionSize > 1}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Rename
-        </button>
+          {uiText("Rename")}</button>
          <button
           onClick={() => handleAction(onDelete)}
           disabled={!node.path}
           className="w-full text-left px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white dark:hover:bg-red-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {`Delete ${selectionSize > 1 ? `${selectionSize} Items` : ''}`}
+          {uiText("Delete {value0}", { value0: selectionSize > 1 ? `${selectionSize} Items` : '' })}
         </button>
         <div className="border-t border-gray-200 dark:border-gray-700 -mx-1 my-1"></div>
         <button
@@ -120,22 +116,21 @@ const FileExplorerContextMenu: React.FC<ContextMenuProps> = ({
           disabled={!node.path}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {`Cut ${selectionSize > 1 ? `${selectionSize} Items` : ''}`}
+          {uiText("Cut {value0}", { value0: selectionSize > 1 ? `${selectionSize} Items` : '' })}
         </button>
          <button
           onClick={() => handleAction(onCopy)}
           disabled={!node.path}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {`Copy ${selectionSize > 1 ? `${selectionSize} Items` : ''}`}
+          {uiText("Copy {value0}", { value0: selectionSize > 1 ? `${selectionSize} Items` : '' })}
         </button>
         <button
           onClick={() => handleAction(() => onPaste(targetPathForNewItems))}
           disabled={!clipboard}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Paste
-        </button>
+          {uiText("Paste")}</button>
         <div className="border-t border-gray-200 dark:border-gray-700 -mx-1 my-1"></div>
         <button
           onClick={() => handleAction(() => onRevealInFileManager(node.path))}
@@ -149,8 +144,7 @@ const FileExplorerContextMenu: React.FC<ContextMenuProps> = ({
           disabled={!node.path}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Copy Path
-        </button>
+          {uiText("Copy Path")}</button>
       </div>
     </div>
   );

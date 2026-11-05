@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import WorkbenchIcon from './WorkbenchIcon';
 /**
  * @file StoryCanvas.tsx
@@ -1153,7 +1154,7 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
     <div
       ref={canvasRef}
       role="application"
-      aria-label="Story canvas"
+      aria-label={uiText("Story canvas")}
       className="absolute inset-0 overflow-hidden cursor-grab active:cursor-grabbing bg-primary bg-[radial-gradient(var(--dot-color)_1px,transparent_1px)]"
       style={backgroundStyle}
       onPointerDown={handlePointerDown}
@@ -1168,18 +1169,18 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
           <div className="bg-secondary border border-primary rounded-xl shadow-xl p-8 max-w-sm text-center pointer-events-auto">
             <div className="mb-3 flex justify-center"><WorkbenchIcon name="document" className="h-10 w-10 text-slate-400" /></div>
             <h3 className="text-lg font-bold text-primary mb-1">从第一个场景开始</h3>
-            <p className="text-sm text-secondary mb-4">Press N or click 'New Scene' to create your opening.</p>
+            <p className="text-sm text-secondary mb-4">{uiText("Press N or click 'New Scene' to create your opening.")}</p>
             <div className="text-xs text-secondary space-y-1 text-left bg-primary/5 rounded-lg p-3 mb-2">
-              <div><kbd className="font-mono bg-primary/10 px-1 rounded">N</kbd> — New scene</div>
-              <div><kbd className="font-mono bg-primary/10 px-1 rounded">Shift</kbd> + drag — Pan canvas</div>
-              <div><kbd className="font-mono bg-primary/10 px-1 rounded">Scroll</kbd> — Zoom in / out</div>
-              <div><kbd className="font-mono bg-primary/10 px-1 rounded">G</kbd> — Group selected blocks</div>
+              <div><kbd className="font-mono bg-primary/10 px-1 rounded">N</kbd> {(" " + uiText("— New scene") + "")}</div>
+              <div><kbd className="font-mono bg-primary/10 px-1 rounded">Shift</kbd> {(" " + uiText("+ drag — Pan canvas") + "")}</div>
+              <div><kbd className="font-mono bg-primary/10 px-1 rounded">{uiText("Scroll")}</kbd> {(" " + uiText("— Zoom in / out") + "")}</div>
+              <div><kbd className="font-mono bg-primary/10 px-1 rounded">G</kbd> {(" " + uiText("— Group selected blocks") + "")}</div>
             </div>
           </div>
         </div>
       )}
       {/* ── Canvas Toolbox (top-left) ── */}
-      <CanvasToolbox label="Project Canvas">
+      <CanvasToolbox label={uiText("Project Canvas")}>
         <CanvasLayoutControls
           canvasLabel="Project Canvas"
           layoutMode={layoutMode}
@@ -1190,40 +1191,40 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
         />
         {/* View Filters */}
         <div className="filter-panel p-3 flex flex-col space-y-2">
-          <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">View Filters</h4>
+          <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{uiText("View Filters")}</h4>
           <label className="flex items-center space-x-2 cursor-pointer text-sm text-secondary">
             <input type="checkbox" checked={canvasFilters.story} onChange={e => setCanvasFilters(f => ({ ...f, story: e.target.checked }))} className="h-4 w-4 rounded focus:ring-indigo-500" style={{ accentColor: 'rgb(79 70 229)' }} />
-            <span>Story Blocks</span>
+            <span>{uiText("Story Blocks")}</span>
           </label>
           <label className="flex items-center space-x-2 cursor-pointer text-sm text-secondary">
             <input type="checkbox" checked={canvasFilters.screens} onChange={e => setCanvasFilters(f => ({ ...f, screens: e.target.checked }))} className="h-4 w-4 rounded focus:ring-teal-500" style={{ accentColor: 'rgb(13 148 136)' }} />
-            <span>Screen Blocks</span>
+            <span>{uiText("Screen Blocks")}</span>
           </label>
           <label className="flex items-center space-x-2 cursor-pointer text-sm text-secondary">
             <input type="checkbox" checked={canvasFilters.config} onChange={e => setCanvasFilters(f => ({ ...f, config: e.target.checked }))} className="h-4 w-4 rounded focus:ring-red-500" style={{ accentColor: 'rgb(239 68 68)' }} />
-            <span>Config Blocks</span>
+            <span>{uiText("Config Blocks")}</span>
           </label>
           <label className="flex items-center space-x-2 cursor-pointer text-sm text-secondary">
             <input type="checkbox" checked={canvasFilters.notes} onChange={e => setCanvasFilters(f => ({ ...f, notes: e.target.checked }))} className="h-4 w-4 rounded focus:ring-yellow-500" style={{ accentColor: 'rgb(234 179 8)' }} />
-            <span>Notes</span>
+            <span>{uiText("Notes")}</span>
           </label>
           <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
           <label className="flex items-center space-x-2 cursor-pointer text-sm text-secondary">
             <input type="checkbox" checked={canvasFilters.minimap} onChange={e => setCanvasFilters(f => ({ ...f, minimap: e.target.checked }))} className="h-4 w-4 rounded" style={{ accentColor: 'rgb(107 114 128)' }} />
-            <span>Minimap</span>
+            <span>{uiText("Minimap")}</span>
           </label>
           {availableCharacters.length > 0 && (
             <>
               <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-primary px-1">Character</span>
+                <span className="text-xs font-semibold text-primary px-1">{uiText("Character")}</span>
                 <select
                   className="text-xs bg-secondary border border-primary rounded px-1.5 py-1 text-primary cursor-pointer"
                   value={characterTagFilter}
                   onChange={e => setCharacterTagFilter(e.target.value)}
                   onPointerDown={e => e.stopPropagation()}
                 >
-                  <option value="">All characters</option>
+                  <option value="">{uiText("All characters")}</option>
                   {availableCharacters.map(c => (
                     <option key={c.tag} value={c.tag}>{c.name}</option>
                   ))}
@@ -1234,7 +1235,7 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
         </div>
         {/* ── Go to Label ── */}
         <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-1.5">
-          <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Go to Label</h4>
+          <h4 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{uiText("Go to Label")}</h4>
           <input
             value={labelSearchQuery}
             onChange={e => {
@@ -1243,7 +1244,7 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
             }}
             onFocus={() => setShowLabelSearchResults(true)}
             onKeyDown={e => e.stopPropagation()}
-            placeholder="Search labels…"
+            placeholder={uiText("Search labels…")}
             className="w-full rounded-md border border-gray-200 dark:border-gray-700 bg-transparent px-2 py-1.5 text-sm"
           />
           {showLabelSearchResults && labelSearchQuery.trim() && (
@@ -1255,10 +1256,10 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
                   onClick={() => centerOnLabelBlock(node.blockId)}
                 >
                   <div className="font-mono text-gray-900 dark:text-gray-100">{node.label}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">{node.containerName ?? 'Unknown file'}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{node.containerName ?? uiText("Unknown file")}</div>
                 </button>
               )) : (
-                <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">No matching labels.</div>
+                <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">{uiText("No matching labels.")}</div>
               )}
             </div>
           )}
@@ -1275,57 +1276,49 @@ const StoryCanvas: React.FC<StoryCanvasProps> = ({
           onClick={() => setShowLegend(v => !v)}
           className="w-full flex items-center gap-1.5 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          <span>Legend</span>
+          <span>{uiText("Legend")}</span>
           <svg xmlns="http://www.w3.org/2000/svg" className={`h-3.5 w-3.5 text-gray-400 ml-auto transition-transform ${showLegend ? '' : '-rotate-90'}`} viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
           </svg>
         </button>
         {showLegend && (
           <div className="px-3 pb-3 pt-1 space-y-2 text-xs text-gray-600 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700">
-            <div className="font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wide text-[10px] pt-1">Arrows</div>
+            <div className="font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wide text-[10px] pt-1">{uiText("Arrows")}</div>
             <div className="flex items-center gap-2">
               <svg width="28" height="10" className="shrink-0">
                 <path d="M0,5 L20,5" stroke="#4f46e5" strokeWidth="2.5" fill="none" />
                 <polygon points="18,2 26,5 18,8" fill="#4f46e5" />
               </svg>
-              Jump
-            </div>
+              {uiText("Jump")}</div>
             <div className="flex items-center gap-2">
               <svg width="28" height="10" className="shrink-0">
                 <circle cx="4" cy="5" r="3" fill="none" stroke="#4f46e5" strokeWidth="2" />
                 <path d="M8,5 L20,5" stroke="#4f46e5" strokeWidth="2.5" fill="none" />
                 <polygon points="18,2 26,5 18,8" fill="#4f46e5" />
               </svg>
-              Call (returns)
-            </div>
-            <div className="font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wide text-[10px] pt-1">Block Roles</div>
+              {uiText("Call (returns)")}</div>
+            <div className="font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wide text-[10px] pt-1">{uiText("Block Roles")}</div>
             <div className="flex items-center gap-2">
               <span className="w-10 h-4 shrink-0 rounded border-2 border-green-400 bg-green-50 dark:bg-green-900/20 inline-block" />
-              Story start
-            </div>
+              {uiText("Story start")}</div>
             <div className="flex items-center gap-2">
               <span className="w-10 h-4 shrink-0 rounded border-2 border-dashed border-amber-400 bg-amber-50 dark:bg-amber-900/20 inline-block" />
-              Story end
-            </div>
+              {uiText("Story end")}</div>
             <div className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M15 4a1 1 0 00-1.447-.894l-5 2.5a1 1 0 000 1.789l5 2.5A1 1 0 0015 9V4zM5 4a1 1 0 00-1.447-.894l-5 2.5a1 1 0 000 1.789l5 2.5A1 1 0 005 9V4z" opacity=".5"/><path d="M15 11a1 1 0 00-1.447-.894l-5 2.5a1 1 0 000 1.789l5 2.5A1 1 0 0015 16v-5z" />
               </svg>
-              Branching
-            </div>
-            <div className="font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wide text-[10px] pt-1">Block Types</div>
+              {uiText("Branching")}</div>
+            <div className="font-semibold text-gray-500 dark:text-gray-500 uppercase tracking-wide text-[10px] pt-1">{uiText("Block Types")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded border-2 border-gray-300 bg-white dark:bg-gray-800 inline-block" />
-              Story
-            </div>
+              {uiText("Story")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded border-2 border-teal-400 bg-teal-50 dark:bg-teal-900/20 inline-block" />
-              Screen
-            </div>
+              {uiText("Screen")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded border-2 border-red-400 bg-red-50 dark:bg-red-900/20 inline-block" />
-              Config
-            </div>
+              {uiText("Config")}</div>
           </div>
         )}
       </div>

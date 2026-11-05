@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Block, EditorTab, FileSystemTreeNode, Position } from '@/types';
@@ -76,7 +77,7 @@ export function useUntitledFiles({
 
   const createUntitledFile = useCallback(() => {
     if (!projectRootPath) {
-      addToast('Open a project before creating a new file', 'warning');
+      addToast(uiText("Open a project before creating a new file"), 'warning');
       return;
     }
     counterRef.current += 1;
@@ -149,7 +150,7 @@ export function useUntitledFiles({
 
     const defaultPath = `${projectRootPath.replace(/[\\/]+$/, '')}/game`;
     const chosenPath = await window.electronAPI.showSaveDialog({
-      title: 'Save File',
+      title: uiText("Save File"),
       defaultPath,
       filters: [
         { name: "Ren'Py Script", extensions: ['rpy'] },
@@ -160,7 +161,7 @@ export function useUntitledFiles({
 
     const res = await window.electronAPI.writeFile(chosenPath, content);
     if (!res.success) {
-      addToast(`Failed to save file: ${res.error || 'Unknown error'}`, 'error');
+      addToast(uiText("Failed to save file: {value0}", { value0: res.error || 'Unknown error' }), 'error');
       return false;
     }
 
@@ -240,7 +241,7 @@ export function useUntitledFiles({
       // Tree refresh is best-effort — the file is already written and tracked as a block.
     }
 
-    addToast(`Saved ${relativePath}`, 'success');
+    addToast(uiText("Saved {value0}", { value0: relativePath }), 'success');
     return true;
   }, [untitledFiles, projectRootPath, blocks, addBlock, updateBlock, addToast, setFileSystemTree, setOpenTabs, setActiveTabId, setSecondaryOpenTabs, setSecondaryActiveTabId, setActivePaneId, setSplitLayout, discardUntitledFile, poppedOutTabs, setPoppedOutTabs]);
 

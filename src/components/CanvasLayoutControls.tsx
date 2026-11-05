@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file CanvasLayoutControls.tsx
  * @description Toolbar widget for switching canvas layout, grouping mode, and view level (~150 lines).
@@ -80,14 +81,12 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
       onPointerDown={event => event.stopPropagation()}
     >
       <div className="px-1 pb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-        {canvasLabel} Layout
-      </div>
+        {canvasLabel} {(" " + uiText("Layout") + "")}</div>
       <div className="flex flex-col gap-2">
         {onChangeViewLevel && viewLevel !== undefined && (
           <div>
             <div className="px-1 pb-1 text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
-              Level
-            </div>
+              {uiText("Level")}</div>
             <div className="flex gap-1">
               {(['label', 'file'] as const).map(level => (
                 <button
@@ -101,7 +100,7 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
-                  {level === 'label' ? 'Labels' : 'Files'}
+                  {level === 'label' ? uiText("Labels") : uiText("Files")}
                 </button>
               ))}
             </div>
@@ -109,13 +108,12 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
         )}
         <div>
           <div className="px-1 pb-1 text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
-            Flow
-          </div>
+            {uiText("Flow")}</div>
           <div className="flex gap-1">
             {allowedLayoutModes.includes('flow-td') && (
               <LayoutIconButton
                 active={layoutMode === 'flow-td'}
-                title="Flow top to bottom"
+                title={uiText("Flow top to bottom")}
                 onClick={() => onChangeLayoutMode('flow-td')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">
@@ -127,7 +125,7 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
             {allowedLayoutModes.includes('flow-lr') && (
               <LayoutIconButton
                 active={layoutMode === 'flow-lr'}
-                title="Flow left to right"
+                title={uiText("Flow left to right")}
                 onClick={() => onChangeLayoutMode('flow-lr')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">
@@ -139,7 +137,7 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
             {allowedLayoutModes.includes('connected-components') && (
               <LayoutIconButton
                 active={layoutMode === 'connected-components'}
-                title="Separate connected components"
+                title={uiText("Separate connected components")}
                 onClick={() => onChangeLayoutMode('connected-components')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">
@@ -151,7 +149,7 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
             {allowedLayoutModes.includes('clustered-flow') && (
               <LayoutIconButton
                 active={layoutMode === 'clustered-flow'}
-                title="Clustered flow"
+                title={uiText("Clustered flow")}
                 onClick={() => onChangeLayoutMode('clustered-flow')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">
@@ -165,12 +163,11 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
         {showGrouping && (
         <div>
           <div className="px-1 pb-1 text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
-            Group
-          </div>
+            {uiText("Group")}</div>
           <div className="flex gap-1">
             <LayoutIconButton
               active={groupingMode === 'none'}
-              title="No grouping"
+              title={uiText("No grouping")}
               onClick={() => onChangeGroupingMode('none')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">
@@ -180,7 +177,7 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
             </LayoutIconButton>
             <LayoutIconButton
               active={groupingMode === 'connected-component'}
-              title="Group by connected component"
+              title={uiText("Group by connected component")}
               onClick={() => onChangeGroupingMode('connected-component')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">
@@ -192,7 +189,7 @@ const CanvasLayoutControls: React.FC<CanvasLayoutControlsProps> = ({
             </LayoutIconButton>
             <LayoutIconButton
               active={groupingMode === 'filename-prefix'}
-              title="Group by filename prefix"
+              title={uiText("Group by filename prefix")}
               onClick={() => onChangeGroupingMode('filename-prefix')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className={iconClass} viewBox="0 0 20 20" fill="currentColor">

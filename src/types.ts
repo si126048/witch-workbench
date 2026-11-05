@@ -1707,6 +1707,7 @@ export interface CreateProjectOptions {
 declare global {
   interface Window {
     electronAPI?: {
+      uiLanguage?: 'zh-CN' | 'en';
           nightfall?: NightfallAPI;
           getStartupArgs?: () => Promise<{ projectPath: string | null }>;
           openDirectory: () => Promise<string | null>;

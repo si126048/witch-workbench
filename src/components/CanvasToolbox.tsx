@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file CanvasToolbox.tsx
  * @description Collapsible floating panel grouping canvas configuration controls (~60 lines).
@@ -26,7 +27,7 @@ interface CanvasToolboxProps {
  */
 const CanvasToolbox: React.FC<CanvasToolboxProps> = ({
   children,
-  label = 'Canvas Controls',
+  label = uiText("Canvas Controls"),
   className = '',
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -42,7 +43,7 @@ const CanvasToolbox: React.FC<CanvasToolboxProps> = ({
         className="w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
         onClick={() => setIsCollapsed(v => !v)}
         aria-expanded={!isCollapsed}
-        title={isCollapsed ? 'Expand canvas controls' : 'Collapse canvas controls'}
+        title={isCollapsed ? uiText("Expand canvas controls") : uiText("Collapse canvas controls")}
       >
         <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
           {label}

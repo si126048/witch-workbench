@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SnippetManager.tsx
  * @description Modern snippet browser with grid layout, search, and multi-source loading.
@@ -41,7 +42,7 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
     const handleImportPack = async () => {
         setImportStatus(null);
         if (!window.electronAPI?.importSnippetPack) {
-            setImportStatus({ type: 'error', message: 'Snippet pack import is not available in this build.' });
+            setImportStatus({ type: 'error', message: uiText("Snippet pack import is not available in this build.") });
             return;
         }
 
@@ -59,14 +60,14 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
                 parsed = JSON.parse(picked.content);
             } catch (parseError) {
                 const message = parseError instanceof Error ? parseError.message : String(parseError);
-                setImportStatus({ type: 'error', message: `Invalid JSON: ${message}` });
+                setImportStatus({ type: 'error', message: uiText("Invalid JSON: {value0}", { value0: message }) });
                 return;
             }
 
             const validation = validateSnippetPack(parsed, picked.filePath ?? 'imported pack');
             if (!validation.valid) {
                 const extra = validation.errors.length > 1 ? ` (+${validation.errors.length - 1} more)` : '';
-                setImportStatus({ type: 'error', message: `Invalid snippet pack: ${validation.errors[0]}${extra}` });
+                setImportStatus({ type: 'error', message: uiText("Invalid snippet pack: {value0}{value1}", { value0: validation.errors[0], value1: extra }) });
                 return;
             }
 
@@ -94,7 +95,7 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
             }
 
             const importedCount = validation.data!.categories.reduce((sum, c) => sum + c.snippets.length, 0);
-            setImportStatus({ type: 'success', message: `Imported ${importedCount} snippet${importedCount === 1 ? '' : 's'}.` });
+            setImportStatus({ type: 'success', message: uiText("Imported {value0} snippet{value1}.", { value0: importedCount, value1: importedCount === 1 ? '' : 's' }) });
             await reload();
         } finally {
             setIsImporting(false);
@@ -107,14 +108,13 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
             {(userSnippets && userSnippets.length > 0 || onCreateSnippet) && (
                 <div className="pb-6 border-b border-primary">
                     <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-semibold text-primary">My Snippets</h3>
+                        <h3 className="font-semibold text-primary">{uiText("My Snippets")}</h3>
                         {onCreateSnippet && (
                             <button
                                 onClick={onCreateSnippet}
                                 className="px-3 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 border border-dashed border-indigo-300 dark:border-indigo-600 rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
                             >
-                                + New
-                            </button>
+                                {uiText("+ New")}</button>
                         )}
                     </div>
                     {userSnippets && userSnippets.length > 0 ? (
@@ -135,19 +135,17 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
                                                 <button
                                                     onClick={() => onEditSnippet(snippet)}
                                                     className="px-2 py-1 text-xs font-semibold rounded bg-tertiary hover:bg-indigo-100 dark:hover:bg-indigo-800 text-primary transition-colors"
-                                                    title="Edit snippet"
+                                                    title={uiText("Edit snippet")}
                                                 >
-                                                    Edit
-                                                </button>
+                                                    {uiText("Edit")}</button>
                                             )}
                                             {onDeleteSnippet && (
                                                 <button
                                                     onClick={() => { if (window.confirm(`Delete snippet "${snippet.title}"?`)) onDeleteSnippet(snippet.id); }}
                                                     className="px-2 py-1 text-xs font-semibold rounded bg-tertiary hover:bg-red-100 dark:hover:bg-red-800 text-red-600 dark:text-red-400 transition-colors"
-                                                    title="Delete snippet"
+                                                    title={uiText("Delete snippet")}
                                                 >
-                                                    Delete
-                                                </button>
+                                                    {uiText("Delete")}</button>
                                             )}
                                         </div>
                                     </div>
@@ -158,7 +156,7 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
                             ))}
                         </div>
                     ) : (
-                        <p className="text-xs text-secondary italic">No custom snippets yet. Create one to get started.</p>
+                        <p className="text-xs text-secondary italic">{uiText("No custom snippets yet. Create one to get started.")}</p>
                     )}
                 </div>
             )}
@@ -166,21 +164,21 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
             {/* Built-in Snippets Grid */}
             <div>
                 <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-primary">Snippet Library</h3>
+                    <h3 className="font-semibold text-primary">{uiText("Snippet Library")}</h3>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={handleImportPack}
                             disabled={isImporting}
                             className="px-3 py-1 text-xs font-semibold text-accent hover:text-accent-hover border border-accent rounded-md hover:bg-accent/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            title="Import a shared snippet pack JSON file into your global snippets"
+                            title={uiText("Import a shared snippet pack JSON file into your global snippets")}
                         >
-                            {isImporting ? 'Importing...' : 'Import Pack...'}
+                            {isImporting ? uiText("Importing...") : uiText("Import Pack...")}
                         </button>
                         <button
                             onClick={reload}
                             disabled={isLoading}
                             className="px-3 py-1 text-xs font-semibold text-accent hover:text-accent-hover border border-accent rounded-md hover:bg-accent/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
-                            title="Reload snippets from all sources"
+                            title={uiText("Reload snippets from all sources")}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +189,7 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            {isLoading ? 'Loading...' : 'Reload'}
+                            {isLoading ? uiText("Loading...") : uiText("Reload")}
                         </button>
                     </div>
                 </div>
@@ -208,13 +206,13 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
 
                 {error && (
                     <div className="mb-3 p-2 rounded bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs">
-                        <strong>Error loading snippets:</strong> {error}
+                        <strong>{uiText("Error loading snippets:")}</strong> {error}
                     </div>
                 )}
 
                 {warnings.length > 0 && (
                     <div className="mb-3 p-2 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs">
-                        <strong>Some snippet files were skipped due to invalid content:</strong>
+                        <strong>{uiText("Some snippet files were skipped due to invalid content:")}</strong>
                         <ul className="list-disc list-inside mt-1 space-y-0.5">
                             {warnings.map((warning, i) => (
                                 <li key={i}>{warning}</li>
@@ -229,7 +227,7 @@ const SnippetManager: React.FC<SnippetManagerProps> = ({
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <p className="text-sm">Loading snippets...</p>
+                        <p className="text-sm">{uiText("Loading snippets...")}</p>
                     </div>
                 ) : (
                     <SnippetGridView categories={categories} />

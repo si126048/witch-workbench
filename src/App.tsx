@@ -1,3 +1,4 @@
+import { uiText } from "./lib/uiText.js";
 import { nt } from './lib/nightfallStrings';
 import CloneProjectButton from './components/CloneProjectButton';
 import TeamHub from './components/TeamHub';
@@ -831,7 +832,7 @@ const App: React.FC = () => {
         setAppSettingsLoaded(true);
       });
       const unsubSettingsWarning = window.electronAPI?.onSettingsWarning?.(() => {
-        addToast('App settings could not be read — using defaults', 'warning');
+        addToast(uiText("App settings could not be read — using defaults"), 'warning');
       });
       return unsubSettingsWarning;
     } else { // Browser fallback
@@ -1034,9 +1035,9 @@ const App: React.FC = () => {
     });
     if (failures.length === 0) {
       discardAfterWriteRef.current = pendingRecovery.sessionId;
-      addToast(`Restored ${restored} item${restored === 1 ? '' : 's'} — review and save when ready`, 'success');
+      addToast(uiText("Restored {value0} item{value1} — review and save when ready", { value0: restored, value1: restored === 1 ? '' : 's' }), 'success');
     } else {
-      addToast(`Some recovered items could not be restored: ${failures.map(f => `${f.item} (${f.error})`).join('; ')}. They will be offered again next time.`, 'error');
+      addToast(uiText("Some recovered items could not be restored: {value0}. They will be offered again next time.", { value0: failures.map(f => `${f.item} (${f.error})`).join('; ') }), 'error');
     }
     resolveRecovery();
   }, [pendingRecovery, projectRootPath, fileSystemTree, blocksRef, editorInstances, images, audios, setBlocks, setDirtyBlockIds, setHasUnsavedSettings, createRecoveredUntitledFile, addToast, resolveRecovery]);
@@ -1044,7 +1045,7 @@ const App: React.FC = () => {
   const handleRecoveryDiscard = useCallback(async () => {
     const sessionId = recoverySessionIdRef.current;
     if (sessionId && pendingRecovery) await window.electronAPI?.recovery.discardPending(sessionId, pendingRecovery.sessionId);
-    addToast('Recovered work discarded', 'info');
+    addToast(uiText("Recovered work discarded"), 'info');
     resolveRecovery();
   }, [pendingRecovery, addToast, resolveRecovery]);
 
@@ -1068,7 +1069,7 @@ const App: React.FC = () => {
           await loadProject(path);
       } catch (err) {
           logger.error('Failed to open project:', err);
-          addToast('Failed to open project', 'error');
+          addToast(uiText("Failed to open project"), 'error');
       }
   }, [loadProject, addToast]);
 
@@ -1080,11 +1081,11 @@ const App: React.FC = () => {
                 await handleOpenWithRenpyCheck(path);
             }
         } else {
-            addToast('Local file system features require the Electron app or a compatible browser with File System Access support.', 'warning');
+            addToast(uiText("Local file system features require the Electron app or a compatible browser with File System Access support."), 'warning');
         }
     } catch (err) {
         logger.error('Failed to open project', err);
-        addToast('Failed to open project', 'error');
+        addToast(uiText("Failed to open project"), 'error');
     }
   }, [handleOpenWithRenpyCheck, addToast]);
 
@@ -1101,10 +1102,10 @@ const App: React.FC = () => {
       closeWizardModal();
       try {
           await loadProject(projectPath);
-          addToast('Project created successfully', 'success');
+          addToast(uiText("Project created successfully"), 'success');
       } catch (err) {
           logger.error('Failed to load newly created project', err);
-          addToast('Failed to load the newly created project', 'error');
+          addToast(uiText("Failed to load the newly created project"), 'error');
       }
   }, [loadProject, addToast, closeWizardModal]);
 
@@ -1152,10 +1153,10 @@ const App: React.FC = () => {
             const absPath = await window.electronAPI.path.join(projectRootPath, b.filePath) as string;
             const res = await window.electronAPI.writeFile(absPath, contentToSave);
             if (res.success) {
-              addToast(`Saved ${b.title || 'file'}`, 'success');
+              addToast(uiText("Saved {value0}", { value0: b.title || 'file' }), 'success');
               setFilesWithDiskConflict(prev => { const next = new Set(prev); next.delete(b.filePath!); return next; });
             } else {
-              addToast(`Failed to save: ${String(res.error)}`, 'error');
+              addToast(uiText("Failed to save: {value0}", { value0: String(res.error) }), 'error');
               return;
             }
           }
@@ -1167,16 +1168,16 @@ const App: React.FC = () => {
         if (projectSettings.draftingMode) updateDraftingArtifacts();
       } catch (err) {
         logger.error('Failed to save block:', err);
-        addToast('Failed to save file', 'error');
+        addToast(uiText("Failed to save file"), 'error');
       }
     };
 
     if (block?.filePath && filesWithDiskConflict.has(block.filePath)) {
       openUnsavedChangesModal({
-        title: 'Overwrite External Changes?',
-        message: `"${block.title || block.filePath}" was changed on disk after you last loaded it. Your editor version will overwrite those changes.`,
-        confirmText: 'Overwrite and Save',
-        dontSaveText: 'Cancel',
+        title: uiText("Overwrite External Changes?"),
+        message: uiText("\"{value0}\" was changed on disk after you last loaded it. Your editor version will overwrite those changes.", { value0: block.title || block.filePath }),
+        confirmText: uiText("Overwrite and Save"),
+        dontSaveText: uiText("Cancel"),
         onConfirm: async () => { closeUnsavedChangesModal(); await doSave(); },
         onDontSave: () => closeUnsavedChangesModal(),
         onCancel: () => closeUnsavedChangesModal(),
@@ -1194,18 +1195,18 @@ const App: React.FC = () => {
     try {
       const result = await window.electronAPI!.generateTranslations(appSettings.renpyPath, projectRootPath, language);
       if (result.success) {
-        addToast(`Translation files generated for "${language}"`, 'success');
+        addToast(uiText("Translation files generated for \"{value0}\"", { value0: language }), 'success');
         await handleRefreshProject();
       } else {
         const detail = result.error || 'Unknown error';
         logger.error('Generate translations failed:\n', detail);
         // Show first meaningful line in the toast, full output is in the console
         const firstLine = detail.split('\n').find(l => l.trim().length > 0) || detail;
-        addToast(`Translation generation failed: ${firstLine}`, 'error');
+        addToast(uiText("Translation generation failed: {value0}", { value0: firstLine }), 'error');
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      addToast(`Failed to generate translations: ${msg}`, 'error');
+      addToast(uiText("Failed to generate translations: {value0}", { value0: msg }), 'error');
     } finally {
       setIsGeneratingTranslations(false);
     }
@@ -1226,10 +1227,10 @@ const App: React.FC = () => {
 
     if (hasUnsaved) {
       openUnsavedChangesModal({
-        title: 'Unsaved Changes',
-        message: 'You have unsaved changes. Do you want to save them before creating a new project?',
-        confirmText: 'Save & Create',
-        dontSaveText: "Don't Save & Create",
+        title: uiText("Unsaved Changes"),
+        message: uiText("You have unsaved changes. Do you want to save them before creating a new project?"),
+        confirmText: uiText("Save & Create"),
+        dontSaveText: uiText("Don't Save & Create"),
         onConfirm: async () => {
           await handleSaveAll();
           handleCreateProject();
@@ -1426,7 +1427,7 @@ const App: React.FC = () => {
                return;
           }
 
-          addToast(`Could not find a block or note for "${target}"`, 'warning');
+          addToast(uiText("Could not find a block or note for \"{value0}\"", { value0: target }), 'warning');
       }
   }, [blocks, analysisResult, addToast, stickyNotes, canvasFilters.notes, setActiveTabId, setCanvasFilters, setCenterOnBlockRequest]);
 
@@ -1437,7 +1438,7 @@ const App: React.FC = () => {
           await window.electronAPI.showItemInFolder?.(absPath);
       } catch (err) {
           logger.error('Failed to reveal item in file manager', err);
-          addToast('Could not reveal file', 'error');
+          addToast(uiText("Could not reveal file"), 'error');
       }
   }, [projectRootPath, addToast]);
 
@@ -1446,10 +1447,10 @@ const App: React.FC = () => {
       try {
           const absPath = await window.electronAPI.path.join(projectRootPath, relativePath) as string;
           await navigator.clipboard.writeText(absPath);
-          addToast('Path copied to clipboard', 'success');
+          addToast(uiText("Path copied to clipboard"), 'success');
       } catch (err) {
           logger.error('Failed to copy path', err);
-          addToast('Could not copy path', 'error');
+          addToast(uiText("Could not copy path"), 'error');
       }
   }, [projectRootPath, addToast]);
 
@@ -1574,7 +1575,7 @@ const App: React.FC = () => {
       }
       setFindUsagesHighlightIds(ids);
       setActiveTabId('canvas');
-      addToast(`Found usages in ${ids.size} blocks`, 'info');
+      addToast(uiText("Found usages in {value0} blocks", { value0: ids.size }), 'info');
   }, [analysisResult.dialogueLines, analysisResult.variableUsages, setFindUsagesHighlightIds, setActiveTabId, addToast]);
 
   const analysisResultWithProfiles = useMemo(() => {
@@ -1699,7 +1700,7 @@ const App: React.FC = () => {
 
   const handleInsertColor = useCallback((hex: string) => {
       const editor = getActiveEditor();
-      if (!editor) { addToast('Open a file in the editor to insert a color.', 'warning'); return; }
+      if (!editor) { addToast(uiText("Open a file in the editor to insert a color."), 'warning'); return; }
       const pos = editor.getPosition();
       if (!pos) return;
       editor.executeEdits('color-picker', [{
@@ -1712,7 +1713,7 @@ const App: React.FC = () => {
 
   const handleInsertATLPreset = useCallback((code: string) => {
       const editor = getActiveEditor();
-      if (!editor) { addToast('Open a file in the editor to insert an animation.', 'warning'); return; }
+      if (!editor) { addToast(uiText("Open a file in the editor to insert an animation."), 'warning'); return; }
       const pos = editor.getPosition();
       if (!pos) return;
       const lineTextBeforeCursor = editor.getModel()?.getLineContent(pos.lineNumber).slice(0, pos.column - 1) ?? '';
@@ -1728,10 +1729,10 @@ const App: React.FC = () => {
 
   const handleWrapSelectionWithColor = useCallback((hex: string) => {
       const editor = getActiveEditor();
-      if (!editor) { addToast('Open a file in the editor to wrap text with a color tag.', 'warning'); return; }
+      if (!editor) { addToast(uiText("Open a file in the editor to wrap text with a color tag."), 'warning'); return; }
       const selection = editor.getSelection();
       if (!selection || selection.isEmpty()) {
-          addToast('Select text in the editor first, then click Wrap.', 'info');
+          addToast(uiText("Select text in the editor first, then click Wrap."), 'info');
           return;
       }
       const selectedText = editor.getModel()?.getValueInRange(selection) ?? '';
@@ -1745,8 +1746,8 @@ const App: React.FC = () => {
 
   const handleCopyColorHex = useCallback((hex: string) => {
       navigator.clipboard.writeText(hex)
-          .then(() => addToast(`Copied ${hex}`, 'success'))
-          .catch(() => addToast('Failed to copy to clipboard', 'error'));
+          .then(() => addToast(uiText("Copied {value0}", { value0: hex }), 'success'))
+          .catch(() => addToast(uiText("Failed to copy to clipboard"), 'error'));
   }, [addToast]);
 
   // --- Explorer Selection → File Menu State Sync ---
@@ -1826,7 +1827,7 @@ const App: React.FC = () => {
     const hasSeenToast = localStorage.getItem(`implicit-var-toast-${projectRootPath}`);
 
     if (implicitVarCount >= 10 && !hasSeenToast && !dismissedImplicitVarHint) {
-      addToast(`${implicitVarCount} implicit variables detected. Check the Variables pane or Diagnostics tab for details.`, 'info');
+      addToast(uiText("{value0} implicit variables detected. Check the Variables pane or Diagnostics tab for details.", { value0: implicitVarCount }), 'info');
       localStorage.setItem(`implicit-var-toast-${projectRootPath}`, 'true');
     }
   }, [analysisResult, projectRootPath, dismissedImplicitVarHint, addToast]);
@@ -1855,10 +1856,10 @@ const App: React.FC = () => {
               return;
           }
           openUnsavedChangesModal({
-              title: 'Unsaved Changes',
-              message: 'You have unsaved changes. Do you want to save them before exiting?',
-              confirmText: 'Save & Exit',
-              dontSaveText: "Don't Save",
+              title: uiText("Unsaved Changes"),
+              message: uiText("You have unsaved changes. Do you want to save them before exiting?"),
+              confirmText: uiText("Save & Exit"),
+              dontSaveText: uiText("Don't Save"),
               onConfirm: async () => {
                   // Trust handleSaveAll's own return value rather than re-checking
                   // hasUnsavedChanges() afterward: dirtyBlockIdsRef/hasUnsavedSettingsRef
@@ -2231,7 +2232,7 @@ const App: React.FC = () => {
             <button
               onClick={() => updateAppSettings(draft => { draft.isLeftSidebarOpen = true })}
               className="w-6 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
-              title="Expand Left Sidebar"
+              title={uiText("Expand Left Sidebar")}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3.293 14.707a1 1 0 010-1.414L6.586 10 3.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0zm8 0a1 1 0 010-1.414L14.586 10l-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
             </button>
@@ -2245,19 +2246,17 @@ const App: React.FC = () => {
                   onClick={() => setActiveLeftPanel('explorer')}
                   className={`px-3 py-1 rounded-md text-sm font-medium ${activeLeftPanel === 'explorer' ? 'bg-white dark:bg-gray-900 shadow' : 'text-gray-600 dark:text-gray-300'}`}
                 >
-                  Explorer
-                </button>
+                  {uiText("Explorer")}</button>
                 <button
                   onClick={() => setActiveLeftPanel('search')}
                   className={`px-3 py-1 rounded-md text-sm font-medium ${activeLeftPanel === 'search' ? 'bg-white dark:bg-gray-900 shadow' : 'text-gray-600 dark:text-gray-300'}`}
                 >
-                  Search
-                </button>
+                  {uiText("Search")}</button>
               </div>
               <button
                 onClick={() => updateAppSettings(draft => { draft.isLeftSidebarOpen = false })}
                 className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                title="Collapse Left Sidebar"
+                title={uiText("Collapse Left Sidebar")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 14.707a1 1 0 010-1.414L13.414 10l3.293-3.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414 0zm-8 0a1 1 0 010-1.414L5.414 10l3.293-3.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414 0z" clipRule="evenodd" /></svg>
               </button>
@@ -2445,7 +2444,7 @@ const App: React.FC = () => {
             <button
               onClick={() => updateAppSettings(draft => { draft.isRightSidebarOpen = false })}
               className="absolute top-3 right-3 z-10 p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              title="Collapse Right Sidebar"
+              title={uiText("Collapse Right Sidebar")}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3.293 14.707a1 1 0 010-1.414L6.586 10 3.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0zm8 0a1 1 0 010-1.414L14.586 10l-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
             </button>
@@ -2528,7 +2527,7 @@ const App: React.FC = () => {
             <button
               onClick={() => updateAppSettings(draft => { draft.isRightSidebarOpen = true })}
               className="w-6 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
-              title="Expand Right Sidebar"
+              title={uiText("Expand Right Sidebar")}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 14.707a1 1 0 010-1.414L13.414 10l3.293-3.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414 0zm-8 0a1 1 0 010-1.414L5.414 10l3.293-3.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414 0z" clipRule="evenodd" /></svg>
             </button>
@@ -2539,8 +2538,8 @@ const App: React.FC = () => {
       {/* Modals and Overlays */}
       {nonRenpyWarningPath && (
         <ConfirmModal
-          title="Folder may not be a Ren'Py project"
-          confirmText="Open Anyway"
+          title={uiText("Folder may not be a Ren'Py project")}
+          confirmText={uiText("Open Anyway")}
           confirmClassName="bg-indigo-600 hover:bg-indigo-700"
           onConfirm={() => {
             const path = nonRenpyWarningPath;
@@ -2549,11 +2548,10 @@ const App: React.FC = () => {
           }}
           onClose={() => setNonRenpyWarningPath(null)}
         >
-          The selected folder doesn't appear to contain a Ren'Py project — no{' '}
+          {uiText("The selected folder doesn't appear to contain a Ren'Py project — no")}{' '}
           <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded text-sm">game/</code>{' '}
-          folder or <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded text-sm">.rpy</code>{' '}
-          files were found. You can still open it, but it may not work as expected.
-        </ConfirmModal>
+          {("" + uiText("folder or") + " ")}<code className="bg-gray-100 dark:bg-gray-700 px-1 rounded text-sm">.rpy</code>{' '}
+          {uiText("files were found. You can still open it, but it may not work as expected.")}</ConfirmModal>
       )}
 
       {isLoading && <LoadingOverlay progress={loadingProgress} message={loadingMessage} onCancel={handleCancelLoad} />}
@@ -2617,17 +2615,16 @@ const App: React.FC = () => {
 
       {deleteConfirmInfo && (
           <ConfirmModal
-            title="Confirm Deletion"
+            title={uiText("Confirm Deletion")}
             onConfirm={() => {
                 deleteConfirmInfo.onConfirm();
                 closeDeleteConfirmModal();
             }}
             onClose={() => closeDeleteConfirmModal()}
-            confirmText="Delete"
+            confirmText={uiText("Delete")}
             confirmClassName="bg-red-600 hover:bg-red-700"
           >
-              Are you sure you want to delete {deleteConfirmInfo.paths.length} item(s)? This cannot be undone.
-          </ConfirmModal>
+              {("" + uiText("Are you sure you want to delete") + " ")}{deleteConfirmInfo.paths.length} {(" " + uiText("item(s)? This cannot be undone.") + "")}</ConfirmModal>
       )}
 
       {contextMenuInfo && createPortal(
@@ -2756,8 +2753,8 @@ const App: React.FC = () => {
         isOpen={isWarpToLabelOpen}
         items={warpLabelItems}
         canvasName="Warp"
-        title="Warp to Label"
-        placeholder="Warp to label…"
+        title={uiText("Warp to Label")}
+        placeholder={uiText("Warp to label…")}
         emptyStateText="No labels available"
         onSelect={handleWarpToLabel}
         onClose={() => closeWarpToLabelModal()}

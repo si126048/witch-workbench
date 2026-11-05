@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file AudioManager.tsx
  * @description Asset panel for browsing and importing audio files (~400 lines).
@@ -55,7 +56,7 @@ const AudioItem: React.FC<{
       <button 
         onClick={(e) => { e.stopPropagation(); onTogglePlay(); }}
         className="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors focus:outline-none flex-shrink-0"
-        title={isPlaying ? "Stop" : "Play Preview"}
+        title={isPlaying ? uiText("Stop") : uiText("Play Preview")}
       >
         {isPlaying ? (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clipRule="evenodd" /></svg>
@@ -231,7 +232,7 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
       <div className="space-y-4 mb-4">
         <div className="flex justify-between items-center">
             <span className="text-xs text-gray-500 dark:text-gray-400">
-                {lastScanned ? `Last scanned: ${new Date(lastScanned).toLocaleTimeString()}` : 'Not scanned.'}
+                {lastScanned ? uiText("Last scanned: {value0}", { value0: new Date(lastScanned).toLocaleTimeString() }) : uiText("Not scanned.")}
             </span>
             <button onClick={onRefresh} disabled={!isFileSystemApiSupported || isRefreshing} className="px-2 py-1 rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1">
                  {isRefreshing ? (
@@ -242,11 +243,11 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
                  ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.885-.666A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566z" clipRule="evenodd" /></svg>
                  )}
-                 <span>Refresh</span>
+                 <span>{uiText("Refresh")}</span>
             </button>
         </div>
         <div>
-          <h3 className="font-semibold mb-2">Audio Sources</h3>
+          <h3 className="font-semibold mb-2">{uiText("Audio Sources")}</h3>
             <div className="flex items-center space-x-2">
                 <select
                     value={selectedSource}
@@ -255,7 +256,7 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
                 >
                     {sources.map(source => (
                     <option key={source} value={source}>
-                        {source === 'Project' ? 'Project Audio' : source}
+                        {source === 'Project' ? uiText("Project Audio") : source}
                     </option>
                     ))}
                 </select>
@@ -263,7 +264,7 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
                     <button
                         onClick={() => onRemoveScanDirectory(selectedSource)}
                         className="p-2 rounded-md hover:bg-red-200 dark:hover:bg-red-800/50 text-gray-500 dark:text-gray-400 hover:text-red-700 dark:hover:text-red-300 flex-shrink-0"
-                        title={`Remove ${selectedSource} from scan list`}
+                        title={uiText("Remove {value0} from scan list", { value0: selectedSource })}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                     </button>
@@ -272,17 +273,17 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
            <button
               onClick={onAddScanDirectory}
               disabled={!isFileSystemApiSupported}
-              title={isFileSystemApiSupported ? "Add external folder to scan for audio" : "Open a project folder to enable this feature"}
+              title={isFileSystemApiSupported ? uiText("Add external folder to scan for audio") : uiText("Open a project folder to enable this feature")}
               className="w-full mt-2 px-3 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" /></svg>
-              <span>Add Directory to Scan</span>
+              <span>{uiText("Add Directory to Scan")}</span>
             </button>
         </div>
         <div className="flex items-center space-x-2 mt-4">
           <input
             type="text"
-            placeholder="Search audio by name or tag..."
+            placeholder={uiText("Search audio by name or tag...")}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             className="flex-grow p-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
@@ -292,7 +293,7 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
             disabled={selectedAudioPaths.size === 0}
             className="px-3 py-2 rounded bg-green-600 hover:bg-green-700 text-white text-sm font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Copy to Project ({selectedAudioPaths.size})
+            {uiText("Copy to Project (")}{selectedAudioPaths.size})
           </button>
         </div>
       </div>
@@ -317,8 +318,8 @@ const AudioManager: React.FC<AudioManagerProps> = ({ audios, metadata, scanDirec
             </div>
           ))}
         </div>
-        {audios.length === 0 && <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Add music and sound effects to bring your story to life.</p>}
-        {audios.length > 0 && filteredAudios.length === 0 && <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No audio files match your filter.</p>}
+        {audios.length === 0 && <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">{uiText("Add music and sound effects to bring your story to life.")}</p>}
+        {audios.length > 0 && filteredAudios.length === 0 && <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">{uiText("No audio files match your filter.")}</p>}
       </div>
       {contextMenu && (
         <AudioContextMenu

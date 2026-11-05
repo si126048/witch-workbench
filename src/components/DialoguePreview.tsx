@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file DialoguePreview.tsx
  * @description Inline "Player View" panel for the code editor.
@@ -190,7 +191,7 @@ const DialoguePreview: React.FC<DialoguePreviewProps> = ({ data, isExpanded, onT
       <button
         onClick={onToggleExpand}
         className="w-full flex items-center justify-between px-3 py-1 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-800 transition-colors"
-        aria-label={isExpanded ? 'Collapse player view' : 'Expand player view'}
+        aria-label={isExpanded ? uiText("Collapse player view") : uiText("Expand player view")}
       >
         <span className="font-medium tracking-wide uppercase" style={{ fontSize: '10px', letterSpacing: '0.08em' }}>
           {label}
@@ -212,7 +213,7 @@ const DialoguePreview: React.FC<DialoguePreviewProps> = ({ data, isExpanded, onT
               ? <DialogueBox data={data} />
               : <ChoiceScreen data={data} />
           ) : (
-            <p className="text-xs text-gray-600 italic py-1">No dialogue or menu at cursor</p>
+            <p className="text-xs text-gray-600 italic py-1">{uiText("No dialogue or menu at cursor")}</p>
           )}
         </div>
       )}

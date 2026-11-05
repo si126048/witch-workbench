@@ -13,6 +13,7 @@ export const DEMO_PROJECT = path.join(__dirname, '..', 'DemoProject');
 const FAKE_RENPY_SDK = path.join(__dirname, 'fixtures', 'fake-renpy-sdk');
 
 type ElectronFixtures = {
+  uiLanguage: 'en' | 'zh-CN';
   electronApp: ElectronApplication;
   window: Page;
 };
@@ -35,10 +36,11 @@ function withRecoveryDir<T>(run: (recoveryDir: string) => Promise<T>): Promise<T
 /** Base fixture — no project loaded. Used for launch/startup tests. */
 /* eslint-disable react-hooks/rules-of-hooks, no-empty-pattern */
 export const test = base.extend<ElectronFixtures>({
-  electronApp: async ({}, use) => withRecoveryDir(async (recoveryDir) => {
+  uiLanguage: ['en', { option: true }],
+  electronApp: async ({ uiLanguage }, use) => withRecoveryDir(async (recoveryDir) => {
     const app = await launchElectron(electron, {
       args: [APP_ENTRY],
-      env: { RENIDE_SETTINGS_OVERRIDE: BASE_SETTINGS_OVERRIDE, RENIDE_RECOVERY_DIR: recoveryDir },
+      env: { NIGHTFALL_UI_LANGUAGE: uiLanguage, RENIDE_SETTINGS_OVERRIDE: BASE_SETTINGS_OVERRIDE, RENIDE_RECOVERY_DIR: recoveryDir },
     });
     await suppressFirstRunTutorial(app);
     await use(app);
@@ -47,6 +49,7 @@ export const test = base.extend<ElectronFixtures>({
   window: async ({ electronApp }, use) => {
     const page = await electronApp.firstWindow();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForSelector('[data-app-ready="true"]', { timeout: 120_000 });
     await use(page);
   },
 });
@@ -55,10 +58,12 @@ export const test = base.extend<ElectronFixtures>({
  *  Also points renpyPath at a stub SDK so Run/Warp toolbar buttons are
  *  enabled — checkRenpyPath only verifies the executable exists, it never runs it. */
 export const testWithProject = base.extend<ElectronFixtures>({
-  electronApp: async ({}, use) => withRecoveryDir(async (recoveryDir) => {
+  uiLanguage: ['en', { option: true }],
+  electronApp: async ({ uiLanguage }, use) => withRecoveryDir(async (recoveryDir) => {
     const app = await launchElectron(electron, {
       args: [APP_ENTRY, '--project', FIXTURE_PROJECT],
       env: {
+        NIGHTFALL_UI_LANGUAGE: uiLanguage,
         RENIDE_SETTINGS_OVERRIDE: JSON.stringify({
           renpyPath: FAKE_RENPY_SDK,
           isLeftSidebarOpen: true,
@@ -74,6 +79,7 @@ export const testWithProject = base.extend<ElectronFixtures>({
   window: async ({ electronApp }, use) => {
     const page = await electronApp.firstWindow();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForSelector('[data-project-ready="true"]', { timeout: 120_000 });
     await use(page);
   },
 });
@@ -82,10 +88,12 @@ export const testWithProject = base.extend<ElectronFixtures>({
  *  background images, CG art, named scene compositions, imagemap compositions,
  *  and a markdown doc — used for tests that require real assets. */
 export const testWithDemoProject = base.extend<ElectronFixtures>({
-  electronApp: async ({}, use) => withRecoveryDir(async (recoveryDir) => {
+  uiLanguage: ['en', { option: true }],
+  electronApp: async ({ uiLanguage }, use) => withRecoveryDir(async (recoveryDir) => {
     const app = await launchElectron(electron, {
       args: [APP_ENTRY, '--project', DEMO_PROJECT],
       env: {
+        NIGHTFALL_UI_LANGUAGE: uiLanguage,
         RENIDE_SETTINGS_OVERRIDE: JSON.stringify({
           renpyPath: FAKE_RENPY_SDK,
           isLeftSidebarOpen: true,
@@ -101,6 +109,7 @@ export const testWithDemoProject = base.extend<ElectronFixtures>({
   window: async ({ electronApp }, use) => {
     const page = await electronApp.firstWindow();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForSelector('[data-project-ready="true"]', { timeout: 120_000 });
     await use(page);
   },
 });

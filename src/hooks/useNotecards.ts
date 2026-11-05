@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file useNotecards.ts
  * @description Custom hook for managing the Notecard Canvas's freeform notecards and links.
@@ -87,7 +88,7 @@ export function useNotecards(params: UseNotecardsParams): UseNotecardsReturn {
       position = { x: worldCenterX - width / 2, y: worldCenterY - height / 2 };
     }
 
-    const newCard: Notecard = { id, title: 'New Notecard', content: '', position, width, height, color: 'yellow' };
+    const newCard: Notecard = { id, title: uiText("New Notecard"), content: '', position, width, height, color: 'yellow' };
 
     setNotecards(draft => {
       draft.push(newCard);

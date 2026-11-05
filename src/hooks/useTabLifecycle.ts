@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback, useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { ClosedTabEntry, EditorTab } from '@/types';
@@ -213,10 +214,10 @@ export function useTabLifecycle({
 
     if (hasUnsaved) {
       openUnsavedChangesModal({
-        title: `Close ${tabsToClose.length > 1 ? 'Tabs' : 'Tab'}`,
-        message: `You have unsaved changes in ${tabsToClose.length > 1 ? 'some tabs' : 'this tab'}. Do you want to save them before closing?`,
-        confirmText: 'Save & Close',
-        dontSaveText: "Don't Save & Close",
+        title: uiText("Close {value0}", { value0: tabsToClose.length > 1 ? 'Tabs' : 'Tab' }),
+        message: uiText("You have unsaved changes in {value0}. Do you want to save them before closing?", { value0: tabsToClose.length > 1 ? 'some tabs' : 'this tab' }),
+        confirmText: uiText("Save & Close"),
+        dontSaveText: uiText("Don't Save & Close"),
         onConfirm: async () => {
           await handleSaveAll();
           const closableIds = new Set(tabsToClose.map(t => t.id));

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useState } from 'react';
 import { logger } from '@/lib/logger';
 
@@ -48,23 +49,21 @@ export default function CodeActionButtons({ code, size = 'sm', className = '' }:
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
                     }
                     ${!code ? 'opacity-50 cursor-not-allowed' : ''}`}
-                title="Copy code to clipboard"
+                title={uiText("Copy code to clipboard")}
             >
                 {copied ? (
                     <>
                         <svg viewBox="0 0 12 12" className={iconClass} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M2 6l3 3 5-5" />
                         </svg>
-                        Copied!
-                    </>
+                        {uiText("Copied!")}</>
                 ) : (
                     <>
                         <svg viewBox="0 0 12 12" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="4" y="1" width="7" height="8" rx="1" />
                             <path d="M1 4v7h7" />
                         </svg>
-                        Copy
-                    </>
+                        {uiText("Copy")}</>
                 )}
             </button>
         </div>

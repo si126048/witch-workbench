@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { BlockType } from '@/components/CreateBlockModal';
@@ -198,7 +199,7 @@ export function useBlockManagement({
         const res = await window.electronAPI.writeFile(fullPath, content);
         if (res.success) {
           addBlock(relativePath, content, initialPosition);
-          addToast(`Created ${fileName} in ${cleanFolderPath || 'root'}`, 'success');
+          addToast(uiText("Created {value0} in {value1}", { value0: fileName, value1: cleanFolderPath || 'root' }), 'success');
           const projData = await window.electronAPI.loadProject(projectRootPath);
           setFileSystemTree(projData.tree);
         } else {
@@ -207,11 +208,11 @@ export function useBlockManagement({
         }
       } catch (e) {
         logger.error('File creation error', e);
-        addToast(`Failed to create file: ${formatErrorMessage(e)}`, 'error');
+        addToast(uiText("Failed to create file: {value0}", { value0: formatErrorMessage(e) }), 'error');
       }
     } else {
       addBlock(fileName, content, initialPosition);
-      addToast(`Created block ${fileName}`, 'success');
+      addToast(uiText("Created block {value0}", { value0: fileName }), 'success');
     }
   }, [addBlock, addToast, projectRootPath, setFileSystemTree]);
 
@@ -293,10 +294,10 @@ export function useBlockManagement({
         const projData = await window.electronAPI.loadProject(projectRootPath);
         setFileSystemTree(projData.tree);
 
-        addToast(`Deleted ${block.filePath}`, 'success');
+        addToast(uiText("Deleted {value0}", { value0: block.filePath }), 'success');
       } catch (err) {
         logger.error('Failed to delete file:', err);
-        addToast(`Failed to delete ${block.filePath}`, 'error');
+        addToast(uiText("Failed to delete {value0}", { value0: block.filePath }), 'error');
       }
     });
   }, [blocks, projectRootPath, deleteBlock, addToast, openDeleteConfirmModal, setFileSystemTree]);
@@ -318,14 +319,14 @@ export function useBlockManagement({
           deleteBlock(b.id);
         } catch (err) {
           logger.error('Failed to delete file:', err);
-          addToast(`Failed to delete ${b.filePath}`, 'error');
+          addToast(uiText("Failed to delete {value0}", { value0: b.filePath }), 'error');
         }
       }
       if (projectRootPath) {
         const projData = await window.electronAPI.loadProject(projectRootPath);
         setFileSystemTree(projData.tree);
       }
-      addToast(`Deleted ${withFile.length} file${withFile.length > 1 ? 's' : ''}`, 'success');
+      addToast(uiText("Deleted {value0} file{value1}", { value0: withFile.length, value1: withFile.length > 1 ? 's' : '' }), 'success');
     });
   }, [blocks, projectRootPath, deleteBlock, addToast, openDeleteConfirmModal, setFileSystemTree]);
 
@@ -343,7 +344,7 @@ export function useBlockManagement({
     const id = `group-${Date.now()}`;
     const newGroup: BlockGroup = {
       id,
-      title: 'New Group',
+      title: uiText("New Group"),
       position: { x: minX - PADDING, y: minY - PADDING - HEADER },
       width: maxX - minX + PADDING * 2,
       height: maxY - minY + PADDING * 2 + HEADER,

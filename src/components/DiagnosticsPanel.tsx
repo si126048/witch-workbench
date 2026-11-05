@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file DiagnosticsPanel.tsx
  * @description Split panel showing Issues and Tasks tabs for project health (~400 lines).
@@ -46,20 +47,20 @@ type SeverityFilter = 'all' | DiagnosticSeverity;
 function SeverityIcon({ severity }: { severity: DiagnosticSeverity }) {
   if (severity === 'error') {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-label="Error">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-label={uiText("Error")}>
         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
       </svg>
     );
   }
   if (severity === 'warning') {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-label="Warning">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-label={uiText("Warning")}>
         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
       </svg>
     );
   }
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-label="Info">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-label={uiText("Info")}>
       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
     </svg>
   );
@@ -145,8 +146,8 @@ function IssueRow({ issue, blocks, onIgnoreIssue, onOpenBlock }: {
         <button
           type="button"
           className="flex-none p-1 text-gray-400 hover:text-indigo-500 rounded"
-          title={`Go to ${locationText}`}
-          aria-label={`Open ${locationText}`}
+          title={uiText("Go to {value0}", { value0: locationText })}
+          aria-label={uiText("Open {value0}", { value0: locationText })}
           onClick={() => onOpenBlock(issue.blockId!, issue.line ?? 1)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -158,8 +159,8 @@ function IssueRow({ issue, blocks, onIgnoreIssue, onOpenBlock }: {
       <button
         type="button"
         className="flex-none p-1 text-gray-400 hover:text-indigo-500 rounded"
-        title="Ignore issue"
-        aria-label="Ignore issue"
+        title={uiText("Ignore issue")}
+        aria-label={uiText("Ignore issue")}
         onClick={() => onIgnoreIssue(issue)}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -333,8 +334,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
             className={`px-3 py-1 ${activeView === 'issues' ? 'bg-indigo-500 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
             onClick={() => setActiveView('issues')}
           >
-            Issues
-            {diagnostics.errorCount + diagnostics.warningCount + diagnostics.infoCount > 0 && (
+            {uiText("Issues")}{diagnostics.errorCount + diagnostics.warningCount + diagnostics.infoCount > 0 && (
               <span className={`ml-1.5 px-1.5 rounded-full text-[11px] font-semibold ${activeView === 'issues' ? 'bg-white/30 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
                 {diagnostics.errorCount + diagnostics.warningCount + diagnostics.infoCount}
               </span>
@@ -344,8 +344,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
             className={`px-3 py-1 border-l border-gray-200 dark:border-gray-600 ${activeView === 'tasks' ? 'bg-indigo-500 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
             onClick={() => setActiveView('tasks')}
           >
-            Tasks
-            {openTaskCount > 0 && (
+            {uiText("Tasks")}{openTaskCount > 0 && (
               <span className={`ml-1.5 px-1.5 rounded-full text-[11px] font-semibold ${activeView === 'tasks' ? 'bg-white/30 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
                 {openTaskCount}
               </span>
@@ -360,7 +359,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
           </svg>
           <input
             type="text"
-            placeholder="Filter…"
+            placeholder={uiText("Filter…")}
             value={filterText}
             onChange={e => setFilterText(e.target.value)}
             className="w-full pl-7 pr-2 py-1 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-indigo-400"
@@ -390,7 +389,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
           {ignoredDiagnostics.length > 0 && (
             <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700 flex-none">
               <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
-                Ignored Issues ({ignoredDiagnostics.length})
+                {uiText("Ignored Issues (")}{ignoredDiagnostics.length})
               </div>
               <div className="space-y-1 max-h-24 overflow-y-auto">
                 {ignoredDiagnostics.map((rule, index) => (
@@ -398,15 +397,15 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                     <div className="flex-1 min-w-0 text-gray-500 dark:text-gray-400">
                       <div className="truncate">{rule.message}</div>
                       <div className="font-mono text-[10px] opacity-75">
-                        {rule.filePath ?? rule.blockId ?? 'unknown'}
+                        {rule.filePath ?? rule.blockId ?? uiText("unknown")}
                         {rule.line ? `:${rule.line}` : ''}
                       </div>
                     </div>
                     <button
                       type="button"
                       className="flex-none p-1 text-gray-400 hover:text-indigo-500 rounded"
-                      title="Unignore issue"
-                      aria-label="Unignore issue"
+                      title={uiText("Unignore issue")}
+                      aria-label={uiText("Unignore issue")}
                       onClick={() => removeIgnoredRule(rule)}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -437,7 +436,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                   onClick={() => setSeverityFilter(s)}
                   className={`px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors ${active ? colors : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-500'}`}
                 >
-                  {s === 'all' ? 'All' : s.charAt(0).toUpperCase() + s.slice(1)} ({count})
+                  {s === 'all' ? uiText("All") : s.charAt(0).toUpperCase() + s.slice(1)} ({count})
                 </button>
               );
             })}
@@ -450,8 +449,8 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p className="text-sm font-medium">No issues found</p>
-                <p className="text-xs">Your project looks clean!</p>
+                <p className="text-sm font-medium">{uiText("No issues found")}</p>
+                <p className="text-xs">{uiText("Your project looks clean!")}</p>
               </div>
             )}
             {Array.from(groupedIssues.entries()).map(([fileKey, fileIssues]) => {
@@ -503,7 +502,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
           <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-100 dark:border-gray-700 flex-none">
             <input
               type="text"
-              placeholder="New task… (Enter to add)"
+              placeholder={uiText("New task… (Enter to add)")}
               value={newTaskTitle}
               onChange={e => setNewTaskTitle(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') addTask(); }}
@@ -514,8 +513,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
               disabled={!newTaskTitle.trim()}
               className="px-3 py-1.5 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed flex-none"
             >
-              Add
-            </button>
+              {uiText("Add")}</button>
           </div>
 
           {/* Task list */}
@@ -525,8 +523,8 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
-                <p className="text-sm font-medium">No tasks yet</p>
-                <p className="text-xs">Add tasks above, or they'll appear from canvas sticky notes.</p>
+                <p className="text-sm font-medium">{uiText("No tasks yet")}</p>
+                <p className="text-xs">{uiText("Add tasks above, or they'll appear from canvas sticky notes.")}</p>
               </div>
             )}
             {filteredTasks.map(task => {
@@ -544,7 +542,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                     <button
                       onClick={() => toggleTask(task.id)}
                       className="mt-0.5 flex-none text-gray-400 hover:text-indigo-500"
-                      aria-label={task.status === 'completed' ? 'Mark open' : 'Mark complete'}
+                      aria-label={task.status === 'completed' ? uiText("Mark open") : uiText("Mark complete")}
                     >
                       {task.status === 'completed' ? (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500" viewBox="0 0 20 20" fill="currentColor">
@@ -559,7 +557,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                   ) : (
                     /* Sticky note indicator */
                     <div className="mt-0.5 flex-none">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-label="Canvas sticky note">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-label={uiText("Canvas sticky note")}>
                         <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
                       </svg>
                     </div>
@@ -578,8 +576,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                         onClick={() => onHighlightBlock(stickyNote.id)}
                         className="text-[11px] text-indigo-500 hover:text-indigo-400 mt-0.5"
                       >
-                        Show on canvas
-                      </button>
+                        {uiText("Show on canvas")}</button>
                     )}
                     {/* File link */}
                     {task.blockId && (
@@ -598,7 +595,7 @@ const DiagnosticsPanel: React.FC<DiagnosticsPanelProps> = ({
                     <button
                       onClick={() => deleteTask(task.id)}
                       className="mt-0.5 flex-none text-gray-300 hover:text-red-400 dark:text-gray-600 dark:hover:text-red-400"
-                      aria-label="Delete task"
+                      aria-label={uiText("Delete task")}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ScreenManager.tsx
  * @description Virtualised list of all Ren'Py `screen` definitions parsed from project scripts (~70 lines).
@@ -30,7 +31,7 @@ const ScreenManager: React.FC<ScreenManagerProps> = ({ screens, onFindDefinition
     return (
         <>
             {screenList.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No screens defined yet.</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">{uiText("No screens defined yet.")}</p>
             ) : (
                 <div
                     ref={containerRef}
@@ -49,7 +50,7 @@ const ScreenManager: React.FC<ScreenManagerProps> = ({ screens, onFindDefinition
                                     {screen.parameters && <p className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">{screen.parameters}</p>}
                                 </div>
                                 <div className="flex items-center space-x-1 flex-shrink-0 pl-2">
-                                    <button onClick={() => onFindDefinition(screen.name)} title="Go to definition" aria-label={`Go to definition of ${screen.name}`} className="p-1 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded">
+                                    <button onClick={() => onFindDefinition(screen.name)} title={uiText("Go to definition")} aria-label={uiText("Go to definition of {value0}", { value0: screen.name })} className="p-1 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded">
                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                                     </button>
                                 </div>

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file GoToLabelModal.tsx
  * @description Fuzzy-search jump dialog for quickly navigating to a label or block (~150 lines).
@@ -57,8 +58,8 @@ const GoToLabelModal: React.FC<GoToLabelModalProps> = ({
   canvasName,
   onSelect,
   onClose,
-  title = 'Go to Label',
-  placeholder = 'Go to label…',
+  title = uiText("Go to Label"),
+  placeholder = uiText("Go to label…"),
   emptyStateText = 'No labels match',
 }) => {
   const [query, setQuery] = useState('');
@@ -192,10 +193,10 @@ const GoToLabelModal: React.FC<GoToLabelModalProps> = ({
 
         {/* Footer hint */}
         <div className="px-3 py-1.5 border-t border-gray-700 flex items-center gap-3 text-xs text-gray-600">
-          <span><kbd className="font-sans">↑↓</kbd> navigate</span>
+          <span><kbd className="font-sans">↑↓</kbd> {(" " + uiText("navigate") + "")}</span>
           <span><kbd className="font-sans">↵</kbd> jump</span>
-          <span><kbd className="font-sans">Esc</kbd> dismiss</span>
-          <span className="ml-auto">{filteredItems.length} result{filteredItems.length !== 1 ? 's' : ''}</span>
+          <span><kbd className="font-sans">Esc</kbd> {(" " + uiText("dismiss") + "")}</span>
+          <span className="ml-auto">{filteredItems.length} {(" " + uiText("result") + "")}{filteredItems.length !== 1 ? 's' : ''}</span>
         </div>
       </div>
     </div>,

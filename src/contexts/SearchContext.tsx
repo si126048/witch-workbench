@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SearchContext.tsx
  * @description React Context for project-wide search and replace functionality.
@@ -92,17 +93,17 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
         });
         setSearchResults(outcome.results);
         if (outcome.regexError) {
-          addToast(`Invalid search pattern: ${outcome.regexError}`, 'error');
+          addToast(uiText("Invalid search pattern: {value0}", { value0: outcome.regexError }), 'error');
         } else if (outcome.cancelled) {
-          addToast('Search cancelled', 'info');
+          addToast(uiText("Search cancelled"), 'info');
         } else if (outcome.truncated) {
-          addToast('Search stopped early: too many files to search. Showing partial results.', 'warning');
+          addToast(uiText("Search stopped early: too many files to search. Showing partial results."), 'warning');
         } else if (outcome.skipped.length > 0) {
-          addToast(`Search skipped ${outcome.skipped.length} file${outcome.skipped.length === 1 ? '' : 's'} that could not be read.`, 'warning');
+          addToast(uiText("Search skipped {value0} file{value1} that could not be read.", { value0: outcome.skipped.length, value1: outcome.skipped.length === 1 ? '' : 's' }), 'warning');
         }
       } catch (err) {
         logger.error('Search failed:', err);
-        addToast('Search failed', 'error');
+        addToast(uiText("Search failed"), 'error');
       } finally {
         setIsSearching(false);
       }
@@ -132,7 +133,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
 
     const regex = buildReplaceRegex(searchQuery, searchOptions);
     if (!regex) {
-      addToast('Invalid search pattern', 'error');
+      addToast(uiText("Invalid search pattern"), 'error');
       return;
     }
 
@@ -150,7 +151,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
     });
 
     if (totalReplacements === 0 || affectedBlockIds.size === 0) {
-      addToast('No matches found to replace', 'info');
+      addToast(uiText("No matches found to replace"), 'info');
       return;
     }
 
@@ -170,7 +171,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
     });
 
     addToast(
-      `Replaced ${totalReplacements} occurrence${totalReplacements === 1 ? '' : 's'} in ${fileCount} file${fileCount === 1 ? '' : 's'}. Save to persist changes.`,
+      uiText("Replaced {value0} occurrence{value1} in {value2} file{value3}. Save to persist changes.", { value0: totalReplacements, value1: totalReplacements === 1 ? '' : 's', value2: fileCount, value3: fileCount === 1 ? '' : 's' }),
       'success',
     );
     setSearchResults([]);

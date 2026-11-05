@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SpriteAnimationPanel.tsx
  * @description Root panel for one sprite's `SpriteAnimation`, opened from
@@ -64,10 +65,9 @@ const SpriteAnimationPanel: React.FC<SpriteAnimationPanelProps> = ({
   if (!animation) {
     return (
       <div className="p-4 text-center">
-        <p className="text-sm text-secondary mb-3">No animation for {spriteLabel} yet.</p>
+        <p className="text-sm text-secondary mb-3">{("" + uiText("No animation for") + " ")}{spriteLabel} {(" " + uiText("yet.") + "")}</p>
         <button onClick={() => setEditingTimelineId(onCreateAnimation())} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">
-          + Add Animation
-        </button>
+          {uiText("+ Add Animation")}</button>
       </div>
     );
   }
@@ -149,18 +149,17 @@ const SpriteAnimationPanel: React.FC<SpriteAnimationPanelProps> = ({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-sm text-primary">{spriteLabel}</h3>
-        <button onClick={() => setShowDeleteConfirm(true)} className="text-xs text-red-600 dark:text-red-400 hover:underline">Remove Animation</button>
+        <button onClick={() => setShowDeleteConfirm(true)} className="text-xs text-red-600 dark:text-red-400 hover:underline">{uiText("Remove Animation")}</button>
       </div>
 
       {showDeleteConfirm && (
         <ConfirmModal
-          title="Remove Animation"
-          confirmText="Remove"
+          title={uiText("Remove Animation")}
+          confirmText={uiText("Remove")}
           onClose={() => setShowDeleteConfirm(false)}
           onConfirm={() => { setShowDeleteConfirm(false); onDeleteAnimation(); }}
         >
-          Remove the animation for {spriteLabel}? This deletes all of its timelines and keyframes and cannot be undone.
-        </ConfirmModal>
+          {("" + uiText("Remove the animation for") + " ")}{spriteLabel}{uiText("? This deletes all of its timelines and keyframes and cannot be undone.")}</ConfirmModal>
       )}
 
       {timelines.length >= 2 && (
@@ -172,25 +171,23 @@ const SpriteAnimationPanel: React.FC<SpriteAnimationPanelProps> = ({
               value="parallel"
               checked={animation.combineMode === 'parallel'}
               disabled={hasOverlappingProperties}
-              title={hasOverlappingProperties ? 'Cannot switch to Parallel: two or more timelines share a property, or multiple timelines each animate a color property (saturation/brightness/contrast/invert) that shares one ATL value. Remove the overlap first.' : undefined}
+              title={hasOverlappingProperties ? uiText("Cannot switch to Parallel: two or more timelines share a property, or multiple timelines each animate a color property (saturation/brightness/contrast/invert) that shares one ATL value. Remove the overlap first.") : undefined}
               onChange={() => setCombineMode('parallel')}
             />
-            Parallel
-          </label>
+            {uiText("Parallel")}</label>
           <label className="flex items-center gap-1">
             <input type="radio" name="combine-mode" value="sequential" checked={animation.combineMode === 'sequential'} onChange={() => setCombineMode('sequential')} />
-            Sequential
-          </label>
+            {uiText("Sequential")}</label>
         </div>
       )}
 
       <div className="flex items-center gap-3">
         <button
           onClick={handlePlay}
-          aria-label={isPlaying ? 'Pause' : 'Play'}
+          aria-label={isPlaying ? uiText("Pause") : uiText("Play")}
           className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold w-16"
         >
-          {isPlaying ? 'Pause' : 'Play'}
+          {isPlaying ? uiText("Pause") : uiText("Play")}
         </button>
         <span className="text-xs font-mono text-secondary ml-auto">{playheadTime.toFixed(2)}s / {totalDuration.toFixed(2)}s</span>
       </div>
@@ -202,14 +199,14 @@ const SpriteAnimationPanel: React.FC<SpriteAnimationPanelProps> = ({
         step={0.05}
         value={Math.min(playheadTime, totalDuration)}
         onChange={(e) => handleScrub(Number(e.target.value))}
-        aria-label="Playhead"
+        aria-label={uiText("Playhead")}
         className="w-full"
       />
 
       <div className="space-y-1">
         <div className="flex items-center gap-3 px-2 text-xs font-semibold text-secondary uppercase tracking-wide">
-          <span className="flex-1">Name</span>
-          <span className="flex-[2]">Keyframes</span>
+          <span className="flex-1">{uiText("Name")}</span>
+          <span className="flex-[2]">{uiText("Keyframes")}</span>
         </div>
         {timelines.map((timeline, index) => (
           <TimelineRow
@@ -224,8 +221,7 @@ const SpriteAnimationPanel: React.FC<SpriteAnimationPanelProps> = ({
       </div>
 
       <button onClick={handleAddTimeline} className="w-full px-3 py-1.5 rounded border border-dashed border-primary text-secondary hover:text-primary hover:border-accent text-sm font-bold">
-        + Add Timeline
-      </button>
+        {uiText("+ Add Timeline")}</button>
 
       {(() => {
         const editingIndex = timelines.findIndex(t => t.id === editingTimelineId);

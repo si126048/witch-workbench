@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useState } from 'react';
 import ConfirmModal from '@/components/ConfirmModal';
 
@@ -25,36 +26,31 @@ const ExternalChangesBanner: React.FC<ExternalChangesBannerProps> = ({ items, on
               <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
             </svg>
             <span className="font-medium truncate max-w-xs" title={item.relativePath}>{fileName}</span>
-            <span className="text-yellow-700 dark:text-yellow-300">was modified outside the editor.</span>
+            <span className="text-yellow-700 dark:text-yellow-300">{uiText("was modified outside the editor.")}</span>
             <button
               onClick={() => setPendingReload(item)}
               className="ml-1 px-2 py-0.5 rounded text-xs font-medium bg-yellow-200 hover:bg-yellow-300 dark:bg-yellow-700 dark:hover:bg-yellow-600 text-yellow-900 dark:text-yellow-100 transition-colors"
             >
-              Reload
-            </button>
+              {uiText("Reload")}</button>
             <button
               onClick={() => onKeep(item.relativePath)}
               className="px-2 py-0.5 rounded text-xs font-medium text-yellow-700 dark:text-yellow-300 hover:bg-yellow-100 dark:hover:bg-yellow-800/50 transition-colors"
             >
-              Keep current
-            </button>
+              {uiText("Keep current")}</button>
           </div>
         );
       })}
       {pendingReload && (
         <ConfirmModal
-          title="Discard unsaved changes?"
-          confirmText="Discard Changes"
+          title={uiText("Discard unsaved changes?")}
+          confirmText={uiText("Discard Changes")}
           onConfirm={() => {
             onReload(pendingReload);
             setPendingReload(null);
           }}
           onClose={() => setPendingReload(null)}
         >
-          {(pendingReload.relativePath.split('/').pop() ?? pendingReload.relativePath)} was modified outside the
-          editor. Reloading it from disk will permanently discard your unsaved changes in this file. This cannot
-          be undone.
-        </ConfirmModal>
+          {(pendingReload.relativePath.split('/').pop() ?? pendingReload.relativePath)} {(" " + uiText("was modified outside the editor. Reloading it from disk will permanently discard your unsaved changes in this file. This cannot be undone.") + "")}</ConfirmModal>
       )}
     </div>
   );

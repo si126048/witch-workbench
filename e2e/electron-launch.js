@@ -23,7 +23,9 @@ export const STRIPPED_ENV_VARS = ['ELECTRON_RUN_AS_NODE'];
 /** Returns a copy of process.env (merged with `extra`) safe to pass as the
  *  `env` option of electron.launch(). */
 export function electronLaunchEnv(extra = {}) {
-  const env = { ...process.env, ...extra };
+  // Existing end-to-end contracts exercise the English fallback. Dedicated
+  // Chinese acceptance specs override this to verify the shipping locale.
+  const env = { ...process.env, NIGHTFALL_UI_LANGUAGE: 'en', ...extra };
   for (const name of STRIPPED_ENV_VARS) delete env[name];
   return env;
 }

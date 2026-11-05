@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ConfigureRenpyModal.tsx
  * @description Modal for locating the Ren'Py SDK executable (~80 lines).
@@ -38,7 +39,7 @@ const ConfigureRenpyModal: React.FC<ConfigureRenpyModalProps> = ({ isOpen, onClo
     if (selectedPath) {
         onSave(selectedPath);
     } else {
-        setError('Please select a path before saving.');
+        setError(uiText("Please select a path before saving."));
     }
   };
 
@@ -54,16 +55,14 @@ const ConfigureRenpyModal: React.FC<ConfigureRenpyModalProps> = ({ isOpen, onClo
         onClick={e => e.stopPropagation()}
       >
         <header className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 id="configure-renpy-title" className="text-xl font-bold">Configure Ren'Py SDK</h2>
+          <h2 id="configure-renpy-title" className="text-xl font-bold">{uiText("Configure Ren'Py SDK")}</h2>
         </header>
         <main className="p-6 space-y-4">
           <p className="text-gray-600 dark:text-gray-300">
-            To launch your game, the editor needs to know where your Ren'Py SDK is installed. Select the SDK root directory (e.g. <code>C:\renpy-8.x</code> on Windows). The launcher executable is resolved automatically per platform.
-          </p>
+            {("" + uiText("To launch your game, the editor needs to know where your Ren'Py SDK is installed. Select the SDK root directory (e.g.") + " ")}<code>C:\renpy-8.x</code> {(" " + uiText("on Windows). The launcher executable is resolved automatically per platform.") + "")}</p>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Ren'Py SDK Directory
-            </label>
+              {uiText("Ren'Py SDK Directory")}</label>
             <div className="flex items-center space-x-2">
               <input
                 type="text"
@@ -75,12 +74,10 @@ const ConfigureRenpyModal: React.FC<ConfigureRenpyModalProps> = ({ isOpen, onClo
                 onClick={handleBrowse}
                 className="mt-1 px-4 py-2 rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm font-bold"
               >
-                Browse...
-              </button>
+                {uiText("Browse...")}</button>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Select the Ren'Py SDK root directory (contains renpy.exe or renpy.sh).
-            </p>
+              {uiText("Select the Ren'Py SDK root directory (contains renpy.exe or renpy.sh).")}</p>
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           </div>
         </main>
@@ -89,15 +86,13 @@ const ConfigureRenpyModal: React.FC<ConfigureRenpyModalProps> = ({ isOpen, onClo
             onClick={onClose}
             className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded"
           >
-            Cancel
-          </button>
+            {uiText("Cancel")}</button>
           <button
             onClick={handleSave}
             disabled={!selectedPath}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Save and Run
-          </button>
+            {uiText("Save and Run")}</button>
         </footer>
       </div>
     </div>

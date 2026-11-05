@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file LabelBlock.tsx
  * @description Canvas node representing a single Ren'Py label in `RouteCanvas` (~120 lines).
@@ -29,10 +30,10 @@ interface LabelBlockProps {
 const OVERLAY_STYLES: Record<NonNullable<LabelBlockProps['overlayHighlight']>, {
   bg: string; border: string; title: string;
 }> = {
-  hub:         { bg: 'bg-sky-500',    border: 'border-sky-500 dark:border-sky-400',    title: 'Hub — many incoming paths' },
-  branch:      { bg: 'bg-violet-500', border: 'border-violet-500 dark:border-violet-400', title: 'Branch — many outgoing paths' },
-  'menu-heavy':{ bg: 'bg-rose-500',   border: 'border-rose-500 dark:border-rose-400',  title: 'Menu-heavy — multiple choice menus' },
-  'call-heavy':{ bg: 'bg-teal-500',   border: 'border-teal-500 dark:border-teal-400',  title: 'Call-heavy — many incoming calls' },
+  hub:         { bg: 'bg-sky-500',    border: 'border-sky-500 dark:border-sky-400',    title: uiText("Hub — many incoming paths") },
+  branch:      { bg: 'bg-violet-500', border: 'border-violet-500 dark:border-violet-400', title: uiText("Branch — many outgoing paths") },
+  'menu-heavy':{ bg: 'bg-rose-500',   border: 'border-rose-500 dark:border-rose-400',  title: uiText("Menu-heavy — multiple choice menus") },
+  'call-heavy':{ bg: 'bg-teal-500',   border: 'border-teal-500 dark:border-teal-400',  title: uiText("Call-heavy — many incoming calls") },
 };
 
 const LabelBlock: React.FC<LabelBlockProps> = React.memo(({
@@ -113,7 +114,7 @@ const LabelBlock: React.FC<LabelBlockProps> = React.memo(({
       }}
       onContextMenu={onContextMenu}
       onDoubleClick={() => onOpenEditor(node.blockId, node.startLine)}
-      title={`Label: ${node.label}\nDouble-click to open in editor${roleTitle}`}
+      title={uiText("Label: {value0}\nDouble-click to open in editor{value1}", { value0: node.label, value1: roleTitle })}
     >
         {isEntry && !isSelected && (
           <span className="absolute -top-1.5 -left-1.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white dark:border-gray-900 pointer-events-none z-10" />
@@ -180,8 +181,8 @@ const LabelBlock: React.FC<LabelBlockProps> = React.memo(({
           className="absolute top-0.5 right-0.5 opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-300 z-10"
           onClick={(e) => { e.stopPropagation(); onOpenEditor(node.blockId, node.startLine); }}
           onPointerDown={(e) => e.stopPropagation()}
-          title="Open in editor"
-          aria-label="Open in editor"
+          title={uiText("Open in editor")}
+          aria-label={uiText("Open in editor")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />

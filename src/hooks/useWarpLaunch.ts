@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useState, useRef, useCallback } from 'react';
 import type { Block, RenpyAnalysisResult } from '@/types';
 import { resolveWarpTarget } from '@/lib/warpTarget';
@@ -90,7 +91,7 @@ export function useWarpLaunch({
       window.electronAPI.runGame(renpyPath, projectRootPath, warpTarget);
     } catch (error) {
       logger.error('Failed to launch warped game:', error);
-      addToast(`Failed to launch warp: ${formatErrorMessage(error)}`, 'error');
+      addToast(uiText("Failed to launch warp: {value0}", { value0: formatErrorMessage(error) }), 'error');
     }
   }, [analysisResult.labels, addToast, renpyPath, cleanupWarpTempFile, pendingWarpTarget, projectRootPath, resetWarpLaunchState]);
 
@@ -101,7 +102,7 @@ export function useWarpLaunch({
     closeWarpToLabelModal();
 
     if (!warpTarget) {
-      addToast(`Could not resolve warp target for "${labelName}"`, 'warning');
+      addToast(uiText("Could not resolve warp target for \"{value0}\"", { value0: labelName }), 'warning');
       return;
     }
 

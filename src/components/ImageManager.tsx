@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ImageManager.tsx
  * @description Asset panel for browsing and importing images (~400 lines).
@@ -197,7 +198,7 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
       <div className="space-y-4 mb-4">
         <div className="flex justify-between items-center">
             <span className="text-xs text-gray-500 dark:text-gray-400">
-                {lastScanned ? `Last scanned: ${new Date(lastScanned).toLocaleTimeString()}` : 'Not scanned.'}
+                {lastScanned ? uiText("Last scanned: {value0}", { value0: new Date(lastScanned).toLocaleTimeString() }) : uiText("Not scanned.")}
             </span>
             <button onClick={onRefresh} disabled={!isFileSystemApiSupported || isRefreshing} className="px-2 py-1 rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1">
                  {isRefreshing ? (
@@ -208,11 +209,11 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
                  ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.885-.666A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566z" clipRule="evenodd" /></svg>
                  )}
-                 <span>Refresh</span>
+                 <span>{uiText("Refresh")}</span>
             </button>
         </div>
         <div>
-            <h3 className="font-semibold mb-2">Image Sources</h3>
+            <h3 className="font-semibold mb-2">{uiText("Image Sources")}</h3>
             <div className="flex items-center space-x-2">
                 <select
                     value={selectedSource}
@@ -221,7 +222,7 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
                 >
                     {sources.map(source => (
                     <option key={source} value={source}>
-                        {source === 'Project' ? 'Project Images' : source}
+                        {source === 'Project' ? uiText("Project Images") : source}
                     </option>
                     ))}
                 </select>
@@ -229,7 +230,7 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
                     <button
                         onClick={() => onRemoveScanDirectory(selectedSource)}
                         className="p-2 rounded-md hover:bg-red-200 dark:hover:bg-red-800/50 text-gray-500 dark:text-gray-400 hover:text-red-700 dark:hover:text-red-300 flex-shrink-0"
-                        title={`Remove ${selectedSource} from scan list`}
+                        title={uiText("Remove {value0} from scan list", { value0: selectedSource })}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                     </button>
@@ -243,28 +244,27 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
                         onChange={e => setHideGuiAssets(!e.target.checked)}
                         className="h-3.5 w-3.5 rounded"
                     />
-                    Show UI assets (gui/)
-                </label>
+                    {uiText("Show UI assets (gui/)")}</label>
             )}
             <div className="flex space-x-2 mt-2">
                 <button
                     onClick={onAddScanDirectory}
                     disabled={!isFileSystemApiSupported}
-                    title={isFileSystemApiSupported ? "Add external folder to scan for images" : "Open a project folder to enable this feature"}
+                    title={isFileSystemApiSupported ? uiText("Add external folder to scan for images") : uiText("Open a project folder to enable this feature")}
                     className="flex-1 px-3 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" /></svg>
-                    <span>Scan Dir</span>
+                    <span>{uiText("Scan Dir")}</span>
                 </button>
                 {onCreatePlaceholder && (
                     <button
                         onClick={onCreatePlaceholder}
                         disabled={!isFileSystemApiSupported}
-                        title="Generate a dummy image"
+                        title={uiText("Generate a dummy image")}
                         className="flex-1 px-3 py-2 rounded bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" /></svg>
-                        <span>Placeholder</span>
+                        <span>{uiText("Placeholder")}</span>
                     </button>
                 )}
             </div>
@@ -272,7 +272,7 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
         <div className="flex items-center space-x-2 mt-4">
             <input
                 type="text"
-                placeholder="Search images by name or tag..."
+                placeholder={uiText("Search images by name or tag...")}
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 className="flex-grow p-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
@@ -282,7 +282,7 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
                 disabled={selectedImagePaths.size === 0}
                 className="px-3 py-2 rounded bg-green-600 hover:bg-green-700 text-white text-sm font-bold disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-                Copy ({selectedImagePaths.size})
+                {uiText("Copy (")}{selectedImagePaths.size})
             </button>
         </div>
       </div>
@@ -305,13 +305,11 @@ const ImageManager: React.FC<ImageManagerProps> = ({ images, metadata, scanDirec
         )}
         {filteredImages.length === 0 && images.length === 0 && (
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
-                No images yet — drag some in to get started!
-            </p>
+                {uiText("No images yet — drag some in to get started!")}</p>
         )}
         {filteredImages.length === 0 && images.length > 0 && (
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
-                No images found matching criteria.
-            </p>
+                {uiText("No images found matching criteria.")}</p>
         )}
       </div>
       {contextMenu && (

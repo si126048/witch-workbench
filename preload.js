@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  uiLanguage: process.env.NIGHTFALL_UI_LANGUAGE === 'en' ? 'en' : 'zh-CN',
   nightfall: {
     hub: (action, ...args) => ipcRenderer.invoke('nightfall:hub-' + action, ...args),
     onTeamRequest: callback => { const handler = () => callback(); ipcRenderer.on('nightfall:team-request', handler); return () => ipcRenderer.removeListener('nightfall:team-request', handler); },

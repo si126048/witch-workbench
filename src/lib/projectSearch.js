@@ -1,3 +1,4 @@
+import { uiText } from "./uiText.js";
 import fsPromises from 'fs/promises';
 import path from 'path';
 import { findRegexMatchesInLine } from './regexLineSearch.js';
@@ -88,7 +89,7 @@ export async function searchInDirectory(directory, query, options) {
                 try {
                     const stats = await statFn(fullPath);
                     if (stats.size > maxFileSize) {
-                        outcome.skipped.push({ path: relativePath, message: 'File too large to search' });
+                        outcome.skipped.push({ path: relativePath, message: uiText("File too large to search") });
                         continue;
                     }
                 } catch (err) {

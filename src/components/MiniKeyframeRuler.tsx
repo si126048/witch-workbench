@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file MiniKeyframeRuler.tsx
  * @description Non-interactive keyframe visualization for a `SpriteTimeline`
@@ -15,7 +16,7 @@ interface MiniKeyframeRulerProps {
 
 const MiniKeyframeRuler: React.FC<MiniKeyframeRulerProps> = ({ keyframes, duration }) => {
   if (keyframes.length === 0) {
-    return <p className="text-xs text-secondary italic">No keyframes</p>;
+    return <p className="text-xs text-secondary italic">{uiText("No keyframes")}</p>;
   }
 
   return (

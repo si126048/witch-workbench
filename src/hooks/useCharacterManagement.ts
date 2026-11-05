@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback } from 'react';
 import type { Updater } from 'use-immer';
 import type { Dispatch, SetStateAction, MutableRefObject } from 'react';
@@ -127,19 +128,19 @@ export function useCharacterManagement({
     if (oldTag) {
       const originalCharDef = analysisResult.characters.get(oldTag);
       if (!originalCharDef) {
-        addToast(`Error: Cannot find original definition for character '${oldTag}'.`, 'error');
+        addToast(uiText("Error: Cannot find original definition for character '{value0}'.", { value0: oldTag }), 'error');
         return;
       }
 
       const blockToUpdate = blocks.find(b => b.id === originalCharDef.definedInBlockId);
       if (!blockToUpdate) {
-        addToast(`Error: Cannot find file for character '${oldTag}'.`, 'error');
+        addToast(uiText("Error: Cannot find file for character '{value0}'.", { value0: oldTag }), 'error');
         return;
       }
 
       const regex = new RegExp(`^(\\s*define\\s+${oldTag}\\s*=\\s*Character\\s*\\([\\s\\S]*?\\))`, 'm');
       if (!regex.test(blockToUpdate.content)) {
-        addToast(`Error: Could not find the Character definition for '${oldTag}' to update.`, 'error');
+        addToast(uiText("Error: Could not find the Character definition for '{value0}' to update.", { value0: oldTag }), 'error');
         return;
       }
 
@@ -163,7 +164,7 @@ export function useCharacterManagement({
         });
 
         pendingTagRenameRef.current = { oldTag, newTag: char.tag };
-        addToast(`Renamed "${oldTag}" to "${char.tag}" in ${renamedFileCount} file(s).`, 'success');
+        addToast(uiText("Renamed \"{value0}\" to \"{value1}\" in {value2} file(s).", { value0: oldTag, value1: char.tag, value2: renamedFileCount }), 'success');
         return;
       }
 
@@ -187,7 +188,7 @@ export function useCharacterManagement({
               setFileSystemTree(projData.tree);
             } else { throw new Error((res.error as string) || 'Unknown file creation error'); }
           } catch (e) {
-            addToast(`Failed to create characters.rpy: ${formatErrorMessage(e)}`, 'error');
+            addToast(uiText("Failed to create characters.rpy: {value0}", { value0: formatErrorMessage(e) }), 'error');
             return;
           }
         } else {
@@ -196,7 +197,7 @@ export function useCharacterManagement({
       }
     }
 
-    addToast(`Character '${char.name}' saved.`, 'success');
+    addToast(uiText("Character '{value0}' saved.", { value0: char.name }), 'success');
   }, [addToast, analysisResult.characters, blocks, projectRootPath, setCharacterProfiles, setCharacterPortraits, setHasUnsavedSettings, updateBlock, addBlock, setFileSystemTree, pendingTagRenameRef]);
 
   return { handleOpenCharacterEditor, handleUpdateCharacter };

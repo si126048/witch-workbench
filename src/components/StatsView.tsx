@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file StatsView.tsx
  * @description Project-wide statistics dashboard with multiple analysis tabs (~600 lines).
@@ -243,15 +244,15 @@ const CharacterTable: React.FC<{
               className="px-3 py-2 text-left font-semibold cursor-pointer select-none"
               onClick={() => toggleSort('name')}
             >
-              Character <SortIcon col="name" />
+              {("" + uiText("Character") + " ")}<SortIcon col="name" />
             </th>
             <th
               className="px-3 py-2 text-right font-semibold cursor-pointer select-none"
               onClick={() => toggleSort('words')}
             >
-              Words <SortIcon col="words" />
+              {("" + uiText("Words") + " ")}<SortIcon col="words" />
             </th>
-            <th className="px-3 py-2 pr-4 text-right font-semibold">Share</th>
+            <th className="px-3 py-2 pr-4 text-right font-semibold">{uiText("Share")}</th>
           </tr>
         </thead>
         <tbody>
@@ -311,15 +312,15 @@ const PerfStatCard: React.FC<{ label: string; valueMs: number | null; targetMs?:
       {targetMs !== undefined && (
         <p className="text-xs">
           {valueMs === null
-            ? <span className="text-secondary">target: {formatMs(targetMs)}</span>
+            ? <span className="text-secondary">{("" + uiText("target:") + " ")}{formatMs(targetMs)}</span>
             : met
-              ? <span className="text-green-500">target {formatMs(targetMs)} ✓</span>
+              ? <span className="text-green-500">{("" + uiText("target") + " ")}{formatMs(targetMs)} ✓</span>
               : exceeded
-                ? <span className="text-red-500">over target ({formatMs(targetMs)})</span>
+                ? <span className="text-red-500">{uiText("over target (")}{formatMs(targetMs)})</span>
                 : null}
         </p>
       )}
-      {targetMs === undefined && <p className="text-xs text-secondary">session latest</p>}
+      {targetMs === undefined && <p className="text-xs text-secondary">{uiText("session latest")}</p>}
     </div>
   );
 };
@@ -766,8 +767,8 @@ const StatsView: React.FC<StatsViewProps> = ({
         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 opacity-30" viewBox="0 0 20 20" fill="currentColor">
           <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
         </svg>
-        <p className="text-lg font-medium">No script loaded yet</p>
-        <p className="text-sm">Open a project to see statistics.</p>
+        <p className="text-lg font-medium">{uiText("No script loaded yet")}</p>
+        <p className="text-sm">{uiText("Open a project to see statistics.")}</p>
       </div>
     );
   }
@@ -806,7 +807,7 @@ const StatsView: React.FC<StatsViewProps> = ({
   return (
     <div className="h-full overflow-y-auto p-6 text-primary">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Script Statistics</h1>
+        <h1 className="text-2xl font-bold">{uiText("Script Statistics")}</h1>
         <ExportMenu
           filenameBase="script-statistics"
           getMarkdown={() => statsToMarkdown(statsReportData)}
@@ -815,15 +816,15 @@ const StatsView: React.FC<StatsViewProps> = ({
       </div>
 
       {/* Writing */}
-      <SectionLabel>Writing</SectionLabel>
+      <SectionLabel>{uiText("Writing")}</SectionLabel>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <StatCard
-          label="Total Words"
+          label={uiText("Total Words")}
           value={totalWords === null ? <InlineSpinner /> : totalWords.toLocaleString()}
           sub="dialogue & narration"
         />
         <StatCard
-          label="Estimated Playtime"
+          label={uiText("Estimated Playtime")}
           value={
             estimatedMinutes === null ? <InlineSpinner /> :
             estimatedMinutes < 60
@@ -833,47 +834,47 @@ const StatsView: React.FC<StatsViewProps> = ({
           sub="at 200 words/min"
         />
         <StatCard
-          label="Dialogue Words"
+          label={uiText("Dialogue Words")}
           value={dialogueWords === null ? <InlineSpinner /> : dialogueWords.toLocaleString()}
           sub={totalWords !== null && totalWords > 0 && dialogueWords !== null ? `${Math.round((dialogueWords / totalWords) * 100)}% of total` : 'characters speaking'}
         />
         <StatCard
-          label="Narration Words"
+          label={uiText("Narration Words")}
           value={narrationWords === null ? <InlineSpinner /> : narrationWords.toLocaleString()}
           sub={totalWords !== null && totalWords > 0 && narrationWords !== null ? `${Math.round((narrationWords / totalWords) * 100)}% of total` : 'narrator lines'}
         />
       </div>
 
       {/* Structure */}
-      <SectionLabel>Structure</SectionLabel>
+      <SectionLabel>{uiText("Structure")}</SectionLabel>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
         <StatCard
-          label="Script Files"
+          label={uiText("Script Files")}
           value={blocks.length.toLocaleString()}
           sub=".rpy files"
         />
         <StatCard
-          label="Characters"
+          label={uiText("Characters")}
           value={characters.size.toLocaleString()}
           sub={charChartData !== null ? `${charChartData.length} speaking` : '…'}
         />
         <StatCard
-          label="Labels"
+          label={uiText("Labels")}
           value={labelCount.toLocaleString()}
           sub="named script points"
         />
         <StatCard
-          label="Menus / Branches"
+          label={uiText("Menus / Branches")}
           value={branchingBlockIds.size.toLocaleString()}
           sub="files with choices"
         />
         <StatCard
-          label="Identified Routes"
+          label={uiText("Identified Routes")}
           value={`${identifiedRoutes.length.toLocaleString()}${routesTruncated ? '+' : ''}`}
           sub={routesTruncated ? 'unique story paths (limit reached)' : 'unique story paths'}
         />
         <StatCard
-          label="Unreachable Labels"
+          label={uiText("Unreachable Labels")}
           value={unreachableLabels.length > 0
             ? <span className="text-orange-500 dark:text-orange-400">{unreachableLabels.length.toLocaleString()}</span>
             : <span className="text-green-500">0</span>
@@ -887,13 +888,12 @@ const StatsView: React.FC<StatsViewProps> = ({
         <div className="mb-8 overflow-x-auto rounded-lg border border-orange-200 dark:border-orange-800">
           <table className="w-full text-sm">
             <caption className="text-xs font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-widest text-left px-3 py-2 bg-orange-50 dark:bg-orange-950/30 border-b border-orange-200 dark:border-orange-800">
-              Unreachable Labels — no path from &ldquo;start&rdquo; leads here
-            </caption>
+              {uiText("Unreachable Labels — no path from “start” leads here")}</caption>
             <thead>
               <tr className="bg-orange-50/60 dark:bg-orange-950/20 border-b border-orange-200 dark:border-orange-800 text-secondary text-xs">
-                <th className="px-3 py-2 text-left font-semibold">Label</th>
-                <th className="px-3 py-2 text-left font-semibold">File</th>
-                <th className="px-3 py-2 text-left font-semibold w-20">Line</th>
+                <th className="px-3 py-2 text-left font-semibold">{uiText("Label")}</th>
+                <th className="px-3 py-2 text-left font-semibold">{uiText("File")}</th>
+                <th className="px-3 py-2 text-left font-semibold w-20">{uiText("Line")}</th>
                 {onOpenEditor && <th className="px-3 py-2 w-10" />}
               </tr>
             </thead>
@@ -914,7 +914,7 @@ const StatsView: React.FC<StatsViewProps> = ({
                     } : undefined}
                     tabIndex={onOpenEditor ? 0 : undefined}
                     role={onOpenEditor ? 'button' : undefined}
-                    title={onOpenEditor ? `Open "${node.label}" in editor` : undefined}
+                    title={onOpenEditor ? uiText("Open \"{value0}\" in editor", { value0: node.label }) : undefined}
                   >
                     <td className="px-3 py-2 font-mono text-xs text-primary">{node.label}</td>
                     <td className="px-3 py-2 text-xs text-secondary truncate max-w-[200px]" title={block?.filePath}>{fileName}</td>
@@ -937,35 +937,35 @@ const StatsView: React.FC<StatsViewProps> = ({
 
       {/* Variables */}
       {(variableStats.total > 0 || undefinedVariableCount > 0) && (<>
-        <SectionLabel>Variables</SectionLabel>
+        <SectionLabel>{uiText("Variables")}</SectionLabel>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
           <StatCard
-            label="Total Variables"
+            label={uiText("Total Variables")}
             value={variableStats.total.toLocaleString()}
             sub="across all script files"
           />
           <StatCard
-            label="Persistent"
+            label={uiText("Persistent")}
             value={variableStats.persistent.toLocaleString()}
             sub="saved between sessions"
           />
           <StatCard
-            label="Default"
+            label={uiText("Default")}
             value={variableStats.defaulted.toLocaleString()}
             sub="default statements"
           />
           <StatCard
-            label="Implicit"
+            label={uiText("Implicit")}
             value={variableStats.implicit.toLocaleString()}
             sub="$ assignments, not real defaults"
           />
           <StatCard
-            label="Constants"
+            label={uiText("Constants")}
             value={variableStats.constants.toLocaleString()}
             sub="define statements"
           />
           <StatCard
-            label="Undefined Variables"
+            label={uiText("Undefined Variables")}
             value={undefinedVariableCount.toLocaleString()}
             sub="referenced but never defined"
             testId="stat-undefined-variables"
@@ -974,12 +974,12 @@ const StatsView: React.FC<StatsViewProps> = ({
         {topVariables.length > 0 && (
           <div className="mb-8 overflow-x-auto rounded-lg border border-primary">
             <table className="w-full text-sm">
-              <caption className="text-xs font-semibold text-secondary uppercase tracking-widest text-left px-3 py-2 bg-tertiary border-b border-primary">Top 10 Variables</caption>
+              <caption className="text-xs font-semibold text-secondary uppercase tracking-widest text-left px-3 py-2 bg-tertiary border-b border-primary">{uiText("Top 10 Variables")}</caption>
               <thead>
                 <tr className="bg-tertiary border-b border-primary text-secondary text-xs">
-                  <th className="px-3 py-2 text-left font-semibold">Variable</th>
-                  <th className="px-3 py-2 text-left font-semibold w-24">Type</th>
-                  <th className="px-3 py-2 text-right font-semibold w-24">Usages</th>
+                  <th className="px-3 py-2 text-left font-semibold">{uiText("Variable")}</th>
+                  <th className="px-3 py-2 text-left font-semibold w-24">{uiText("Type")}</th>
+                  <th className="px-3 py-2 text-right font-semibold w-24">{uiText("Usages")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1005,50 +1005,50 @@ const StatsView: React.FC<StatsViewProps> = ({
           {complexity}
         </span>
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-primary">Story Complexity</p>
+          <p className="text-sm font-semibold text-primary">{uiText("Story Complexity")}</p>
           <p className="text-xs text-secondary">{COMPLEXITY_DESCRIPTIONS[complexity]}</p>
         </div>
         <div className="ml-auto text-right text-xs text-secondary flex-shrink-0">
-          <p>{branchRatioPercent}% of files branch</p>
-          <p>{identifiedRoutes.length}{routesTruncated ? '+' : ''} route{identifiedRoutes.length !== 1 ? 's' : ''} identified</p>
+          <p>{branchRatioPercent}{uiText("% of files branch")}</p>
+          <p>{identifiedRoutes.length}{routesTruncated ? '+' : ''} {(" " + uiText("route") + "")}{identifiedRoutes.length !== 1 ? 's' : ''} {(" " + uiText("identified") + "")}</p>
         </div>
       </div>
 
       {/* Endings & Completeness */}
-      <SectionLabel>Endings &amp; Completeness</SectionLabel>
+      <SectionLabel>{uiText("Endings & Completeness")}</SectionLabel>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         <StatCard
-          label="Distinct Endings"
+          label={uiText("Distinct Endings")}
           value={pathStats === null ? <InlineSpinner /> : pathStats.endingCount.toLocaleString()}
           sub="labels with no exit"
         />
         <StatCard
-          label="Shortest Path"
+          label={uiText("Shortest Path")}
           value={pathStats === null ? <InlineSpinner /> : (pathStats.shortestPath !== null ? `${pathStats.shortestPath} steps` : '—')}
           sub="from start to first ending"
         />
         <StatCard
-          label="Longest Path"
+          label={uiText("Longest Path")}
           value={pathStats === null ? <InlineSpinner /> : (pathStats.longestPath !== null ? `${pathStats.longestPath} steps` : '—')}
           sub="from start to deepest ending"
         />
       </div>
 
       {/* Assets & Health */}
-      <SectionLabel>Assets &amp; Health</SectionLabel>
+      <SectionLabel>{uiText("Assets & Health")}</SectionLabel>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         <StatCard
-          label="Image Assets"
+          label={uiText("Image Assets")}
           value={projectImages.size.toLocaleString()}
           sub={coverageData !== null && coverageData.imageReferenced > 0 ? `${coverageData.imageReferenced} referenced` : 'tracked images'}
         />
         <StatCard
-          label="Audio Assets"
+          label={uiText("Audio Assets")}
           value={projectAudios.size.toLocaleString()}
           sub={coverageData !== null && coverageData.audioReferenced > 0 ? `${coverageData.audioReferenced} referenced` : 'tracked audio files'}
         />
         <StatCard
-          label={diagnosticsErrorCount > 0 ? 'Script Errors' : 'No Errors'}
+          label={diagnosticsErrorCount > 0 ? uiText("Script Errors") : uiText("No Errors")}
           value={
             diagnosticsErrorCount > 0
               ? <span className="text-red-500">{diagnosticsErrorCount}</span>
@@ -1061,10 +1061,10 @@ const StatsView: React.FC<StatsViewProps> = ({
 
       {/* Word count by character */}
       <section className="mb-8">
-        <h2 className="text-lg font-semibold mb-3">Word Count by Character</h2>
+        <h2 className="text-lg font-semibold mb-3">{uiText("Word Count by Character")}</h2>
         {!charChartData || !displayedChars ? (
           <div className="flex items-center gap-2 text-secondary text-sm py-4">
-            <InlineSpinner /> <span>Computing character word counts…</span>
+            <InlineSpinner /> <span>{uiText("Computing character word counts…")}</span>
           </div>
         ) : charChartData.length === 0 ? null : (
           <>
@@ -1080,14 +1080,14 @@ const StatsView: React.FC<StatsViewProps> = ({
                       : 'bg-tertiary text-secondary hover:bg-tertiary-hover'
                   }`}
                 >
-                  {l === 'all' ? 'All' : `Top ${l}`}
+                  {l === 'all' ? uiText("All") : uiText("Top {value0}", { value0: l })}
                 </button>
               ))}
             </div>
           </div>
           <p className="text-xs text-secondary mb-3">
-            Showing {displayedChars.length} of {charChartData.length} speaking character{charChartData.length !== 1 ? 's' : ''}
-            {characters.size > charChartData.length && ` (${characters.size - charChartData.length} defined with no dialogue)`}
+            {("" + uiText("Showing") + " ")}{displayedChars.length} {(" " + uiText("of") + " ")}{charChartData.length} {(" " + uiText("speaking character") + "")}{charChartData.length !== 1 ? 's' : ''}
+            {characters.size > charChartData.length && (" " + uiText("({value0} defined with no dialogue)", { value0: characters.size - charChartData.length }) + "")}
           </p>
           {displayedChars.length > 6 ? (
             <CharacterTable data={displayedChars} />
@@ -1117,7 +1117,7 @@ const StatsView: React.FC<StatsViewProps> = ({
       {/* Lines by file */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold">Lines of Script by File</h2>
+          <h2 className="text-lg font-semibold">{uiText("Lines of Script by File")}</h2>
           <div className="flex items-center gap-1">
             {FILE_LIMITS.map(l => (
               <button
@@ -1129,15 +1129,14 @@ const StatsView: React.FC<StatsViewProps> = ({
                     : 'bg-tertiary text-secondary hover:bg-tertiary-hover'
                 }`}
               >
-                {l === 'all' ? 'All' : `Top ${l}`}
+                {l === 'all' ? uiText("All") : uiText("Top {value0}", { value0: l })}
               </button>
             ))}
           </div>
         </div>
         {fileLimit !== 'all' && blocks.length > fileLimit && (
           <p className="text-xs text-secondary mb-2">
-            Showing {fileLimit} of {blocks.length} files by line count
-          </p>
+            {("" + uiText("Showing") + " ")}{fileLimit} {(" " + uiText("of") + " ")}{blocks.length} {(" " + uiText("files by line count") + "")}</p>
         )}
         <ResponsiveContainer width="100%" height={Math.max(200, lineChartData.length * 28)}>
           <BarChart
@@ -1156,10 +1155,10 @@ const StatsView: React.FC<StatsViewProps> = ({
 
       {/* Asset Coverage */}
       <section className="mb-8">
-        <h2 className="text-lg font-semibold mb-3">Asset Coverage</h2>
+        <h2 className="text-lg font-semibold mb-3">{uiText("Asset Coverage")}</h2>
         {!coverageData || !coverageRows ? (
           <div className="flex items-center gap-2 text-secondary text-sm py-4">
-            <InlineSpinner /> <span>Scanning asset coverage…</span>
+            <InlineSpinner /> <span>{uiText("Scanning asset coverage…")}</span>
           </div>
         ) : coverageData.rows.length === 0 ? null : (<>
 
@@ -1167,14 +1166,14 @@ const StatsView: React.FC<StatsViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             {[
               {
-                label: 'Images',
+                label: uiText("Images"),
                 referenced: coverageData.imageReferenced,
                 total: coverageData.imageTotal,
                 missing: coverageData.imageMissing,
                 orphaned: coverageData.imageOrphaned,
               },
               {
-                label: 'Audio',
+                label: uiText("Audio"),
                 referenced: coverageData.audioReferenced,
                 total: coverageData.audioTotal,
                 missing: coverageData.audioMissing,
@@ -1186,7 +1185,7 @@ const StatsView: React.FC<StatsViewProps> = ({
                 <div key={label} className="bg-secondary rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-semibold text-primary">{label}</span>
-                    <span className="text-xs text-secondary tabular-nums">{referenced}/{total} referenced ({pct}%)</span>
+                    <span className="text-xs text-secondary tabular-nums">{referenced}/{total} {(" " + uiText("referenced (") + "")}{pct}%)</span>
                   </div>
                   <div className="h-2 bg-tertiary rounded-full overflow-hidden mb-2">
                     <div
@@ -1196,13 +1195,13 @@ const StatsView: React.FC<StatsViewProps> = ({
                   </div>
                   <div className="flex items-center gap-3 text-xs text-secondary">
                     {missing > 0 && (
-                      <span className="text-orange-500 font-medium">{missing} missing from disk</span>
+                      <span className="text-orange-500 font-medium">{missing} {(" " + uiText("missing from disk") + "")}</span>
                     )}
                     {orphaned > 0 && (
-                      <span className="text-gray-400">{orphaned} unreferenced</span>
+                      <span className="text-gray-400">{orphaned} {(" " + uiText("unreferenced") + "")}</span>
                     )}
                     {missing === 0 && orphaned === 0 && (
-                      <span className="text-green-500">All files accounted for</span>
+                      <span className="text-green-500">{uiText("All files accounted for")}</span>
                     )}
                   </div>
                 </div>
@@ -1221,7 +1220,7 @@ const StatsView: React.FC<StatsViewProps> = ({
                   aria-pressed={coverageTypeFilter === t}
                   className={`px-2.5 py-1 capitalize border-r border-primary last:border-0 transition-colors ${coverageTypeFilter === t ? 'bg-indigo-500 text-white' : 'bg-secondary text-secondary hover:bg-tertiary'}`}
                 >
-                  {t === 'all' ? 'All Types' : t === 'image' ? 'Images' : 'Audio'}
+                  {t === 'all' ? uiText("All Types") : t === 'image' ? uiText("Images") : uiText("Audio")}
                 </button>
               ))}
             </div>
@@ -1234,7 +1233,7 @@ const StatsView: React.FC<StatsViewProps> = ({
                   aria-pressed={coverageStatusFilter === s}
                   className={`px-2.5 py-1 capitalize border-r border-primary last:border-0 transition-colors ${coverageStatusFilter === s ? 'bg-indigo-500 text-white' : 'bg-secondary text-secondary hover:bg-tertiary'}`}
                 >
-                  {s === 'all' ? 'All Status' : s}
+                  {s === 'all' ? uiText("All Status") : s}
                 </button>
               ))}
             </div>
@@ -1245,13 +1244,13 @@ const StatsView: React.FC<StatsViewProps> = ({
               </svg>
               <input
                 type="text"
-                placeholder="Filter assets…"
+                placeholder={uiText("Filter assets…")}
                 value={coverageTextFilter}
                 onChange={e => setCoverageTextFilter(e.target.value)}
                 className="w-full pl-7 pr-2 py-1 text-xs bg-secondary border border-primary rounded focus:outline-none focus:ring-1 focus:ring-indigo-400 text-primary placeholder:text-secondary"
               />
             </div>
-            <span className="text-xs text-secondary flex-none">{coverageRows.length} asset{coverageRows.length !== 1 ? 's' : ''}</span>
+            <span className="text-xs text-secondary flex-none">{coverageRows.length} {(" " + uiText("asset") + "")}{coverageRows.length !== 1 ? 's' : ''}</span>
           </div>
 
           {/* Coverage table */}
@@ -1263,26 +1262,26 @@ const StatsView: React.FC<StatsViewProps> = ({
                     className="px-3 py-2 text-left font-semibold cursor-pointer select-none"
                     onClick={() => toggleCoverageSort('name')}
                   >
-                    Asset {coverageSortKey === 'name' ? (coverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
+                    {("" + uiText("Asset") + " ")}{coverageSortKey === 'name' ? (coverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
                   </th>
                   <th
                     className="px-3 py-2 text-left font-semibold cursor-pointer select-none w-20"
                     onClick={() => toggleCoverageSort('type')}
                   >
-                    Type {coverageSortKey === 'type' ? (coverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
+                    {("" + uiText("Type") + " ")}{coverageSortKey === 'type' ? (coverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
                   </th>
                   <th
                     className="px-3 py-2 text-left font-semibold cursor-pointer select-none w-36"
                     onClick={() => toggleCoverageSort('status')}
                   >
-                    Status {coverageSortKey === 'status' ? (coverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
+                    {("" + uiText("Status") + " ")}{coverageSortKey === 'status' ? (coverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {coverageRows.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-3 py-6 text-center text-secondary text-xs">No assets match the current filter</td>
+                    <td colSpan={3} className="px-3 py-6 text-center text-secondary text-xs">{uiText("No assets match the current filter")}</td>
                   </tr>
                 )}
                 {coverageRows.map((row, i) => (
@@ -1293,20 +1292,17 @@ const StatsView: React.FC<StatsViewProps> = ({
                       {row.status === 'referenced' && (
                         <span className="inline-flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                          Referenced
-                        </span>
+                          {uiText("Referenced")}</span>
                       )}
                       {row.status === 'missing' && (
                         <span className="inline-flex items-center gap-1 text-xs text-orange-600 dark:text-orange-400">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
-                          Missing from disk
-                        </span>
+                          {uiText("Missing from disk")}</span>
                       )}
                       {row.status === 'orphaned' && (
                         <span className="inline-flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
-                          Unreferenced
-                        </span>
+                          {uiText("Unreferenced")}</span>
                       )}
                     </td>
                   </tr>
@@ -1320,7 +1316,7 @@ const StatsView: React.FC<StatsViewProps> = ({
       {/* Variable Coverage */}
       {variableCoverageRows.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-semibold mb-3">Variable Coverage</h2>
+          <h2 className="text-lg font-semibold mb-3">{uiText("Variable Coverage")}</h2>
 
           {/* Coverage bar */}
           {(() => {
@@ -1331,17 +1327,17 @@ const StatsView: React.FC<StatsViewProps> = ({
             return (
               <div className="bg-secondary rounded-lg p-4 mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-primary">Variables</span>
-                  <span className="text-xs text-secondary tabular-nums">{referenced}/{total} referenced ({pct}%)</span>
+                  <span className="text-sm font-semibold text-primary">{uiText("Variables")}</span>
+                  <span className="text-xs text-secondary tabular-nums">{referenced}/{total} {(" " + uiText("referenced (") + "")}{pct}%)</span>
                 </div>
                 <div className="h-2 bg-tertiary rounded-full overflow-hidden mb-2">
                   <div className="h-full bg-indigo-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
                 </div>
                 <div className="flex items-center gap-3 text-xs text-secondary">
                   {unreferenced > 0 ? (
-                    <span className="text-gray-400">{unreferenced} unreferenced</span>
+                    <span className="text-gray-400">{unreferenced} {(" " + uiText("unreferenced") + "")}</span>
                   ) : (
-                    <span className="text-green-500">All variables referenced</span>
+                    <span className="text-green-500">{uiText("All variables referenced")}</span>
                   )}
                 </div>
               </div>
@@ -1358,7 +1354,7 @@ const StatsView: React.FC<StatsViewProps> = ({
                   aria-pressed={varCoverageStatusFilter === s}
                   className={`px-2.5 py-1 capitalize border-r border-primary last:border-0 transition-colors ${varCoverageStatusFilter === s ? 'bg-indigo-500 text-white' : 'bg-secondary text-secondary hover:bg-tertiary'}`}
                 >
-                  {s === 'all' ? 'All Status' : s}
+                  {s === 'all' ? uiText("All Status") : s}
                 </button>
               ))}
             </div>
@@ -1368,13 +1364,13 @@ const StatsView: React.FC<StatsViewProps> = ({
               </svg>
               <input
                 type="text"
-                placeholder="Filter variables…"
+                placeholder={uiText("Filter variables…")}
                 value={varCoverageTextFilter}
                 onChange={e => setVarCoverageTextFilter(e.target.value)}
                 className="w-full pl-7 pr-2 py-1 text-xs bg-secondary border border-primary rounded focus:outline-none focus:ring-1 focus:ring-indigo-400 text-primary placeholder:text-secondary"
               />
             </div>
-            <span className="text-xs text-secondary flex-none">{filteredVariableCoverageRows.length} variable{filteredVariableCoverageRows.length !== 1 ? 's' : ''}</span>
+            <span className="text-xs text-secondary flex-none">{filteredVariableCoverageRows.length} {(" " + uiText("variable") + "")}{filteredVariableCoverageRows.length !== 1 ? 's' : ''}</span>
           </div>
 
           {/* Coverage table */}
@@ -1383,19 +1379,19 @@ const StatsView: React.FC<StatsViewProps> = ({
               <thead>
                 <tr className="bg-tertiary border-b border-primary text-secondary text-xs">
                   <th className="px-3 py-2 text-left font-semibold cursor-pointer select-none" onClick={() => toggleVarCoverageSort('name')}>
-                    Variable {varCoverageSortKey === 'name' ? (varCoverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
+                    {("" + uiText("Variable") + " ")}{varCoverageSortKey === 'name' ? (varCoverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
                   </th>
-                  <th className="px-3 py-2 text-left font-semibold w-24">Type</th>
+                  <th className="px-3 py-2 text-left font-semibold w-24">{uiText("Type")}</th>
                   <th className="px-3 py-2 text-left font-semibold cursor-pointer select-none w-36" onClick={() => toggleVarCoverageSort('status')}>
-                    Status {varCoverageSortKey === 'status' ? (varCoverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
+                    {("" + uiText("Status") + " ")}{varCoverageSortKey === 'status' ? (varCoverageSortDir === 'asc' ? '↑' : '↓') : <span className="opacity-40">↕</span>}
                   </th>
-                  <th className="px-3 py-2 text-left font-semibold w-28">Locations</th>
+                  <th className="px-3 py-2 text-left font-semibold w-28">{uiText("Locations")}</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredVariableCoverageRows.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-3 py-6 text-center text-secondary text-xs">No variables match the current filter</td>
+                    <td colSpan={4} className="px-3 py-6 text-center text-secondary text-xs">{uiText("No variables match the current filter")}</td>
                   </tr>
                 )}
                 {filteredVariableCoverageRows.map((row, i) => (
@@ -1419,19 +1415,17 @@ const StatsView: React.FC<StatsViewProps> = ({
                         {row.status === 'referenced' ? (
                           <span className="inline-flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                            Referenced
-                          </span>
+                            {uiText("Referenced")}</span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
-                            Unreferenced
-                          </span>
+                            {uiText("Unreferenced")}</span>
                         )}
                       </td>
                       <td className="px-3 py-2 text-xs text-secondary">
                         {row.locations.length > 0 ? (
                           <span className="inline-flex items-center gap-1">
-                            {row.locations.length} location{row.locations.length !== 1 ? 's' : ''}
+                            {row.locations.length} {(" " + uiText("location") + "")}{row.locations.length !== 1 ? 's' : ''}
                             <svg className={`w-3 h-3 transition-transform ${expandedVarNames.has(row.name) ? '' : '-rotate-90'}`} viewBox="0 0 12 12" fill="none">
                               <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
@@ -1445,9 +1439,9 @@ const StatsView: React.FC<StatsViewProps> = ({
                           <table className="w-full text-xs">
                             <thead>
                               <tr className="text-secondary">
-                                <th className="text-left font-semibold pb-1">File</th>
-                                <th className="text-left font-semibold pb-1">Label</th>
-                                <th className="text-right font-semibold pb-1 w-16">Lines</th>
+                                <th className="text-left font-semibold pb-1">{uiText("File")}</th>
+                                <th className="text-left font-semibold pb-1">{uiText("Label")}</th>
+                                <th className="text-right font-semibold pb-1 w-16">{uiText("Lines")}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -1485,41 +1479,40 @@ const StatsView: React.FC<StatsViewProps> = ({
 
       {performanceMetrics && (
         <section className="mb-8">
-          <h2 className="text-lg font-semibold mb-1">IDE Performance</h2>
-          <p className="text-xs text-secondary mb-4">Internal metrics — measured since this session started. Not project content.</p>
+          <h2 className="text-lg font-semibold mb-1">{uiText("IDE Performance")}</h2>
+          <p className="text-xs text-secondary mb-4">{uiText("Internal metrics — measured since this session started. Not project content.")}</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
             <PerfStatCard
-              label="Project Load"
+              label={uiText("Project Load")}
               valueMs={performanceMetrics.lastLoadMs}
               targetMs={5000}
             />
             <PerfStatCard
-              label="Last Analysis"
+              label={uiText("Last Analysis")}
               valueMs={performanceMetrics.lastAnalysisMs}
             />
             <PerfStatCard
-              label="Last Asset Scan"
+              label={uiText("Last Asset Scan")}
               valueMs={performanceMetrics.lastScanMs}
             />
             <div className="bg-secondary rounded-lg p-4 flex flex-col gap-1">
-              <p className="text-xs text-secondary uppercase tracking-wide font-medium">Canvas FPS</p>
+              <p className="text-xs text-secondary uppercase tracking-wide font-medium">{uiText("Canvas FPS")}</p>
               <p className="text-2xl font-bold tabular-nums">
                 {fps !== null ? fps : <span className="text-secondary text-base font-normal">—</span>}
               </p>
               <p className="text-xs text-secondary">
                 {fps !== null
-                  ? fps >= 55 ? <span className="text-green-500">60 fps target ✓</span> : fps >= 30 ? <span className="text-yellow-500">below 60 fps</span> : <span className="text-red-500">low fps</span>
-                  : 'live while tab is open'}
+                  ? fps >= 55 ? <span className="text-green-500">{uiText("60 fps target ✓")}</span> : fps >= 30 ? <span className="text-yellow-500">{uiText("below 60 fps")}</span> : <span className="text-red-500">{uiText("low fps")}</span>
+                  : uiText("live while tab is open")}
               </p>
             </div>
           </div>
           {performanceMetrics.memorySamples.length >= 2 && (
             <div className="bg-secondary rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-secondary uppercase tracking-wide font-medium">JS Heap Memory</p>
+                <p className="text-xs text-secondary uppercase tracking-wide font-medium">{uiText("JS Heap Memory")}</p>
                 <p className="text-xs text-secondary tabular-nums">
-                  {performanceMetrics.memorySamples[performanceMetrics.memorySamples.length - 1].mb.toFixed(1)} MB now
-                  {' · '}peak {Math.max(...performanceMetrics.memorySamples.map(s => s.mb)).toFixed(1)} MB
+                  {performanceMetrics.memorySamples[performanceMetrics.memorySamples.length - 1].mb.toFixed(1)} {(" " + uiText("MB now") + "")}{' · '}{("" + uiText("peak") + " ")}{Math.max(...performanceMetrics.memorySamples.map(s => s.mb)).toFixed(1)} MB
                 </p>
               </div>
               <MemorySparkline samples={performanceMetrics.memorySamples} />

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { UI_TIMING } from '@/lib/constants';
 import { logger } from '@/lib/logger';
@@ -286,7 +287,7 @@ const AudioEditorView: React.FC<AudioEditorViewProps> = ({ audio, metadata, onSa
               boxShadow: isPlaying ? '0 0 20px #00ffe7, 0 0 40px #0088ff' : '0 0 8px #00ffe780',
               color: '#00ffe7',
             }}
-            aria-label={isPlaying ? 'Pause' : 'Play'}
+            aria-label={isPlaying ? uiText("Pause") : uiText("Play")}
           >
             {isPlaying ? (
               <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -335,54 +336,54 @@ const AudioEditorView: React.FC<AudioEditorViewProps> = ({ audio, metadata, onSa
         <div className="p-4 space-y-4 flex-grow">
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b pb-2 border-gray-200 dark:border-gray-700">File Info</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b pb-2 border-gray-200 dark:border-gray-700">{uiText("File Info")}</h3>
             <div className="mt-2 space-y-1 text-xs">
-              <p><span className="font-semibold text-gray-500 dark:text-gray-400">Path: </span><code className="break-all">{audio.filePath}</code></p>
+              <p><span className="font-semibold text-gray-500 dark:text-gray-400">{("" + uiText("Path:") + " ")}</span><code className="break-all">{audio.filePath}</code></p>
               {audio.lastModified && (
-                <p><span className="font-semibold text-gray-500 dark:text-gray-400">Modified: </span>{new Date(audio.lastModified).toLocaleString()}</p>
+                <p><span className="font-semibold text-gray-500 dark:text-gray-400">{("" + uiText("Modified:") + " ")}</span>{new Date(audio.lastModified).toLocaleString()}</p>
               )}
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b pb-2 border-gray-200 dark:border-gray-700">Ren'Py Definition</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b pb-2 border-gray-200 dark:border-gray-700">{uiText("Ren'Py Definition")}</h3>
             <div className="mt-3 space-y-3">
               <div>
-                <label htmlFor="renpyName" className="text-xs font-medium text-gray-700 dark:text-gray-300">Ren'Py Name</label>
+                <label htmlFor="renpyName" className="text-xs font-medium text-gray-700 dark:text-gray-300">{uiText("Ren'Py Name")}</label>
                 <input
                   id="renpyName"
                   type="text"
                   value={renpyName}
                   onChange={e => setRenpyName(e.target.value)}
-                  placeholder="e.g., town_theme"
+                  placeholder={uiText("e.g., town_theme")}
                   className="w-full mt-1 p-2 text-sm rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
                 />
-                <p className="text-xs text-gray-400 mt-0.5">Short name for use in code (optional).</p>
+                <p className="text-xs text-gray-400 mt-0.5">{uiText("Short name for use in code (optional).")}</p>
               </div>
               <div>
-                <label htmlFor="tags" className="text-xs font-medium text-gray-700 dark:text-gray-300">Tags</label>
+                <label htmlFor="tags" className="text-xs font-medium text-gray-700 dark:text-gray-300">{uiText("Tags")}</label>
                 <input
                   id="tags"
                   type="text"
                   value={tags}
                   onChange={e => setTags(e.target.value)}
-                  placeholder="e.g., happy, upbeat"
+                  placeholder={uiText("e.g., happy, upbeat")}
                   className="w-full mt-1 p-2 text-sm rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
                 />
-                <p className="text-xs text-gray-400 mt-0.5">Comma-separated searchable tags.</p>
+                <p className="text-xs text-gray-400 mt-0.5">{uiText("Comma-separated searchable tags.")}</p>
               </div>
               <div className="bg-gray-100 dark:bg-gray-700/50 p-2 rounded-md">
-                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Example Usage</p>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{uiText("Example Usage")}</p>
                 <code className="text-xs font-mono break-all">{renpyTag}</code>
               </div>
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b pb-2 border-gray-200 dark:border-gray-700">Project Settings</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b pb-2 border-gray-200 dark:border-gray-700">{uiText("Project Settings")}</h3>
             <div className="mt-3 space-y-3">
               <div>
-                <label htmlFor="subfolder" className="text-xs font-medium text-gray-700 dark:text-gray-300">Project Subfolder</label>
+                <label htmlFor="subfolder" className="text-xs font-medium text-gray-700 dark:text-gray-300">{uiText("Project Subfolder")}</label>
                 <div className="flex items-center mt-1">
                   <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600 whitespace-nowrap">game/audio/</span>
                   <input
@@ -390,11 +391,11 @@ const AudioEditorView: React.FC<AudioEditorViewProps> = ({ audio, metadata, onSa
                     type="text"
                     value={subfolder}
                     onChange={e => setSubfolder(e.target.value)}
-                    placeholder="e.g., sfx/footsteps"
+                    placeholder={uiText("e.g., sfx/footsteps")}
                     className="flex-grow p-2 text-sm rounded-r-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
-                <p className="text-xs text-gray-400 mt-0.5">Optional subfolder within game/audio/.</p>
+                <p className="text-xs text-gray-400 mt-0.5">{uiText("Optional subfolder within game/audio/.")}</p>
               </div>
 
               {audio.isInProject ? (
@@ -407,19 +408,17 @@ const AudioEditorView: React.FC<AudioEditorViewProps> = ({ audio, metadata, onSa
                     'bg-indigo-600 hover:bg-indigo-700 text-white'
                   }`}
                 >
-                  {saveState === 'saving' ? 'Saving…' : saveState === 'saved' ? '✓ Saved' : saveState === 'error' ? 'Error — try again' : 'Save Metadata'}
+                  {saveState === 'saving' ? uiText("Saving…") : saveState === 'saved' ? uiText("✓ Saved") : saveState === 'error' ? uiText("Error — try again") : uiText("Save Metadata")}
                 </button>
               ) : audio.projectFilePath ? (
                 <div className="text-center text-sm text-green-600 dark:text-green-400 font-bold p-2 border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/30 rounded">
-                  Copied to Project
-                </div>
+                  {uiText("Copied to Project")}</div>
               ) : (
                 <button
                   onClick={handleCopyToProject}
                   className="w-full py-2 px-4 rounded-md bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors"
                 >
-                  Copy to Project
-                </button>
+                  {uiText("Copy to Project")}</button>
               )}
             </div>
           </div>

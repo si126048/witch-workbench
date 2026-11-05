@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ExportMenu.tsx
  * @description Compact "Export" popover offering clipboard copy (via CopyButton) and
@@ -20,7 +21,7 @@ interface ExportMenuProps {
   disabled?: boolean;
 }
 
-const ExportMenu: React.FC<ExportMenuProps> = ({ getMarkdown, getCSV, filenameBase, label = 'Export', disabled }) => {
+const ExportMenu: React.FC<ExportMenuProps> = ({ getMarkdown, getCSV, filenameBase, label = uiText("Export"), disabled }) => {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0 });
   const [saving, setSaving] = useState<'md' | 'csv' | null>(null);
@@ -47,7 +48,7 @@ const ExportMenu: React.FC<ExportMenuProps> = ({ getMarkdown, getCSV, filenameBa
     setSaving(format);
     try {
       const filePath = await window.electronAPI.showSaveDialog({
-        title: `Export ${label}`,
+        title: uiText("Export {value0}", { value0: label }),
         defaultPath: `${filenameBase}.${format}`,
         filters: format === 'md'
           ? [{ name: 'Markdown', extensions: ['md'] }]
@@ -90,23 +91,21 @@ const ExportMenu: React.FC<ExportMenuProps> = ({ getMarkdown, getCSV, filenameBa
           onMouseDown={e => e.stopPropagation()}
         >
           <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-            Copy to Clipboard
-          </div>
+            {uiText("Copy to Clipboard")}</div>
           <div className="px-3 pb-2 flex gap-2">
             <CopyButton text={getMarkdown()} label="Markdown" size="xs" />
             <CopyButton text={getCSV()} label="CSV" size="xs" />
           </div>
           <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
           <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-            Save to File
-          </div>
+            {uiText("Save to File")}</div>
           <button
             type="button"
             onClick={() => saveAs('md')}
             disabled={saving !== null}
             className="w-full flex items-center px-3 py-1.5 text-left text-xs text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 disabled:opacity-50"
           >
-            {saving === 'md' ? 'Saving…' : 'Markdown (.md)…'}
+            {saving === 'md' ? uiText("Saving…") : uiText("Markdown (.md)…")}
           </button>
           <button
             type="button"
@@ -114,7 +113,7 @@ const ExportMenu: React.FC<ExportMenuProps> = ({ getMarkdown, getCSV, filenameBa
             disabled={saving !== null}
             className="w-full flex items-center px-3 py-1.5 text-left text-xs text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 disabled:opacity-50"
           >
-            {saving === 'csv' ? 'Saving…' : 'CSV (.csv)…'}
+            {saving === 'csv' ? uiText("Saving…") : uiText("CSV (.csv)…")}
           </button>
         </div>,
         document.body

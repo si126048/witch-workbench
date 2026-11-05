@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file StoryElementsPanel.tsx
  * @description Tabbed sidebar panel aggregating all story element managers (~700 lines).
@@ -33,57 +34,57 @@ interface SubPane {
 const SUB_PANES: SubPane[] = [
     {
         id: 'characters',
-        tooltip: 'Characters',
+        tooltip: uiText("Characters"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>,
     },
     {
         id: 'variables',
-        tooltip: 'Variables',
+        tooltip: uiText("Variables"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.745 3A23.933 23.933 0 003 12c0 3.183.62 6.22 1.745 9M19.5 3c.967 2.782 1.5 5.771 1.5 9s-.533 6.218-1.5 9M8.25 8.885l1.444-.89a.75.75 0 011.105.402l2.402 7.206a.75.75 0 001.104.401l1.445-.889m-8.25.75l.213.09a1.687 1.687 0 002.062-.617l4.45-6.676a1.688 1.688 0 012.062-.618l.213.09" /></svg>,
     },
     {
         id: 'screens',
-        tooltip: 'Screens',
+        tooltip: uiText("Screens"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" /></svg>,
     },
     {
         id: 'images',
-        tooltip: 'Images',
+        tooltip: uiText("Images"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>,
     },
     {
         id: 'audio',
-        tooltip: 'Audio',
+        tooltip: uiText("Audio"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" /></svg>,
     },
     {
         id: 'scenes',
-        tooltip: 'Scene Compositions',
+        tooltip: uiText("Scene Compositions"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-1.5-3.75h-6" /></svg>,
     },
     {
         id: 'imagemaps',
-        tooltip: 'Image Maps',
+        tooltip: uiText("Image Maps"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>,
     },
     {
         id: 'snippets',
-        tooltip: 'Code Snippets',
+        tooltip: uiText("Code Snippets"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875c-1.243 0-2.25.84-2.25 1.875 0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.401.604-.401.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.036 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.369 0 .713.128 1.003.349.283.215.604.401.959.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" /></svg>,
     },
     {
         id: 'animations',
-        tooltip: 'ATL Animations',
+        tooltip: uiText("ATL Animations"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>,
     },
     {
         id: 'menuTemplates',
-        tooltip: 'Menu Templates',
+        tooltip: uiText("Menu Templates"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>,
     },
     {
         id: 'colorPalette',
-        tooltip: 'Color Palette',
+        tooltip: uiText("Color Palette"),
         icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg>,
     },
 ];
@@ -230,7 +231,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
     return (
         <div className="h-full bg-secondary text-primary flex flex-row min-h-0" data-tutorial="story-elements">
             {/* Vertical icon nav */}
-            <nav className="flex-none w-12 border-r border-primary flex flex-col overflow-y-auto" role="tablist" aria-label="Story Elements">
+            <nav className="flex-none w-12 border-r border-primary flex flex-col overflow-y-auto" role="tablist" aria-label={uiText("Story Elements")}>
                 <div className="flex flex-col mx-auto mt-14 mb-4">
                     {SUB_PANES.map(pane => (
                         <button
@@ -261,11 +262,11 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {activeSubTab === 'characters' && (
                     <div>
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold">Characters ({characterList.length})</h2>
-                            <button onClick={() => onOpenCharacterEditor('new_character')} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">+ Add</button>
+                            <h2 className="text-lg font-semibold">{uiText("Characters (")}{characterList.length})</h2>
+                            <button onClick={() => onOpenCharacterEditor('new_character')} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">{uiText("+ Add")}</button>
                         </div>
                         {characterList.length === 0 ? (
-                            <p className="text-sm text-secondary italic">Characters bring your story to life. Click 'Add' to create your first one!</p>
+                            <p className="text-sm text-secondary italic">{uiText("Characters bring your story to life. Click 'Add' to create your first one!")}</p>
                         ) : (
                             <div className="space-y-2">
                                 {characterList.map((char) => (
@@ -277,7 +278,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                                         onMouseEnter={() => onHoverHighlightStart(char.tag, 'character')}
                                         onMouseLeave={onHoverHighlightEnd}
                                         onDoubleClick={() => onOpenCharacterEditor(char.tag)}
-                                        title="Drag to insert dialogue · Double-click to edit"
+                                        title={uiText("Drag to insert dialogue · Double-click to edit")}
                                     >
                                         <div className="flex items-center space-x-3 min-w-0 pointer-events-none">
                                             <div className="w-6 h-6 rounded-full flex-shrink-0" style={{ backgroundColor: char.color }}></div>
@@ -288,10 +289,10 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                                         </div>
                                         <div className="flex items-center space-x-1 flex-shrink-0 pl-2">
                                             <span className="text-xs text-secondary mr-2">({characterUsage.get(char.tag) || 0})</span>
-                                            <button onClick={() => onFindCharacterUsages(char.tag)} title="Find Usages" className="p-1 text-secondary hover:text-accent rounded" aria-label="Find usages">
+                                            <button onClick={() => onFindCharacterUsages(char.tag)} title={uiText("Find Usages")} className="p-1 text-secondary hover:text-accent rounded" aria-label={uiText("Find usages")}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                             </button>
-                                            <button onClick={() => onOpenCharacterEditor(char.tag)} title="Edit Character" className="p-1 text-secondary hover:text-accent rounded" aria-label="Edit character">
+                                            <button onClick={() => onOpenCharacterEditor(char.tag)} title={uiText("Edit Character")} className="p-1 text-secondary hover:text-accent rounded" aria-label={uiText("Edit character")}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
                                             </button>
                                         </div>
@@ -306,7 +307,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {/* Variables */}
                 {activeSubTab === 'variables' && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">Variables ({analysisResult.variables.size})</h2>
+                        <h2 className="text-lg font-semibold mb-4">{uiText("Variables (")}{analysisResult.variables.size})</h2>
                         <VariableManager
                             analysisResult={analysisResult}
                             onAddVariable={onAddVariable}
@@ -326,7 +327,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {/* Screens */}
                 {activeSubTab === 'screens' && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">Screens ({analysisResult.screens.size})</h2>
+                        <h2 className="text-lg font-semibold mb-4">{uiText("Screens (")}{analysisResult.screens.size})</h2>
                         <ScreenManager
                             screens={analysisResult.screens}
                             onFindDefinition={onFindScreenDefinition}
@@ -338,7 +339,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {/* Images */}
                 {activeSubTab === 'images' && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">Images ({projectImages.size})</h2>
+                        <h2 className="text-lg font-semibold mb-4">{uiText("Images (")}{projectImages.size})</h2>
                         <ImageManager
                             images={imagesArray}
                             metadata={imageMetadata}
@@ -358,7 +359,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {/* Audio */}
                 {activeSubTab === 'audio' && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">Audio ({projectAudios.size})</h2>
+                        <h2 className="text-lg font-semibold mb-4">{uiText("Audio (")}{projectAudios.size})</h2>
                         <AudioManager
                             audios={audiosArray}
                             metadata={audioMetadata}
@@ -380,11 +381,11 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {activeSubTab === 'scenes' && (
                     <div>
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold">Scene Compositions ({scenes.length})</h2>
-                            <button onClick={() => onCreateScene()} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">+ New</button>
+                            <h2 className="text-lg font-semibold">{uiText("Scene Compositions (")}{scenes.length})</h2>
+                            <button onClick={() => onCreateScene()} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">{uiText("+ New")}</button>
                         </div>
                         {scenes.length === 0 ? (
-                            <p className="text-sm text-secondary italic">No scenes created yet.</p>
+                            <p className="text-sm text-secondary italic">{uiText("No scenes created yet.")}</p>
                         ) : (
                             <ul className="space-y-2">
                                 {scenes.map(scene => (
@@ -395,8 +396,8 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                                         <button
                                             onClick={() => onDeleteScene(scene.id)}
                                             className="p-1.5 text-secondary hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            title="Delete Scene"
-                                            aria-label="Delete scene"
+                                            title={uiText("Delete Scene")}
+                                            aria-label={uiText("Delete scene")}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </button>
@@ -411,11 +412,11 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {activeSubTab === 'imagemaps' && (
                     <div>
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold">ImageMaps ({imagemaps.length})</h2>
-                            <button onClick={() => onCreateImageMap()} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">+ New</button>
+                            <h2 className="text-lg font-semibold">{uiText("ImageMaps (")}{imagemaps.length})</h2>
+                            <button onClick={() => onCreateImageMap()} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">{uiText("+ New")}</button>
                         </div>
                         {imagemaps.length === 0 ? (
-                            <p className="text-sm text-secondary italic">No imagemaps created yet.</p>
+                            <p className="text-sm text-secondary italic">{uiText("No imagemaps created yet.")}</p>
                         ) : (
                             <ul className="space-y-2">
                                 {imagemaps.map(imagemap => (
@@ -426,8 +427,8 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                                         <button
                                             onClick={() => onDeleteImageMap(imagemap.id)}
                                             className="p-1.5 text-secondary hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            title="Delete ImageMap"
-                                            aria-label="Delete imagemap"
+                                            title={uiText("Delete ImageMap")}
+                                            aria-label={uiText("Delete imagemap")}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </button>
@@ -441,7 +442,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {/* Snippets */}
                 {activeSubTab === 'snippets' && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">Code Snippets</h2>
+                        <h2 className="text-lg font-semibold mb-4">{uiText("Code Snippets")}</h2>
                         <SnippetManager
                             userSnippets={userSnippets}
                             onCreateSnippet={onCreateSnippet}
@@ -455,7 +456,7 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {/* ATL Animations */}
                 {activeSubTab === 'animations' && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">ATL Animations</h2>
+                        <h2 className="text-lg font-semibold mb-4">{uiText("ATL Animations")}</h2>
                         <ATLPresetBrowser onInsertAtCursor={onInsertATLPresetAtCursor} />
                     </div>
                 )}
@@ -464,8 +465,8 @@ const StoryElementsPanel: React.FC<StoryElementsPanelProps> = ({
                 {activeSubTab === 'menuTemplates' && (
                     <div>
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold">Menu Templates ({menuTemplates.length})</h2>
-                            <button onClick={onCreateMenuTemplate} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">+ New</button>
+                            <h2 className="text-lg font-semibold">{uiText("Menu Templates (")}{menuTemplates.length})</h2>
+                            <button onClick={onCreateMenuTemplate} className="px-3 py-1.5 rounded bg-accent hover:bg-accent-hover text-white text-sm font-bold">{uiText("+ New")}</button>
                         </div>
                         <MenuTemplateManager
                             templates={menuTemplates}

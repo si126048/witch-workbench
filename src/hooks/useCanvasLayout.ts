@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useRef, useCallback, useEffect } from 'react';
 import type React from 'react';
 import type { Block, Position, PersistedProjectSettings, RenpyAnalysisResult, LabelNode, RouteLink, IdentifiedRoute } from '@/types';
@@ -95,7 +96,7 @@ export function useCanvasLayout({
     } catch (e) {
       logger.error('Failed to tidy up layout:', e);
       if (options?.showToast ?? true) {
-        addToast('Failed to organize layout', 'error');
+        addToast(uiText("Failed to organize layout"), 'error');
       }
     }
   }, [analysisResult.links, setBlocks, addToast, updateProjectSettings, setHasUnsavedSettings]);
@@ -181,7 +182,7 @@ export function useCanvasLayout({
     } catch (error) {
       logger.error('Failed to organize route layout:', error);
       if (options?.showToast ?? true) {
-        addToast('Failed to organize route layout', 'error');
+        addToast(uiText("Failed to organize route layout"), 'error');
       }
     }
   }, [routeAnalysisResult.labelNodes, routeAnalysisResult.routeLinks, routeNodeLayoutCache, setRouteNodeLayoutCache, updateProjectSettings, setHasUnsavedSettings, addToast]);
@@ -255,7 +256,7 @@ export function useCanvasLayout({
           draft.storyCanvasLayoutVersion = getStoryLayoutVersion();
         });
         setHasUnsavedSettings(true);
-        addToast('Story graph changed. Layout preserved; use Redraw to reorganize.', 'info');
+        addToast(uiText("Story graph changed. Layout preserved; use Redraw to reorganize."), 'info');
       } else {
         applyStoryLayout(layoutMode, groupingMode, {
           showToast: pendingRefresh.hasSavedLayouts,
@@ -313,7 +314,7 @@ export function useCanvasLayout({
           draft.routeCanvasLayoutVersion = getRouteCanvasLayoutVersion();
         });
         setHasUnsavedSettings(true);
-        addToast('Route graph changed. Layout preserved; use Redraw to reorganize.', 'info');
+        addToast(uiText("Route graph changed. Layout preserved; use Redraw to reorganize."), 'info');
       } else {
         applyRouteLayout(layoutMode, groupingMode, {
           showToast: pendingRefresh.hasSavedLayouts,

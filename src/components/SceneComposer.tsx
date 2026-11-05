@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SceneComposer.tsx
  * @description Visual drag-and-drop scene layout tool (~600 lines).
@@ -584,7 +585,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
             // 5. Save
             if (window.electronAPI) {
                 const filePath = await window.electronAPI.showSaveDialog({
-                    title: 'Export Scene Composition',
+                    title: uiText("Export Scene Composition"),
                     defaultPath: `${sceneName}.png`,
                     filters: [
                         { name: 'PNG Image', extensions: ['png'] },
@@ -600,9 +601,9 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                     
                     const res = await window.electronAPI.writeFile(filePath, base64Data, 'base64');
                     if (!res.success) {
-                        addToast(`Failed to save image: ${res.error}`, 'error');
+                        addToast(uiText("Failed to save image: {value0}", { value0: res.error }), 'error');
                     } else {
-                        addToast('Scene exported successfully.', 'success');
+                        addToast(uiText("Scene exported successfully."), 'success');
                     }
                 }
             } else {
@@ -614,12 +615,12 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                addToast('Scene exported successfully.', 'success');
+                addToast(uiText("Scene exported successfully."), 'success');
             }
 
         } catch (error) {
             logger.error("Export failed:", error);
-            addToast('Failed to export image.', 'error');
+            addToast(uiText("Failed to export image."), 'error');
         } finally {
             setIsExporting(false);
         }
@@ -911,7 +912,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
             <div className="h-12 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center px-4 justify-between flex-shrink-0">
                 <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Scene Name:</span>
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">{uiText("Scene Name:")}</span>
                         {isRenaming ? (
                             <input
                                 ref={nameInputRef}
@@ -926,7 +927,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                             <span 
                                 className="text-sm font-semibold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded border border-transparent hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
                                 onClick={() => setIsRenaming(true)}
-                                title="Click to rename"
+                                title={uiText("Click to rename")}
                             >
                                 {sceneName}
                             </span>
@@ -936,7 +937,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                         onClick={handleExport}
                         disabled={isExporting}
                         className="flex items-center space-x-2 px-3 py-1 rounded text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Export current composition as an image"
+                        title={uiText("Export current composition as an image")}
                     >
                         {isExporting ? (
                             <svg className="animate-spin h-4 w-4 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -948,31 +949,31 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                         )}
-                        <span>{isExporting ? 'Exporting...' : 'Export Image'}</span>
+                        <span>{isExporting ? uiText("Exporting...") : uiText("Export Image")}</span>
                     </button>
                     <button
                         onClick={() => setShowTimeline(v => !v)}
                         className={`flex items-center space-x-2 px-3 py-1 rounded text-xs font-bold transition-colors ${showTimeline ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
-                        title="Toggle the animation timeline for the selected sprite"
+                        title={uiText("Toggle the animation timeline for the selected sprite")}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>Timeline</span>
+                        <span>{uiText("Timeline")}</span>
                     </button>
                     <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
                     <div className="flex items-center space-x-1">
-                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide hidden md:inline">Res:</span>
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide hidden md:inline">{uiText("Res:")}</span>
                         <select
                             value={resolutionDropdownValue}
                             onChange={handleResolutionDropdownChange}
                             className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600 px-2 py-1"
-                            aria-label="Canvas resolution"
+                            aria-label={uiText("Canvas resolution")}
                         >
                             {PRESET_RESOLUTIONS.map(p => (
                                 <option key={`${p.width}x${p.height}`} value={`${p.width}x${p.height}`}>{p.label}</option>
                             ))}
-                            <option value="custom">Custom...</option>
+                            <option value="custom">{uiText("Custom...")}</option>
                         </select>
                         {showResolutionInputs && (
                             <>
@@ -985,7 +986,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                     className="text-xs w-14 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600 px-1 py-1 text-center"
                                     min={1}
                                     placeholder="W"
-                                    aria-label="Custom width"
+                                    aria-label={uiText("Custom width")}
                                 />
                                 <span className="text-xs text-gray-400">×</span>
                                 <input
@@ -997,16 +998,16 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                     className="text-xs w-14 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600 px-1 py-1 text-center"
                                     min={1}
                                     placeholder="H"
-                                    aria-label="Custom height"
+                                    aria-label={uiText("Custom height")}
                                 />
                             </>
                         )}
                     </div>
                 </div>
                 <div className="flex items-center space-x-2 text-xs text-gray-400">
-                    <span className="hidden md:inline">Ref: {REF_WIDTH}×{REF_HEIGHT} • Shift + Arrow to Nudge</span>
+                    <span className="hidden md:inline">{("" + uiText("Ref:") + " ")}{REF_WIDTH}×{REF_HEIGHT} {(" " + uiText("• Shift + Arrow to Nudge") + "")}</span>
                     <span className="w-px h-3 bg-gray-300 dark:bg-gray-600 mx-2"></span>
-                    <span>Drag images from right panel</span>
+                    <span>{uiText("Drag images from right panel")}</span>
                 </div>
             </div>
 
@@ -1044,7 +1045,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            <span>Drop Background Image Here</span>
+                            <span>{uiText("Drop Background Image Here")}</span>
                         </div>
                     )}
 
@@ -1101,7 +1102,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                             onPreviewUpdate={setTimelinePreviewValues}
                         />
                     ) : (
-                        <p className="text-sm text-secondary text-center py-8">Select a sprite or the background to animate it.</p>
+                        <p className="text-sm text-secondary text-center py-8">{uiText("Select a sprite or the background to animate it.")}</p>
                     )}
                 </div>
             )}
@@ -1112,10 +1113,10 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                 {/* Properties Pane (Left) */}
                 <div className="flex-1 flex flex-col min-w-0">
                     <div className="flex-none p-2 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
-                        <span className="font-bold text-xs ml-2 text-gray-700 dark:text-gray-300 uppercase tracking-wider">Properties</span>
-                        <span className="text-[9px] text-gray-400 dark:text-gray-500 ml-2" title="Undo/redo scene changes with Ctrl+Z / Ctrl+Y">Ctrl+Z to undo</span>
+                        <span className="font-bold text-xs ml-2 text-gray-700 dark:text-gray-300 uppercase tracking-wider">{uiText("Properties")}</span>
+                        <span className="text-[9px] text-gray-400 dark:text-gray-500 ml-2" title={uiText("Undo/redo scene changes with Ctrl+Z / Ctrl+Y")}>{uiText("Ctrl+Z to undo")}</span>
                         <div className="flex space-x-2">
-                            <button onClick={() => { saveUndo(); onSceneChange({ background: null, sprites: [] }); }} className="px-3 py-1 text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-300 rounded hover:bg-red-200 font-medium">Clear All</button>
+                            <button onClick={() => { saveUndo(); onSceneChange({ background: null, sprites: [] }); }} className="px-3 py-1 text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-300 rounded hover:bg-red-200 font-medium">{uiText("Clear All")}</button>
                         </div>
                     </div>
 
@@ -1138,7 +1139,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                 {/* Layers Pane */}
                 <div className="flex-1 flex flex-col min-h-0">
                     <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">Layers (Foreground Top)</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">{uiText("Layers (Foreground Top)")}</h3>
                     </div>
                     <div className="flex-1 overflow-y-auto p-2 space-y-1">
                         {/* Draggable Layer List */}
@@ -1170,7 +1171,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                         <button
                                             onClick={(e) => { e.stopPropagation(); toggleVisibility(sprite.id); }}
                                             className="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white mr-1"
-                                            title={isHidden ? "Show Layer" : "Hide Layer"}
+                                            title={isHidden ? uiText("Show Layer") : uiText("Hide Layer")}
                                         >
                                             {isHidden ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -1187,7 +1188,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                         <button
                                             onClick={(e) => { e.stopPropagation(); toggleLock(sprite.id); }}
                                             className={`p-1 mr-1 ${sprite.locked ? 'text-amber-500 hover:text-amber-600' : 'text-gray-300 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-400'}`}
-                                            title={sprite.locked ? "Unlock Layer" : "Lock Layer"}
+                                            title={sprite.locked ? uiText("Unlock Layer") : uiText("Lock Layer")}
                                         >
                                             {sprite.locked ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -1214,7 +1215,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); setSpriteAsBackground(sprite.id); }}
                                                 className="p-1 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
-                                                title="Set as Background"
+                                                title={uiText("Set as Background")}
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1223,7 +1224,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); removeSprite(sprite.id); }}
                                                 className="p-1 text-gray-400 hover:text-red-500 dark:hover:text-red-400"
-                                                title="Delete Layer"
+                                                title={uiText("Delete Layer")}
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -1249,7 +1250,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                 <button 
                                     onClick={(e) => { e.stopPropagation(); toggleVisibility('background'); }}
                                     className="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white mr-1"
-                                    title={scene.background.visible === false ? "Show Layer" : "Hide Layer"}
+                                    title={scene.background.visible === false ? uiText("Show Layer") : uiText("Hide Layer")}
                                 >
                                     {scene.background.visible === false ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -1266,7 +1267,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                 <button
                                     onClick={(e) => { e.stopPropagation(); toggleLock('background'); }}
                                     className={`p-1 mr-1 ${scene.background.locked ? 'text-amber-500 hover:text-amber-600' : 'text-gray-300 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-400'}`}
-                                    title={scene.background.locked ? "Unlock Layer" : "Lock Layer"}
+                                    title={scene.background.locked ? uiText("Unlock Layer") : uiText("Lock Layer")}
                                 >
                                     {scene.background.locked ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -1283,7 +1284,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                     <img src={scene.background.image.dataUrl} className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-0.5">Background</p>
+                                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-0.5">{uiText("Background")}</p>
                                     <p className={`text-xs truncate ${selectedSpriteId === 'background' ? 'text-indigo-700 dark:text-indigo-300' : 'text-gray-700 dark:text-gray-300'} ${scene.background.visible === false ? 'opacity-50 line-through decoration-gray-400' : ''}`}>
                                         {getRenpyTag(scene.background.image)}
                                     </p>
@@ -1291,7 +1292,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                                 <button
                                     onClick={(e) => { e.stopPropagation(); removeSprite('background'); }}
                                     className="p-1 text-gray-400 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 ml-1"
-                                    title="Clear Background"
+                                    title={uiText("Clear Background")}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -1300,8 +1301,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                             </div>
                         ) : (
                             <div className="p-4 text-center text-xs text-gray-400 italic border-t-2 border-dashed border-gray-200 dark:border-gray-700 mt-2">
-                                No background
-                            </div>
+                                {uiText("No background")}</div>
                         )}
                     </div>
                 </div>
@@ -1309,7 +1309,7 @@ const SceneComposer: React.FC<SceneComposerProps> = ({ images, metadata, scene, 
                     {/* Code Preview */}
                     <div className="flex-1 flex flex-col min-h-0 border-t border-gray-200 dark:border-gray-700">
                         <div className="flex-none flex justify-between items-center px-2 py-1 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase">Code Preview</span>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase">{uiText("Code Preview")}</span>
                             <CodeActionButtons code={generatedCode} size="xs" />
                         </div>
                         <pre className="flex-1 p-3 font-mono text-xs overflow-auto text-gray-600 dark:text-gray-400 select-text bg-white dark:bg-gray-800 min-h-0">

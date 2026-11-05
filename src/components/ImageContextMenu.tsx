@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ImageContextMenu.tsx
  * @description Right-click context menu for images in the Asset Manager (~50 lines).
@@ -37,21 +38,19 @@ const ImageContextMenu: React.FC<ImageContextMenuProps> = ({ x, y, imageTag, onS
       style={{ top: y, left: x }}
     >
       <div className="p-2">
-        <p className="text-sm font-semibold px-2 py-1 text-gray-800 dark:text-gray-200">Insert Image:</p>
+        <p className="text-sm font-semibold px-2 py-1 text-gray-800 dark:text-gray-200">{uiText("Insert Image:")}</p>
         <p className="text-xs font-mono px-2 pb-2 text-gray-500 dark:text-gray-400 truncate max-w-xs">{imageTag}</p>
         <div className="border-t border-gray-200 dark:border-gray-700 -mx-2 my-1"></div>
         <button
           onClick={() => onSelect('scene')}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Add `scene` statement
-        </button>
+          {uiText("Add `scene` statement")}</button>
         <button
           onClick={() => onSelect('show')}
           className="w-full text-left px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 rounded"
         >
-          Add `show` statement
-        </button>
+          {uiText("Add `show` statement")}</button>
       </div>
     </div>
   );

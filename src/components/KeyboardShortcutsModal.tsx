@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file KeyboardShortcutsModal.tsx
  * @description Modal reference card listing all keyboard shortcuts and mouse gestures (~200 lines).
@@ -43,18 +44,18 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
   const gestures = mouseGestures ?? DEFAULT_GESTURES;
 
   const canvasItems = [
-    { keys: ['N'], description: 'Add New Block' },
-    { keys: ['G'], description: 'Group Selected Blocks' },
-    { keys: ['Delete'], description: 'Delete Selected Blocks/Groups' },
-    { keys: ['Escape'], description: 'Clear Selection' },
-    { keys: ['Enter'], description: 'Open Selected in Editor' },
-    { keys: ['↑', '↓', '←', '→'], description: 'Move Focus Between Nodes' },
-    { keys: ['F'], description: 'Fit to Screen' },
-    { keys: ['['], description: 'Navigate Back (Flow Canvas)' },
-    { keys: [']'], description: 'Navigate Forward (Flow Canvas)' },
-    { keys: getPanKeys(gestures.canvasPanGesture), description: 'Pan Canvas' },
+    { keys: ['N'], description: uiText("Add New Block") },
+    { keys: ['G'], description: uiText("Group Selected Blocks") },
+    { keys: ['Delete'], description: uiText("Delete Selected Blocks/Groups") },
+    { keys: ['Escape'], description: uiText("Clear Selection") },
+    { keys: ['Enter'], description: uiText("Open Selected in Editor") },
+    { keys: ['↑', '↓', '←', '→'], description: uiText("Move Focus Between Nodes") },
+    { keys: ['F'], description: uiText("Fit to Screen") },
+    { keys: ['['], description: uiText("Navigate Back (Flow Canvas)") },
+    { keys: [']'], description: uiText("Navigate Forward (Flow Canvas)") },
+    { keys: getPanKeys(gestures.canvasPanGesture), description: uiText("Pan Canvas") },
     ...(gestures.middleMouseAlwaysPans && gestures.canvasPanGesture !== 'middle-drag'
-      ? [{ keys: ['Middle Mouse', 'Drag'], description: 'Pan Canvas (also)' }]
+      ? [{ keys: ['Middle Mouse', 'Drag'], description: uiText("Pan Canvas (also)") }]
       : []),
     {
       keys: ['Scroll'],
@@ -62,33 +63,33 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
         ? 'Zoom In/Out (scroll inverted)'
         : 'Zoom In/Out',
     },
-    { keys: ['Double Click'], description: 'Open Block in Editor' },
+    { keys: ['Double Click'], description: uiText("Open Block in Editor") },
   ];
 
   const shortcuts = [
     { category: 'General', items: [
-        { keys: ['F5'], description: 'Run Project' },
-        { keys: ['Shift', 'F5'], description: 'Stop Project' },
-        { keys: ['Ctrl', 'G'], description: 'Go to Label' },
-        { keys: ['Ctrl', 'Shift', 'G'], description: 'Warp to Label' },
-        { keys: ['Ctrl', 'Shift', 'F'], description: 'Search in Files' },
-        { keys: ['Ctrl', 'S'], description: 'Save All' },
-        { keys: ['Ctrl', 'W'], description: 'Close Active Tab' },
-        { keys: ['Ctrl', 'Shift', 'T'], description: 'Reopen Closed Tab' },
-        { keys: ['Ctrl', 'Q'], description: 'Quit Application' },
-        { keys: ['Ctrl', ','], description: 'Settings' },
-        { keys: ['Ctrl', '/'], description: 'Keyboard Shortcuts' },
-        { keys: ['Ctrl', 'Z'], description: 'Undo' },
-        { keys: ['Ctrl', 'Y'], description: 'Redo' },
+        { keys: ['F5'], description: uiText("Run Project") },
+        { keys: ['Shift', 'F5'], description: uiText("Stop Project") },
+        { keys: ['Ctrl', 'G'], description: uiText("Go to Label") },
+        { keys: ['Ctrl', 'Shift', 'G'], description: uiText("Warp to Label") },
+        { keys: ['Ctrl', 'Shift', 'F'], description: uiText("Search in Files") },
+        { keys: ['Ctrl', 'S'], description: uiText("Save All") },
+        { keys: ['Ctrl', 'W'], description: uiText("Close Active Tab") },
+        { keys: ['Ctrl', 'Shift', 'T'], description: uiText("Reopen Closed Tab") },
+        { keys: ['Ctrl', 'Q'], description: uiText("Quit Application") },
+        { keys: ['Ctrl', ','], description: uiText("Settings") },
+        { keys: ['Ctrl', '/'], description: uiText("Keyboard Shortcuts") },
+        { keys: ['Ctrl', 'Z'], description: uiText("Undo") },
+        { keys: ['Ctrl', 'Y'], description: uiText("Redo") },
     ]},
     { category: 'Canvas', items: canvasItems, configurable: true },
     { category: 'Editor', items: [
-        { keys: ['Ctrl', 'S'], description: 'Save File' },
-        { keys: ['Ctrl', 'Click'], description: 'Go to Definition' },
+        { keys: ['Ctrl', 'S'], description: uiText("Save File") },
+        { keys: ['Ctrl', 'Click'], description: uiText("Go to Definition") },
     ]},
     { category: 'Explorer', items: [
-        { keys: ['Double Click'], description: 'Open File' },
-        { keys: ['Right Click'], description: 'Context Menu' },
+        { keys: ['Double Click'], description: uiText("Open File") },
+        { keys: ['Right Click'], description: uiText("Context Menu") },
     ]},
   ];
 
@@ -96,8 +97,8 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]" onClick={onClose}>
         <div ref={contentRef} {...modalProps} className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl m-4 flex flex-col border border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
             <header className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                <h2 id="shortcuts-modal-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">Keyboard Shortcuts</h2>
-                <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" aria-label="Close">
+                <h2 id="shortcuts-modal-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">{uiText("Keyboard Shortcuts")}</h2>
+                <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" aria-label={uiText("Close")}>
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </header>
@@ -112,8 +113,7 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                                         onClick={() => { onClose(); onOpenSettings(); }}
                                         className="text-xs text-indigo-500 dark:text-indigo-400 hover:underline"
                                     >
-                                        Configure →
-                                    </button>
+                                        {uiText("Configure →")}</button>
                                 )}
                             </div>
                             <ul className="space-y-2">
@@ -134,8 +134,7 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
             </main>
             <footer className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-b-lg border-t border-gray-200 dark:border-gray-700 text-right">
                 <button onClick={onClose} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded transition-colors">
-                    Close
-                </button>
+                    {uiText("Close")}</button>
             </footer>
         </div>
     </div>,

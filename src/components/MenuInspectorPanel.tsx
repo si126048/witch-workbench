@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file MenuInspectorPanel.tsx
  * @description Collapsed/expanded inspector for the selected `menu` node on `RouteCanvas` (~130 lines).
@@ -57,7 +58,7 @@ const MenuInspectorPanel: React.FC<MenuInspectorPanelProps> = ({
         onClick={onToggle}
       >
         <div className="flex items-center gap-2 min-w-0">
-          <span className="shrink-0">Menu Inspector</span>
+          <span className="shrink-0">{uiText("Menu Inspector")}</span>
           {selectedMenu && (
             <span className="font-mono text-xs text-indigo-600 dark:text-indigo-400 truncate">
               {selectedMenu.sourceLabel}
@@ -76,10 +77,9 @@ const MenuInspectorPanel: React.FC<MenuInspectorPanelProps> = ({
       {isOpen && (
         !selectedMenu ? (
           <div className="px-3 py-5 text-xs text-center text-gray-400 dark:text-gray-500">
-            Click a menu pill{' '}
+            {uiText("Click a menu pill")}{' '}
             <span className="inline-block w-3 h-3 rounded-full bg-indigo-500 opacity-80 align-middle" />{' '}
-            to inspect choices
-          </div>
+            {uiText("to inspect choices")}</div>
         ) : (
           <>
             <ul className="divide-y divide-gray-100 dark:divide-gray-700 max-h-64 overflow-y-auto">
@@ -110,7 +110,7 @@ const MenuInspectorPanel: React.FC<MenuInspectorPanelProps> = ({
                             key={ci}
                             className="w-2 h-2 rounded-full shrink-0 inline-block"
                             style={{ backgroundColor: color }}
-                            title="Part of a highlighted route"
+                            title={uiText("Part of a highlighted route")}
                           />
                         ))}
                       </div>
@@ -120,14 +120,13 @@ const MenuInspectorPanel: React.FC<MenuInspectorPanelProps> = ({
               ))}
             </ul>
             <div className="border-t border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center justify-between">
-              <span className="text-xs text-gray-400 dark:text-gray-500">line {selectedMenu.menuLine}</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">{("" + uiText("line") + " ")}{selectedMenu.menuLine}</span>
               {firstChoice && (
                 <button
                   className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline"
                   onClick={() => onOpenEditor(firstChoice.blockId, selectedMenu.menuLine)}
                 >
-                  Open in editor ↗
-                </button>
+                  {uiText("Open in editor ↗")}</button>
               )}
             </div>
           </>

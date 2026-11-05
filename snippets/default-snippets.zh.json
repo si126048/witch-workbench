@@ -1,0 +1,200 @@
+{
+  "version": "1.0",
+  "categories": [
+    {
+      "name": "对白与旁白",
+      "snippets": [
+        {
+          "title": "普通对白",
+          "description": "角色说出一句对白。",
+          "code": "e \"I have something to say.\""
+        },
+        {
+          "title": "带图像属性的对白",
+          "description": "在这句对白中使用不同的角色图像。",
+          "code": "e happy \"This makes me so happy!\""
+        },
+        {
+          "title": "旁白",
+          "description": "向玩家显示的叙述文字，不由角色说出。",
+          "code": "\"The sun sets over the city.\""
+        },
+        {
+          "title": "NVL 模式对白",
+          "description": "像小说一样铺满屏幕的对白。",
+          "code": "nvl clear\n\"This is the first line of NVL-mode text.\"\ne \"And characters can speak here, too.\"\n\"This allows for a lot of text to be on screen at once.\""
+        }
+      ]
+    },
+    {
+      "name": "逻辑与流程控制",
+      "snippets": [
+        {
+          "title": "简单条件分支",
+          "description": "根据条件执行不同路径。",
+          "code": "if has_met_eileen:\n    e \"It's good to see you again!\"\nelse:\n    e \"Nice to meet you.\""
+        },
+        {
+          "title": "多条件分支",
+          "description": "依次判断多个条件。",
+          "code": "if score >= 10:\n    \"You got an A!\"\nelif score >= 5:\n    \"You got a B.\"\nelse:\n    \"You got a C.\""
+        },
+        {
+          "title": "选项菜单",
+          "description": "向玩家提供选项。",
+          "code": "menu:\n    \"What should I do?\":\n        \"Go to the park.\":\n            jump park_scene\n        \"Stay home.\":\n            jump home_scene"
+        },
+        {
+          "title": "跳转到标签",
+          "description": "直接跳转到故事的其他位置。",
+          "code": "jump end_of_chapter_one"
+        },
+        {
+          "title": "调用标签",
+          "description": "调用另一个标签，结束后返回。",
+          "code": "call check_inventory\n\"Okay, back to it.\""
+        }
+      ]
+    },
+    {
+      "name": "图像",
+      "snippets": [
+        {
+          "title": "显示图像",
+          "description": "显示图片或角色立绘。",
+          "code": "show eileen happy"
+        },
+        {
+          "title": "在指定位置显示",
+          "description": "在屏幕指定位置显示图像。",
+          "code": "show eileen happy at right"
+        },
+        {
+          "title": "场景语句",
+          "description": "清空画面并显示背景。",
+          "code": "scene bg classroom"
+        },
+        {
+          "title": "隐藏图像",
+          "description": "从画面中移除图像。",
+          "code": "hide eileen"
+        },
+        {
+          "title": "图像定义",
+          "description": "定义指向文件的图像标识。",
+          "code": "image bg school = \"bg/school_day.jpg\""
+        },
+        {
+          "title": "纯色图像定义",
+          "description": "创建纯色图像。",
+          "code": "image black = Solid(\"#000000\")"
+        },
+        {
+          "title": "占位图定义",
+          "description": "用于原型制作的占位图像。",
+          "code": "image eileen = Placeholder(\"girl\")"
+        },
+        {
+          "title": "简单动画",
+          "description": "逐帧播放的动画。",
+          "code": "image rain:\n    \"rain1.png\"\n    0.1\n    \"rain2.png\"\n    0.1\n    \"rain3.png\"\n    0.1\n    repeat"
+        },
+        {
+          "title": "条件图像切换",
+          "description": "根据变量状态显示不同图像。",
+          "code": "image eileen = ConditionSwitch(\n    \"mood == 'happy'\", \"eileen_happy.png\",\n    \"mood == 'sad'\", \"eileen_sad.png\",\n    \"True\", \"eileen_neutral.png\"\n)"
+        },
+        {
+          "title": "分层图像",
+          "description": "使用分层图像定义角色立绘。",
+          "code": "layeredimage eileen:\n    always \"eileen_base.png\"\n    group outfit auto:\n        attribute uniform default\n        attribute casual\n    group face auto:\n        attribute happy default\n        attribute sad"
+        }
+      ]
+    },
+    {
+      "name": "画面与效果",
+      "snippets": [
+        {
+          "title": "带转场的场景",
+          "description": "清空画面并淡入新的背景。",
+          "code": "scene bg park with fade"
+        },
+        {
+          "title": "简单转场",
+          "description": "在画面变化之间使用转场。",
+          "code": "with dissolve"
+        },
+        {
+          "title": "暂停",
+          "description": "等待指定秒数。",
+          "code": "pause 1.5"
+        }
+      ]
+    },
+    {
+      "name": "ATL 与变换",
+      "snippets": [
+        {
+          "title": "基本变换定义",
+          "description": "定义带名称的变换，供后续复用。",
+          "code": "transform slight_right:\n    xalign 0.75\n    yalign 1.0"
+        },
+        {
+          "title": "线性移动",
+          "description": "让图像在 2 秒内从左向右移动。",
+          "code": "transform move_across:\n    xalign 0.0\n    linear 2.0 xalign 1.0"
+        },
+        {
+          "title": "淡入淡出",
+          "description": "随时间改变不透明度（alpha）。",
+          "code": "transform ghost_fade:\n    alpha 0.0\n    linear 1.0 alpha 0.5\n    pause 1.0\n    linear 1.0 alpha 0.0"
+        },
+        {
+          "title": "缩放弹出效果",
+          "description": "通过缓动快速放大图像。",
+          "code": "transform pop_in:\n    zoom 0.0\n    easein_back 0.5 zoom 1.0"
+        },
+        {
+          "title": "循环浮动",
+          "description": "持续上下浮动。",
+          "code": "transform hovering:\n    yoffset 0\n    easein 1.0 yoffset -20\n    easeout 1.0 yoffset 0\n    repeat"
+        },
+        {
+          "title": "并行动画",
+          "description": "同时改变多个属性，例如移动与旋转。",
+          "code": "transform roll_across:\n    parallel:\n        xalign 0.0\n        linear 3.0 xalign 1.0\n    parallel:\n        rotate 0\n        linear 3.0 rotate 360"
+        },
+        {
+          "title": "显示与隐藏事件",
+          "description": "图像显示或隐藏时触发指定动画。",
+          "code": "transform slide_in_out:\n    on show:\n        xalign 0.0\n        linear 0.5 xalign 0.5\n    on hide:\n        linear 0.5 xalign 1.0"
+        }
+      ]
+    },
+    {
+      "name": "音频",
+      "snippets": [
+        {
+          "title": "播放音乐",
+          "description": "开始播放音乐，可用 fadein 设置淡入。",
+          "code": "play music \"audio/bgm/town_theme.ogg\" fadein 1.0"
+        },
+        {
+          "title": "播放音效",
+          "description": "播放一次音效。",
+          "code": "play sound \"audio/sfx/door_open.wav\""
+        },
+        {
+          "title": "停止音乐",
+          "description": "停止当前音乐，可用 fadeout 设置淡出。",
+          "code": "stop music fadeout 2.0"
+        },
+        {
+          "title": "排队播放音乐",
+          "description": "当前音乐结束后，继续播放下一首。",
+          "code": "queue music \"audio/bgm/night_theme.ogg\""
+        }
+      ]
+    }
+  ]
+}

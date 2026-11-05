@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file EditorView.tsx
  * @description Monaco-based code editor for Ren'Py files (761 lines).
@@ -701,7 +702,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
                   startColumn: targetStart + 1,
                   endLineNumber: lineNumber,
                   endColumn: targetStart + 1 + target.length,
-                  message: `Invalid jump: Label '${target}' not found in project.`,
+                  message: uiText("Invalid jump: Label '{value0}' not found in project.", { value0: target }),
                   severity: monacoInstance.MarkerSeverity.Error,
               });
           }
@@ -887,7 +888,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'save-block',
-        label: 'Save',
+        label: uiText("Save"),
         keybindings: [monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS],
         run: () => {
             if (onTriggerSaveRef.current) {
@@ -899,7 +900,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
     // Menu constructor context menu actions
     editor.addAction({
         id: 'create-menu',
-        label: 'Create Menu...',
+        label: uiText("Create Menu..."),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 1,
         run: (ed) => {
@@ -910,7 +911,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'insert-menu-template',
-        label: 'Insert Menu Template...',
+        label: uiText("Insert Menu Template..."),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 2,
         precondition: (menuTemplatesRef.current && menuTemplatesRef.current.length > 0) ? undefined : 'false',
@@ -922,7 +923,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'warp-to-here',
-        label: 'Warp to here',
+        label: uiText("Warp to here"),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 3,
         precondition: 'renpyCanWarpHere',
@@ -936,7 +937,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'insert-copied-code',
-        label: 'Insert Copied Code',
+        label: uiText("Insert Copied Code"),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 4,
         run: async (ed) => {
@@ -987,7 +988,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'format-bold',
-        label: 'Format: Bold',
+        label: uiText("Format: Bold"),
         keybindings: [monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyB],
         contextMenuGroupId: 'renpy-format',
         contextMenuOrder: 1,
@@ -996,7 +997,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'format-italic',
-        label: 'Format: Italic',
+        label: uiText("Format: Italic"),
         keybindings: [monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyI],
         contextMenuGroupId: 'renpy-format',
         contextMenuOrder: 2,
@@ -1005,7 +1006,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'format-underline',
-        label: 'Format: Underline',
+        label: uiText("Format: Underline"),
         keybindings: [monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyU],
         contextMenuGroupId: 'renpy-format',
         contextMenuOrder: 3,
@@ -1014,7 +1015,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'format-strikethrough',
-        label: 'Format: Strikethrough',
+        label: uiText("Format: Strikethrough"),
         contextMenuGroupId: 'renpy-format',
         contextMenuOrder: 4,
         run: (ed) => wrapSelectionWithTag(ed, '{s}', '{/s}'),
@@ -1022,7 +1023,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'create-file-from-selection',
-        label: 'New File from Selection',
+        label: uiText("New File from Selection"),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 5,
         precondition: 'renpyHasSelection',
@@ -1035,7 +1036,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'create-variable-from-selection',
-        label: 'Create Variable from Selection',
+        label: uiText("Create Variable from Selection"),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 6,
         precondition: 'renpyHasSelection',
@@ -1048,7 +1049,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
 
     editor.addAction({
         id: 'create-character-from-selection',
-        label: 'Create Character from Selection',
+        label: uiText("Create Character from Selection"),
         contextMenuGroupId: 'renpy',
         contextMenuOrder: 7,
         precondition: 'renpyHasSelection',
@@ -1147,7 +1148,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
               startColumn: jump.columnStart + 1,
               endLineNumber: jump.line,
               endColumn: jump.columnEnd + 1,
-              message: `Invalid jump: Label '${jump.target}' not found in project.`,
+              message: uiText("Invalid jump: Label '{value0}' not found in project.", { value0: jump.target }),
               severity: monacoInstance.MarkerSeverity.Error,
           }));
 
@@ -1169,7 +1170,7 @@ const EditorView: React.FC<EditorViewProps> = (props) => {
           startColumn: ref.columnStart + 1,
           endLineNumber: ref.line,
           endColumn: ref.columnEnd + 1,
-          message: `Variable "${ref.name}" is used but never defined.`,
+          message: uiText("Variable \"{value0}\" is used but never defined.", { value0: ref.name }),
           severity: monacoInstance.MarkerSeverity.Warning,
       }));
 

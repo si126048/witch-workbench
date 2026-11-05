@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ImageMapComposer.tsx
  * @description Visual hotspot editor for Ren'Py `imagemap` compositions (~500 lines).
@@ -287,7 +288,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                         <button
                             onClick={() => setIsRenaming(true)}
                             className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                            aria-label="Rename imagemap"
+                            aria-label={uiText("Rename imagemap")}
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -296,7 +297,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                     )}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {imagemap.hotspots.length} hotspot{imagemap.hotspots.length !== 1 ? 's' : ''}
+                    {imagemap.hotspots.length} {(" " + uiText("hotspot") + "")}{imagemap.hotspots.length !== 1 ? 's' : ''}
                 </div>
             </div>
 
@@ -305,15 +306,14 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                 {/* Left Panel - Settings */}
                 <div className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-y-auto">
                     <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">Screen Settings</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">{uiText("Screen Settings")}</h3>
                     </div>
 
                     <div className="p-3 space-y-4">
                         {/* Screen Name */}
                         <div>
                             <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                Screen Name
-                            </label>
+                                {uiText("Screen Name")}</label>
                             <input
                                 type="text"
                                 value={imagemap.screenName}
@@ -326,8 +326,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                         {/* Ground Image */}
                         <div>
                             <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                Ground Image
-                            </label>
+                                {uiText("Ground Image")}</label>
                             <div
                                 onDrop={handleGroundImageDrop}
                                 onDragOver={(e) => e.preventDefault()}
@@ -337,7 +336,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                     <div className="space-y-2">
                                         <img
                                             src={imagemap.groundImage.dataUrl}
-                                            alt="Ground"
+                                            alt={uiText("Ground")}
                                             className="w-full h-32 object-contain rounded"
                                         />
                                         <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
@@ -347,13 +346,11 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                             onClick={() => onImageMapChange(prev => ({ ...prev, groundImage: null }))}
                                             className="text-xs text-red-600 dark:text-red-400 hover:underline"
                                         >
-                                            Remove
-                                        </button>
+                                            {uiText("Remove")}</button>
                                     </div>
                                 ) : (
                                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        Drag an image here from Assets
-                                    </p>
+                                        {uiText("Drag an image here from Assets")}</p>
                                 )}
                             </div>
                         </div>
@@ -361,8 +358,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                         {/* Hover Image */}
                         <div>
                             <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                Hover Image (Optional)
-                            </label>
+                                {uiText("Hover Image (Optional)")}</label>
                             <div
                                 onDrop={handleHoverImageDrop}
                                 onDragOver={(e) => e.preventDefault()}
@@ -372,7 +368,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                     <div className="space-y-2">
                                         <img
                                             src={imagemap.hoverImage.dataUrl}
-                                            alt="Hover"
+                                            alt={uiText("Hover")}
                                             className="w-full h-32 object-contain rounded"
                                         />
                                         <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
@@ -382,13 +378,11 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                             onClick={() => onImageMapChange(prev => ({ ...prev, hoverImage: null }))}
                                             className="text-xs text-red-600 dark:text-red-400 hover:underline"
                                         >
-                                            Remove
-                                        </button>
+                                            {uiText("Remove")}</button>
                                     </div>
                                 ) : (
                                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        Drag an image here from Assets
-                                    </p>
+                                        {uiText("Drag an image here from Assets")}</p>
                                 )}
                             </div>
                         </div>
@@ -403,7 +397,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                             <div className="relative inline-block">
                                 <img
                                     src={imagemap.groundImage.dataUrl}
-                                    alt="Ground"
+                                    alt={uiText("Ground")}
                                     className="max-w-full h-auto"
                                 />
                                 <div
@@ -452,7 +446,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                     <svg className="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
-                                    <p className="text-sm font-medium">Add a ground image to start</p>
+                                    <p className="text-sm font-medium">{uiText("Add a ground image to start")}</p>
                                 </div>
                             </div>
                         )}
@@ -461,7 +455,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                     {/* Code Preview */}
                     <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex-shrink-0">
                         <div className="flex justify-between items-center px-2 py-1">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase">Code Preview</span>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase">{uiText("Code Preview")}</span>
                             <CodeActionButtons code={generateCode()} size="xs" />
                         </div>
                         <pre className="p-3 font-mono text-xs overflow-auto text-gray-600 dark:text-gray-400 select-text max-h-24 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
@@ -474,7 +468,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                 <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col">
                     <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
                         <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">
-                            Hotspots ({imagemap.hotspots.length})
+                            {uiText("Hotspots (")}{imagemap.hotspots.length})
                         </h3>
                     </div>
 
@@ -492,7 +486,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                             >
                                 <div className="flex items-center justify-between mb-1">
                                     <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                                        Hotspot {index + 1}
+                                        {("" + uiText("Hotspot") + " ")}{index + 1}
                                     </span>
                                     <button
                                         onClick={(e) => {
@@ -500,7 +494,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                             removeHotspot(hotspot.id);
                                         }}
                                         className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-                                        aria-label="Delete hotspot"
+                                        aria-label={uiText("Delete hotspot")}
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -508,16 +502,16 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                     </button>
                                 </div>
                                 <div className="text-[10px] text-gray-500 dark:text-gray-400 space-y-0.5">
-                                    <div>Position: ({Math.round(hotspot.x)}, {Math.round(hotspot.y)})</div>
-                                    <div>Size: {Math.round(hotspot.width)} × {Math.round(hotspot.height)}</div>
+                                    <div>{uiText("Position: (")}{Math.round(hotspot.x)}, {Math.round(hotspot.y)})</div>
+                                    <div>{("" + uiText("Size:") + " ")}{Math.round(hotspot.width)} × {Math.round(hotspot.height)}</div>
                                 </div>
                             </div>
                         ))}
 
                         {imagemap.hotspots.length === 0 && (
                             <div className="text-center py-8 text-gray-400 dark:text-gray-500">
-                                <p className="text-xs">No hotspots yet</p>
-                                <p className="text-xs mt-1">Click and drag on the canvas to create one</p>
+                                <p className="text-xs">{uiText("No hotspots yet")}</p>
+                                <p className="text-xs mt-1">{uiText("Click and drag on the canvas to create one")}</p>
                             </div>
                         )}
                     </div>
@@ -525,28 +519,26 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                     {/* Selected Hotspot Properties */}
                     {selectedHotspot && (
                         <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 space-y-3">
-                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide">Properties</h4>
+                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide">{uiText("Properties")}</h4>
 
                             {/* Action Type */}
                             <div>
                                 <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                    Action
-                                </label>
+                                    {uiText("Action")}</label>
                                 <select
                                     value={selectedHotspot.actionType}
                                     onChange={(e) => updateHotspot(selectedHotspot.id, { actionType: e.target.value as ImageMapActionType })}
                                     className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
                                 >
-                                    <option value="jump">Jump</option>
-                                    <option value="call">Call</option>
+                                    <option value="jump">{uiText("Jump")}</option>
+                                    <option value="call">{uiText("Call")}</option>
                                 </select>
                             </div>
 
                             {/* Target Label */}
                             <div>
                                 <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                    Target Label
-                                </label>
+                                    {uiText("Target Label")}</label>
                                 <input
                                     type="text"
                                     value={selectedHotspot.targetLabel}
@@ -588,8 +580,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                        Width
-                                    </label>
+                                        {uiText("Width")}</label>
                                     <input
                                         type="number"
                                         value={Math.round(selectedHotspot.width)}
@@ -599,8 +590,7 @@ const ImageMapComposer: React.FC<ImageMapComposerProps> = ({
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                        Height
-                                    </label>
+                                        {uiText("Height")}</label>
                                     <input
                                         type="number"
                                         value={Math.round(selectedHotspot.height)}

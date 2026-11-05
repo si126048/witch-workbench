@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SnippetGridView.tsx
  * @description Grid-based snippet browser with search and category filtering.
@@ -25,10 +26,10 @@ interface SnippetGridViewProps {
 type SortOption = 'alphabetical' | 'mostUsed' | 'recent' | 'favorites';
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'alphabetical', label: 'Alphabetical' },
-  { value: 'mostUsed', label: 'Most Copied' },
-  { value: 'recent', label: 'Recently Used' },
-  { value: 'favorites', label: 'Favorites First' },
+  { value: 'alphabetical', label: uiText("Alphabetical") },
+  { value: 'mostUsed', label: uiText("Most Copied") },
+  { value: 'recent', label: uiText("Recently Used") },
+  { value: 'favorites', label: uiText("Favorites First") },
 ];
 
 const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
@@ -160,7 +161,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
     const result = await exportSnippetPack(exportCategories, `${sanitizeFileNameSegment('vangard-snippets')}.json`);
     if (result.canceled) return;
     setExportStatus(result.success
-      ? { type: 'success', message: `Exported ${selected.length} snippet${selected.length === 1 ? '' : 's'}${result.filePath ? ` to ${result.filePath}` : '.'}` }
+      ? { type: 'success', message: uiText("Exported {value0} snippet{value1}{value2}", { value0: selected.length, value1: selected.length === 1 ? '' : 's', value2: result.filePath ? ` to ${result.filePath}` : '.' }) }
       : { type: 'error', message: result.error ?? 'Export failed.' });
     if (result.success) {
       setSelectMode(false);
@@ -172,7 +173,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
     const result = await exportSnippetPack([category], `${sanitizeFileNameSegment(category.name)}.json`);
     if (result.canceled) return;
     setExportStatus(result.success
-      ? { type: 'success', message: `Exported "${category.name}"${result.filePath ? ` to ${result.filePath}` : '.'}` }
+      ? { type: 'success', message: uiText("Exported \"{value0}\"{value1}", { value0: category.name, value1: result.filePath ? ` to ${result.filePath}` : '.' }) }
       : { type: 'error', message: result.error ?? 'Export failed.' });
   };
 
@@ -202,10 +203,10 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
         <input
           ref={searchInputRef}
           type="text"
-          placeholder="Search snippets..."
+          placeholder={uiText("Search snippets...")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          title="Press / to search, Esc to clear"
+          title={uiText("Press / to search, Esc to clear")}
           className="w-full px-3 py-2 pl-9 rounded-md border border-primary bg-secondary text-primary placeholder-secondary focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <svg
@@ -242,8 +243,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
             onClick={clearFilters}
             className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
           >
-            Clear Filters
-          </button>
+            {uiText("Clear Filters")}</button>
         )}
         {selectedCategories.size === 1 && (
           <button
@@ -254,8 +254,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
             }}
             className="px-3 py-1 rounded-full text-xs font-medium bg-tertiary text-secondary hover:bg-primary hover:text-primary border border-primary transition-colors"
           >
-            Export Category
-          </button>
+            {uiText("Export Category")}</button>
         )}
         <button
           onClick={toggleSelectMode}
@@ -265,18 +264,18 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
               : 'bg-tertiary text-secondary hover:bg-primary hover:text-primary border border-primary'
           }`}
         >
-          {selectMode ? 'Cancel Select' : 'Select'}
+          {selectMode ? uiText("Cancel Select") : uiText("Select")}
         </button>
         {selectMode && selectedIds.size > 0 && (
           <button
             onClick={handleExportSelected}
             className="px-3 py-1 rounded-full text-xs font-medium bg-accent text-white hover:bg-accent-hover transition-colors"
           >
-            Export Selected ({selectedIds.size})
+            {uiText("Export Selected (")}{selectedIds.size})
           </button>
         )}
         <div className="ml-auto flex items-center gap-1.5">
-          <label htmlFor="snippet-sort" className="text-xs text-secondary">Sort by:</label>
+          <label htmlFor="snippet-sort" className="text-xs text-secondary">{uiText("Sort by:")}</label>
           <select
             id="snippet-sort"
             value={sortBy}
@@ -292,8 +291,8 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
 
       {/* Results Count */}
       <div className="text-xs text-secondary">
-        {filteredSnippets.length} {filteredSnippets.length === 1 ? 'snippet' : 'snippets'}
-        {(selectedCategories.size > 0 || searchQuery) && ` (filtered from ${allSnippets.length})`}
+        {filteredSnippets.length} {filteredSnippets.length === 1 ? uiText("snippet") : uiText("snippets")}
+        {(selectedCategories.size > 0 || searchQuery) && (" " + uiText("(filtered from {value0})", { value0: allSnippets.length }) + "")}
       </div>
 
       {exportStatus && (
@@ -318,8 +317,8 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="text-sm">No snippets found</p>
-          <p className="text-xs mt-1">Try adjusting your search or filters</p>
+          <p className="text-sm">{uiText("No snippets found")}</p>
+          <p className="text-xs mt-1">{uiText("Try adjusting your search or filters")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -343,7 +342,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
                         type="checkbox"
                         checked={selectedIds.has(snippetId)}
                         onChange={() => toggleSnippetSelected(snippetId)}
-                        aria-label={`Select ${snippet.title}`}
+                        aria-label={uiText("Select {value0}", { value0: snippet.title })}
                         className="mt-1 flex-shrink-0"
                       />
                     )}
@@ -355,8 +354,8 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
                   <div className="flex items-center flex-shrink-0 ml-2 gap-1">
                     <button
                       onClick={() => toggleFavorite(snippetId)}
-                      aria-label={stat.favorite ? `Unfavorite ${snippet.title}` : `Favorite ${snippet.title}`}
-                      title={stat.favorite ? 'Remove from favorites' : 'Add to favorites'}
+                      aria-label={stat.favorite ? uiText("Unfavorite {value0}", { value0: snippet.title }) : uiText("Favorite {value0}", { value0: snippet.title })}
+                      title={stat.favorite ? uiText("Remove from favorites") : uiText("Add to favorites")}
                       className={`p-0.5 rounded transition-colors ${stat.favorite ? 'text-amber-500' : 'text-secondary hover:text-amber-500'}`}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="h-3.5 w-3.5" fill={stat.favorite ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={1.5}>
@@ -387,7 +386,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
                     onClick={() => setExpandedSnippet(isExpanded ? null : snippetId)}
                     onMouseEnter={() => setHoveredSnippet(snippetId)}
                     onMouseLeave={() => setHoveredSnippet(prev => (prev === snippetId ? null : prev))}
-                    title={isExpanded ? 'Click to collapse' : 'Click to expand'}
+                    title={isExpanded ? uiText("Click to collapse") : uiText("Click to expand")}
                   >
                     <code>{isExpanded ? snippet.code : codePreview}</code>
                   </div>
@@ -407,8 +406,8 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
                       {snippet.category}
                     </span>
                     {stat.copyCount > 0 && (
-                      <span className="text-[10px] text-secondary" title={`Copied ${stat.copyCount} time${stat.copyCount === 1 ? '' : 's'}`}>
-                        Copied {stat.copyCount}×
+                      <span className="text-[10px] text-secondary" title={uiText("Copied {value0} time{value1}", { value0: stat.copyCount, value1: stat.copyCount === 1 ? '' : 's' })}>
+                        {("" + uiText("Copied") + " ")}{stat.copyCount}×
                       </span>
                     )}
                   </div>
@@ -417,7 +416,7 @@ const SnippetGridView: React.FC<SnippetGridViewProps> = ({ categories }) => {
                       onClick={() => setExpandedSnippet(isExpanded ? null : snippetId)}
                       className="text-[10px] text-secondary hover:text-accent transition-colors"
                     >
-                      {isExpanded ? 'Show less' : 'Show more'}
+                      {isExpanded ? uiText("Show less") : uiText("Show more")}
                     </button>
                   )}
                 </div>

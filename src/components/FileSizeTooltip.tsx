@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file FileSizeTooltip.tsx
  * @description Portal-rendered hover tooltip showing file-size severity
@@ -47,7 +48,7 @@ const FileSizeTooltip: React.FC<FileSizeTooltipProps> = ({
           className="fixed z-[9999] w-56 rounded-md border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-2xl px-3 py-2 text-xs text-gray-700 dark:text-gray-300 pointer-events-none"
         >
           <div className="font-semibold text-gray-800 dark:text-gray-100 truncate mb-1">{fileName}</div>
-          <div>{lineCount.toLocaleString()} / {limit.toLocaleString()} lines [{label}]</div>
+          <div>{lineCount.toLocaleString()} / {limit.toLocaleString()} {(" " + uiText("lines [") + "")}{label}]</div>
           <div className="mt-1 text-gray-500 dark:text-gray-400">
             {labelCount} label{labelCount !== 1 ? 's' : ''}, {jumpCount} jump{jumpCount !== 1 ? 's' : ''}
           </div>

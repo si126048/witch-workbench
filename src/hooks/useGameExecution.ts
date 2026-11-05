@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useState, useCallback, useEffect } from 'react';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
@@ -48,7 +49,7 @@ export function useGameExecution({
     if (!window.electronAPI?.clearScreenshots) return;
     const result = await window.electronAPI.clearScreenshots();
     if (result.success) {
-      addToast(`Cleared ${result.count} screenshot${result.count !== 1 ? 's' : ''}`, 'success');
+      addToast(uiText("Cleared {value0} screenshot{value1}", { value0: result.count, value1: result.count !== 1 ? 's' : '' }), 'success');
       await refreshScreenshotCount();
       window.electronAPI.updateExplorerMenuState?.({ hasScreenshots: false });
     }
@@ -59,7 +60,7 @@ export function useGameExecution({
     const path = await window.electronAPI.getLatestScreenshotPath();
     if (path) {
       await navigator.clipboard.writeText(path);
-      addToast('Screenshot path copied to clipboard', 'success');
+      addToast(uiText("Screenshot path copied to clipboard"), 'success');
     }
   }, [addToast]);
 
@@ -74,7 +75,7 @@ export function useGameExecution({
   useEffect(() => {
     if (!window.electronAPI?.onScreenshotCaptured) return;
     const removeListener = window.electronAPI.onScreenshotCaptured((data: { filename: string; filepath: string }) => {
-      addToast(`Screenshot saved: ${data.filename}`, 'success');
+      addToast(uiText("Screenshot saved: {value0}", { value0: data.filename }), 'success');
       void refreshScreenshotCount();
     });
     return removeListener;
@@ -110,16 +111,16 @@ export function useGameExecution({
   useEffect(() => {
     if (!window.electronAPI?.onUpdateAvailable) return;
     const removeAvailable = window.electronAPI.onUpdateAvailable((version: string) => {
-      addToast(`Update v${version} is downloading in the background.`, 'info');
+      addToast(uiText("Update v{value0} is downloading in the background.", { value0: version }), 'info');
     });
     const removeNotAvailable = window.electronAPI.onUpdateNotAvailable?.(() => {
-      addToast('Vangard Studio is up to date.', 'info');
+      addToast(uiText("Vangard Studio is up to date."), 'info');
     });
     const removeError = window.electronAPI.onUpdateError?.(() => {
-      addToast('Could not check for updates. Check your connection and try again.', 'error');
+      addToast(uiText("Could not check for updates. Check your connection and try again."), 'error');
     });
     const removeDownloaded = window.electronAPI.onUpdateDownloaded((version: string) => {
-      addToast(`Update v${version} ready — restart Vangard Studio to install.`, 'success');
+      addToast(uiText("Update v{value0} ready — restart Vangard Studio to install.", { value0: version }), 'success');
     });
     return () => {
       removeAvailable();

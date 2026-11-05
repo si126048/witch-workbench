@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SearchPanel.tsx
  * @description Full-text search interface (179 lines).
@@ -79,7 +80,7 @@ const SearchPanel: React.FC = () => {
     return (
         <aside className="w-full h-full bg-white dark:bg-gray-800 flex flex-col z-10">
             <div className="flex-none p-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold">Search</h2>
+                <h2 className="text-xl font-bold">{uiText("Search")}</h2>
             </div>
             <div className="flex-none p-2 space-y-2 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center space-x-1">
@@ -90,7 +91,7 @@ const SearchPanel: React.FC = () => {
                         <div className="flex items-center space-x-2">
                             <input
                                 type="text"
-                                placeholder="Search"
+                                placeholder={uiText("Search")}
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 onKeyDown={handleSearchKeyDown}
@@ -101,23 +102,21 @@ const SearchPanel: React.FC = () => {
                                     onClick={onCancelSearch}
                                     className="px-3 py-1 text-sm font-semibold rounded bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900"
                                 >
-                                    Cancel
-                                </button>
+                                    {uiText("Cancel")}</button>
                             ) : (
                                 <button
                                     onClick={onSearch}
                                     disabled={!query}
                                     className="px-3 py-1 text-sm font-semibold rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 disabled:opacity-50"
                                 >
-                                    Find All
-                                </button>
+                                    {uiText("Find All")}</button>
                             )}
                         </div>
                         {showReplace && (
                             <div className="flex items-center space-x-2">
                                 <input
                                     type="text"
-                                    placeholder="Replace"
+                                    placeholder={uiText("Replace")}
                                     value={replace}
                                     onChange={(e) => setReplace(e.target.value)}
                                     className="w-full px-2 py-1 text-sm rounded bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"
@@ -125,34 +124,33 @@ const SearchPanel: React.FC = () => {
                                 <button
                                     onClick={onReplaceAll}
                                     disabled={!query || totalMatches === 0}
-                                    title="Replace All"
+                                    title={uiText("Replace All")}
                                     className="px-3 py-1 text-sm font-semibold rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 disabled:opacity-50"
                                 >
-                                    Replace All
-                                </button>
+                                    {uiText("Replace All")}</button>
                             </div>
                         )}
                     </div>
                 </div>
                  <div className="flex items-center justify-start ml-6">
                     <div className="flex items-center space-x-1">
-                        <SearchOptionButton title="Match Case (Alt+C)" isActive={options.isCaseSensitive} onClick={() => setOptions({ ...options, isCaseSensitive: !options.isCaseSensitive })}>
+                        <SearchOptionButton title={uiText("Match Case (Alt+C)")} isActive={options.isCaseSensitive} onClick={() => setOptions({ ...options, isCaseSensitive: !options.isCaseSensitive })}>
                             <span className="text-xs font-mono">Aa</span>
                         </SearchOptionButton>
-                        <SearchOptionButton title="Match Whole Word (Alt+W)" isActive={options.isWholeWord} onClick={() => setOptions({ ...options, isWholeWord: !options.isWholeWord })}>
+                        <SearchOptionButton title={uiText("Match Whole Word (Alt+W)")} isActive={options.isWholeWord} onClick={() => setOptions({ ...options, isWholeWord: !options.isWholeWord })}>
                              <span className="text-xs font-mono">ab|</span>
                         </SearchOptionButton>
-                        <SearchOptionButton title="Use Regular Expression (Alt+R)" isActive={options.isRegex} onClick={() => setOptions({ ...options, isRegex: !options.isRegex })}>
+                        <SearchOptionButton title={uiText("Use Regular Expression (Alt+R)")} isActive={options.isRegex} onClick={() => setOptions({ ...options, isRegex: !options.isRegex })}>
                              <span className="text-xs font-mono">.*</span>
                         </SearchOptionButton>
                     </div>
                 </div>
             </div>
             <div className="flex-1 min-h-0 p-2 overflow-y-auto overscroll-contain">
-                 {isSearching && <p className="text-sm text-gray-500 dark:text-gray-400 px-2">Searching...</p>}
+                 {isSearching && <p className="text-sm text-gray-500 dark:text-gray-400 px-2">{uiText("Searching...")}</p>}
                  {!isSearching && results.length > 0 && (
                      <p className="text-xs text-gray-500 dark:text-gray-400 px-2 pb-2">
-                        {totalMatches} result{totalMatches !== 1 ? 's' : ''} in {results.length} file{results.length !== 1 ? 's' : ''}
+                        {totalMatches} {(" " + uiText("result") + "")}{totalMatches !== 1 ? 's' : ''} {(" " + uiText("in") + " ")}{results.length} {(" " + uiText("file") + "")}{results.length !== 1 ? 's' : ''}
                      </p>
                  )}
                 {results.map(fileResult => (
@@ -181,7 +179,7 @@ const SearchPanel: React.FC = () => {
                     </div>
                 ))}
                 {!isSearching && query && results.length === 0 && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 px-2">No results found.</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 px-2">{uiText("No results found.")}</p>
                 )}
             </div>
         </aside>

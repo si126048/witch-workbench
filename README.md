@@ -1,34 +1,135 @@
-# 夜幕工作台
+# 夜幕工作台 · Nightfall Workbench
 
-Windows 本地 Ren’Py 制作工作台，基于 Vangard Studio。使用 Electron、React、TypeScript 和 Monaco，增加中文深色制作界面、版本化场景演出及 Git / Git LFS 团队同步。无需专用协作后端。
+面向 Windows 的本地 Ren’Py 制作工具：编辑剧本、管理素材、编排场景演出，通过 Git / Git LFS 与团队异步协作。无需搭建专用协作服务器。
 
-本版为 0.2.0，手动升级、未签名 Windows 安装包。新增负责人建队、成员加入包和日常启动快捷方式；实际验证范围和限制见随交付提供的验收记录，不将未验证能力视为生产可用。
+基于 [Vangard Studio](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide)，沿用 Electron、React、TypeScript、Monaco 与上游解析能力。本项目是独立修改版，与上游分别维护。
 
-## 使用与分发
+## 当前版本 0.3.0
 
-- [使用说明书与团队安装指南](docs/使用说明书.md)
-- [架构与数据契约](docs/nightfall-architecture.md)
-- [上游版权声明](NOTICE-NIGHTFALL.md) 与 [AGPL 许可证](LICENSE)
-- [保留的上游说明](docs/UPSTREAM_README.md)
+安装文件为 `Nightfall_Workbench_Windows_0.3.0.exe`。这一版接在 0.2.0 的团队建队、加入包和日常启动之上：
 
-安装包位于本机构建的 `release/Nightfall_Workbench_Windows_0.2.0.exe`。新版交付目录为 `delivery/0.2.0`，旧的 0.1.0 材料保留。尚未上传公共下载站点；负责人可将安装包、匹配源码、许可证、说明书和校验文件放入团队网盘或自己仓库的 Releases。游戏项目使用独立仓库，成员分别克隆工作副本。团队启动向导用法见说明书第 11 节。
+- 界面默认简体中文，覆盖工作台面板、系统菜单和 Monaco 内置操作。用户剧本、代码标识、文件名以及 Git / SDK 原始日志保留原文。
+- 修复窗口变窄时工具栏按钮被压缩、遮挡后无法点击的问题。中间工具区可以横向滚动，按钮和画布切换组保持原有宽度。
 
-## 开发与验证
+从 0.2.0 升级时，先保存制作中的内容并退出旧版，再安装本版。个人配置仍在 `%APPDATA%/nightfall-workbench`。范围和已检查项见 [0.3.0 更新与验收](docs/中文界面验收记录.md)。
 
-使用 Node.js 24、Git 和 Git LFS。在 Windows 终端执行：
+## 下载与安装
 
-```text
+从 **[Releases 发布页](https://github.com/si126048/witch-workbench/releases)** 下载 Windows 安装包和同版本说明书。普通使用不需要 Node.js 或编译源码。
+
+1. 退出旧版，运行 `Nightfall_Workbench_Windows_0.3.0.exe` 安装。
+2. 下载并解压 [Ren’Py SDK 8.5.3](https://www.renpy.org/release/8.5.3)，放在长期使用、当前账号可写的目录。SDK 单独安装。
+3. 打开工作台“设置”，选择 SDK 根目录，即包含 `renpy.exe` 和 `renpy.py` 的文件夹。
+4. 需要团队协作时，安装 [Git for Windows](https://git-scm.com/downloads/win) 和 [Git LFS](https://git-lfs.com/)，然后重启工作台。
+
+目前提供未签名 Windows 安装包，采用手动升级。请核对发布附件中的 SHA-256。首次安装、仓库认证和成员授权仍需本人完成。
+
+## 五分钟开始制作
+
+### 新建或打开游戏
+
+首页选择“新建项目”，指定项目名称、目录和 SDK。建议将游戏与 SDK 分开放置。
+
+已有工程选择“打开项目”，打开**包含 `game` 文件夹的根目录**。从 `game/script.rpy` 的 `label start:` 开始编写；保存后点击运行或按 `F5`，用 Ren’Py 实机检查结果。工具栏停止按钮用于停止游戏。
+
+### 编辑场景演出
+
+1. 图片放在 `game/images`，音频放在 `game/audio`。
+2. 进入“制作工作台 → 场景演出”，新建或打开场景。
+3. 添加图层，调整位置、缩放、旋转、透明度与关键帧；添加对白、转场、音乐和音效事件。
+4. 点击“审阅生成差异”，审阅后“确认成对保存”。
+5. 在手写剧本中使用 `call nf_<场景ID>` 播放，例如 `call nf_opening`。
+
+演出文档保存到 `.nightfall/scenes/<ID>.json`，脚本保存到 `game/nightfall_generated/<ID>.rpy`，两者需一同保存和提交。舞台用于快速预览，不播放音频；对白等待和最终音画效果以实机为准。手写脚本不会自动反向转换为演出文档。
+
+也可从 Releases 获取原创样片，解压后打开其项目根目录，体验保存、重开和运行流程。
+
+## 团队协作：三个入口
+
+点击首页“团队协作启动”或工具栏的分支图标。
+
+| 入口 | 适用人员 | 主要操作 |
+|---|---|---|
+| 负责人建队 | 项目负责人 | 配置游戏仓库和默认分支，生成加入 ZIP，可附带匹配的安装包 |
+| 成员首次加入 | 新成员 | 导入配置，选择空目录，克隆游戏，配置本机提交身份和 SDK |
+| 日常开工 | 已加入成员 | 创建个人桌面快捷方式，以后双击即可获取远端状态并打开自己的副本 |
+
+**工作台源码和游戏工程分别管理。** 本仓库存放工作台代码；游戏剧本、素材和演出使用你们单独创建的游戏仓库。
+
+### 负责人首次建队
+
+1. 在 GitHub 等平台创建游戏仓库并邀请成员。私有仓库成员先接受邀请。
+2. 打开本地游戏，进入“负责人建队”，填写名称、仓库地址、默认分支和推荐 SDK 版本。
+3. 配置当前仓库。已有 `origin` 不匹配时会拒绝覆盖，请明确处理。
+4. 到“团队同步 → 仓库管理”审阅并应用 LFS 规则，再提交、推送初始游戏内容。空远端尚无分支时，成员无法克隆。
+5. 生成加入包并分发。分发程序时同时提供对应源码、许可证和说明书。
+
+### 成员首次加入
+
+将加入 ZIP **完整解压**，双击“加入团队.cmd”。按向导检测 Git/LFS，配置系统凭据或 SSH，再选择空文件夹克隆。提交姓名和邮箱只修改当前工作副本的 Git 设置。
+
+安装程序须与工作台版本匹配，SDK 由成员分别安装。加入包不保存密码、令牌或负责人的本机项目路径。
+
+### 日常同步与冲突
+
+每人使用自己的副本，为场景或任务创建分支，通过托管平台 Pull Request 审阅合并。不要共同编辑一个网盘同步的工作目录。
+
+日常快捷方式只执行 `fetch`，不自动拉取、合并或丢弃修改。快进拉取失败后需显式合并。文本冲突提供三方比较；演出冲突应选完整有效的文档版本，再重新生成脚本。本版不自动 rebase 或强推。
+
+大文件使用 Git LFS。二进制锁依赖远端支持，不能替代分工。网络失败仍可本地保存和提交；推送失败保留提交，方便重试。
+
+## 常见问题
+
+| 问题 | 处理方式 |
+|---|---|
+| SDK 无效或无法运行 | 选择真实 SDK 根目录，确认 `renpy.exe` 存在；不要使用测试夹具或临时缓存目录 |
+| Git/LFS 未检测到 | 安装后完全退出并重启，确认终端 `git --version`、`git lfs version` 可运行 |
+| 私有仓库无法克隆 | 检查邀请和系统凭据/SSH；地址中不要嵌入密码或令牌 |
+| 配置或切换项目被阻止 | 保存剧本与项目设置；演出须在演出页审阅保存 |
+| 素材缺失或显示 LFS 指针 | 检查相对路径，并在项目目录执行 `git lfs pull` |
+| 演出不能提交 | 同时选择演出 JSON 和对应脚本，确认已成对保存且没有外部修改 |
+| 克隆失败后不能重试 | 按错误原因处理网络/认证问题，再选新的空目录；不要覆盖既有内容 |
+
+## 能力边界与文档
+
+面向小团队异步制作；首版不含实时共同编辑、在线状态、内置任务评论和自动更新。0.3.0 默认使用简体中文，覆盖工作台面板、系统菜单和 Monaco 内置操作；代码、变量名、文件名及外部 Git/SDK 原始日志保留原文。实际可用范围以对应版本验收记录为准，CI 不能代替对游戏本身的测试。
+
+- [完整使用说明书](docs/使用说明书.md)：恢复、冲突、加入包和分发步骤。
+- [架构说明](docs/nightfall-architecture.md)：模块边界、场景契约和保存事务。
+- [0.2.0 验收记录](docs/团队启动验收记录.md)：实际检查结果和限制。
+- [0.3.0 更新与验收](docs/中文界面验收记录.md)：中文覆盖范围及本轮验证结果。
+- [上游原始说明](docs/UPSTREAM_README.md)。
+
+## 从源码开发
+
+使用 Node.js 24、Git 和 Git LFS，在 Windows 终端执行：
+
+```powershell
+git clone https://github.com/si126048/witch-workbench.git
+cd witch-workbench
 npm ci
+npm run electron:start
+```
+
+检查和构建：
+
+```powershell
 npm run typecheck
 npm run lint
 npm run test:coverage
 npm run build
+npm --prefix website ci
 npm run docs:check
 npm run test:e2e
+node scripts/build-windows.js
 ```
 
-端到端测试会多次启动桌面窗口，请在专用测试桌面或 CI 中运行。开发启动：`npm run electron:start`。Ren’Py SDK 另行配置，验收版本为 8.5.3。
+界面测试会启动桌面窗口，请在专用测试桌面或 CI 运行，不与个人制作共用配置目录。运行测试时保持 renderer 不变，不要同时重建 `dist`。打包时冻结运行时源码，脚本会对照 ASAR 内脚本字节并检查语法。
 
-Windows 打包使用 `node scripts/build-windows.js`。构建时冻结源码，完成后检查 ASAR 中脚本字节与语法。生成离线说明书使用 `node scripts/build-manual.js`。
+默认界面语言为简体中文。维护者可在启动前设置环境变量 `NIGHTFALL_UI_LANGUAGE=en` 检查英文回退；继承的测试默认覆盖英文，`e2e/chinese-workbench.spec.ts` 专门覆盖实际交付的中文界面。翻译词表位于 `src/lib/uiText.zh.json`，未知文案保留英文，不翻译用户剧本。
 
-仓库保留上游历史，基线为 `fa3999a977b7f374df75962d6da3a0cbe42a3810`；`upstream` 禁止推送。请为自己的发布配置独立远端，不向上游自动发布。继承的发布工作流已停用，Windows 校验工作流不会自动发布安装包。
+## 许可证与致谢
+
+采用 [AGPL-3.0-only](LICENSE)，保留 [上游作者与修改版声明](NOTICE-NIGHTFALL.md)。分发安装程序时请提供匹配的源码与许可证。Ren’Py 和字体分别遵循各自许可证。
+
+上游基线为 `fa3999a977b7f374df75962d6da3a0cbe42a3810`，历史保留。问题可通过本仓库 Issues 反馈；提交前请去除令牌、凭据和个人隐私信息。

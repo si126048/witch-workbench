@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file NotecardCanvas.tsx
  * @description Notecard Canvas shell: a permanent top/bottom split between the Timeline pane
@@ -123,8 +124,8 @@ const KanbanCard: React.FC<{
             style={{ backgroundColor: TAB_COLORS[card.color] }}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => setIsColorPickerOpen(o => !o)}
-            title="Change Color"
-            aria-label="Change notecard color"
+            title={uiText("Change Color")}
+            aria-label={uiText("Change notecard color")}
           />
           {isColorPickerOpen && (
             <div className="absolute top-4 left-0 bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 rounded p-1 flex gap-1 z-50">
@@ -173,8 +174,8 @@ const KanbanCard: React.FC<{
             onClick={(e) => { e.stopPropagation(); deleteCard(card.id); }}
             onPointerDown={(e) => e.stopPropagation()}
             className="text-black/30 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
-            title="Delete Notecard"
-            aria-label="Delete notecard"
+            title={uiText("Delete Notecard")}
+            aria-label={uiText("Delete notecard")}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
           </button>
@@ -188,7 +189,7 @@ const KanbanCard: React.FC<{
           value={bodyDraft}
           onChange={(e) => setBodyDraft(e.target.value)}
           onBlur={commitBody}
-          placeholder="Type a note..."
+          placeholder={uiText("Type a note...")}
           onPointerDown={(e) => e.stopPropagation()}
         />
       ) : (
@@ -667,15 +668,15 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
       {isTimelinePaneOpen ? (
         <div ref={timelinePaneRef} data-testid="notecard-timeline-pane" style={{ height: timelinePaneSize, flexShrink: 0 }} className="flex flex-col min-h-0 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between px-2 py-1 flex-shrink-0 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Timeline</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{uiText("Timeline")}</span>
             <div className="flex items-center gap-2">
               {usedSlots.length > 0 && (
-                <CopyButton text={formatFullTimeline(notecards, timelineSettings)} label="Copy Full Timeline" size="xs" />
+                <CopyButton text={formatFullTimeline(notecards, timelineSettings)} label={uiText("Copy Full Timeline")} size="xs" />
               )}
               <button
                 onClick={() => setIsTimelinePaneOpen(false)}
-                title="Collapse Timeline"
-                aria-label="Collapse Timeline"
+                title={uiText("Collapse Timeline")}
+                aria-label={uiText("Collapse Timeline")}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" /></svg>
@@ -718,7 +719,7 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
                           {getTimelineSlotLabel(timelineSettings, slot)}
                         </button>
                         {usedSlots.includes(slot) && (
-                          <div title="Copy this scene's cards">
+                          <div title={uiText("Copy this scene's cards")}>
                             <CopyButton text={formatSlotContent(notecards, slot)} label="" size="xs" />
                           </div>
                         )}
@@ -747,11 +748,11 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
         </div>
       ) : (
         <div className="flex items-center justify-between px-2 py-1 flex-shrink-0 border-b border-gray-200 dark:border-gray-700">
-          <span className="text-xs text-gray-500 dark:text-gray-400">Timeline (collapsed)</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">{uiText("Timeline (collapsed)")}</span>
           <button
             onClick={() => setIsTimelinePaneOpen(true)}
-            title="Expand Timeline"
-            aria-label="Expand Timeline"
+            title={uiText("Expand Timeline")}
+            aria-label={uiText("Expand Timeline")}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
@@ -768,10 +769,10 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
         <div className="flex-1 min-h-0 flex flex-col">
           <div className="flex items-center justify-between px-2 py-1 flex-shrink-0 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Unsorted</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{uiText("Unsorted")}</span>
               <input
                 type="text"
-                placeholder="Search notecards…"
+                placeholder={uiText("Search notecards…")}
                 className="w-56 px-2 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -779,8 +780,8 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
             </div>
             <button
               onClick={() => setIsUnsortedPaneOpen(false)}
-              title="Collapse Unsorted"
-              aria-label="Collapse Unsorted"
+              title={uiText("Collapse Unsorted")}
+              aria-label={uiText("Collapse Unsorted")}
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" /></svg>
@@ -846,7 +847,7 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
                   <input
                     autoFocus
                     className="absolute z-40 text-xs px-1 py-0.5 rounded border border-indigo-400 bg-white dark:bg-gray-800"
-                    placeholder="Link label…"
+                    placeholder={uiText("Link label…")}
                     style={{ left: (a.x + b.x) / 2, top: (a.y + b.y) / 2 }}
                     value={labelDraft}
                     onChange={(e) => setLabelDraft(e.target.value)}
@@ -883,11 +884,11 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
         </div>
       ) : (
         <div className="flex items-center justify-between px-2 py-1 flex-shrink-0">
-          <span className="text-xs text-gray-500 dark:text-gray-400">Unsorted (collapsed)</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">{uiText("Unsorted (collapsed)")}</span>
           <button
             onClick={() => setIsUnsortedPaneOpen(true)}
-            title="Expand Unsorted"
-            aria-label="Expand Unsorted"
+            title={uiText("Expand Unsorted")}
+            aria-label={uiText("Expand Unsorted")}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
@@ -907,20 +908,17 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
                 className="block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                 onClick={() => { insertTimelineSlot(contextMenu.slot as number); setContextMenu(null); }}
               >
-                Insert Scene Before
-              </button>
+                {uiText("Insert Scene Before")}</button>
               <button
                 className="block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                 onClick={() => { insertTimelineSlot((contextMenu.slot as number) + 1); setContextMenu(null); }}
               >
-                Insert Scene After
-              </button>
+                {uiText("Insert Scene After")}</button>
               <button
                 className="block w-full text-left px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                 onClick={() => { deleteTimelineSlot(contextMenu.slot as number); setContextMenu(null); }}
               >
-                Delete This Scene
-              </button>
+                {uiText("Delete This Scene")}</button>
             </>
           ) : contextMenu.cardId ? (() => {
             const card = cardById(contextMenu.cardId as string);
@@ -929,7 +927,7 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
               <div className="px-1">
                 <CopyButton
                   text={formatCard(card)}
-                  label="Copy Scene Content"
+                  label={uiText("Copy Scene Content")}
                   size="xs"
                   className="w-full justify-start"
                 />
@@ -940,8 +938,7 @@ const NotecardCanvas: React.FC<NotecardCanvasProps> = ({
               className="block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={() => { addNotecard({ x: contextMenu.worldX, y: contextMenu.worldY }); setContextMenu(null); }}
             >
-              New Notecard
-            </button>
+              {uiText("New Notecard")}</button>
           )}
         </div>
       )}

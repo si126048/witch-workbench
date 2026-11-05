@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file MenuConstructor.tsx
  * @description Live Ren'Py `menu` block code builder with bidirectional form ↔ code sync (~350 lines).
@@ -274,32 +275,30 @@ const MenuConstructor: React.FC<MenuConstructorProps> = ({ analysisResult, activ
             {/* Top: Visual Editor */}
             <div className="flex-1 overflow-y-auto p-4 border-b-2 border-gray-300 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-bold text-gray-700 dark:text-gray-300">Menu Constructor</h3>
+                    <h3 className="font-bold text-gray-700 dark:text-gray-300">{uiText("Menu Constructor")}</h3>
                     <div className="flex space-x-2">
                         <button onClick={handleClear} className="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded text-sm font-semibold">
-                            Clear
-                        </button>
+                            {uiText("Clear")}</button>
                         <button onClick={addChoice} disabled={!!parseError} className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-sm font-semibold disabled:opacity-50">
-                            + Add Choice
-                        </button>
+                            {uiText("+ Add Choice")}</button>
                     </div>
                 </div>
 
                 {parseError ? (
                     <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded text-sm text-yellow-700 dark:text-yellow-300 mb-4 border border-yellow-300 dark:border-yellow-600">
                         {parseError} <br/>
-                        <span className="text-xs opacity-75">Edit in the code box below or simplify syntax to restore visual editor.</span>
+                        <span className="text-xs opacity-75">{uiText("Edit in the code box below or simplify syntax to restore visual editor.")}</span>
                     </div>
                 ) : (
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Narrator Caption (Optional)</label>
+                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{uiText("Narrator Caption (Optional)")}</label>
                             <input 
                                 type="text" 
                                 value={caption} 
                                 onChange={(e) => setCaption(e.target.value)} 
                                 className="w-full p-2 text-sm border rounded dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 focus:ring-2 focus:ring-indigo-500"
-                                placeholder='e.g. "What should I do?"'
+                                placeholder={uiText("e.g. \"What should I do?\"")}
                             />
                         </div>
 
@@ -311,7 +310,7 @@ const MenuConstructor: React.FC<MenuConstructorProps> = ({ analysisResult, activ
                                 return (
                                     <div key={choice.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-3 shadow-sm group">
                                         <div className="flex justify-between items-start mb-2">
-                                            <span className="text-xs font-bold text-gray-400">Choice {idx + 1}</span>
+                                            <span className="text-xs font-bold text-gray-400">{("" + uiText("Choice") + " ")}{idx + 1}</span>
                                             <div className="flex space-x-1 opacity-50 group-hover:opacity-100 transition-opacity">
                                                 <button onClick={() => moveChoice(idx, -1)} disabled={idx === 0} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded disabled:opacity-30">
                                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
@@ -331,17 +330,17 @@ const MenuConstructor: React.FC<MenuConstructorProps> = ({ analysisResult, activ
                                                 value={choice.text} 
                                                 onChange={(e) => updateChoice(choice.id, 'text', e.target.value)} 
                                                 className="w-full p-1.5 text-sm border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 font-medium"
-                                                placeholder="Choice Text"
+                                                placeholder={uiText("Choice Text")}
                                             />
                                             
                                             <div className="flex flex-col space-y-1">
-                                                <span className="text-xs text-gray-500 font-mono">Display if</span>
+                                                <span className="text-xs text-gray-500 font-mono">{uiText("Display if")}</span>
                                                 <div className="flex-1 relative">
                                                     <textarea 
                                                         value={choice.condition} 
                                                         onChange={(e) => updateChoice(choice.id, 'condition', e.target.value)} 
                                                         className={`w-full p-1.5 text-xs border rounded dark:bg-gray-700 font-mono resize-y ${conditionValidation.length > 0 ? 'border-yellow-500' : 'dark:border-gray-600'}`}
-                                                        placeholder="condition (optional)"
+                                                        placeholder={uiText("condition (optional)")}
                                                         rows={1}
                                                     />
                                                     {conditionValidation.length > 0 && (
@@ -358,7 +357,7 @@ const MenuConstructor: React.FC<MenuConstructorProps> = ({ analysisResult, activ
                                                     onChange={(e) => updateChoice(choice.id, 'logic', e.target.value)}
                                                     className={`w-full p-2 text-xs font-mono border rounded bg-gray-50 dark:bg-gray-900 ${logicValidation.issues.length > 0 ? 'border-red-400' : 'dark:border-gray-600'}`}
                                                     rows={3}
-                                                    placeholder="jump label..."
+                                                    placeholder={uiText("jump label...")}
                                                 />
                                                 {logicValidation.issues.length > 0 && (
                                                     <div className="absolute right-2 bottom-2 text-red-500" title={logicValidation.issues.join('\n')}>
@@ -378,7 +377,7 @@ const MenuConstructor: React.FC<MenuConstructorProps> = ({ analysisResult, activ
             {/* Bottom: Code View */}
             <div className="h-1/3 bg-gray-50 dark:bg-gray-950 flex flex-col border-t border-gray-200 dark:border-gray-700">
                 <div className="flex justify-between items-center px-3 py-1 bg-gray-200 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
-                    <span className="text-xs font-bold text-gray-500 uppercase">Generated Code</span>
+                    <span className="text-xs font-bold text-gray-500 uppercase">{uiText("Generated Code")}</span>
                     <CodeActionButtons code={code} size="xs" />
                 </div>
                 <textarea 

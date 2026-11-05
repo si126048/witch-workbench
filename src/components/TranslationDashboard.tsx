@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file TranslationDashboard.tsx
  * @description Read-only dashboard that displays translation coverage across
@@ -133,16 +134,15 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
     <button
       onClick={() => setShowGenerateForm(true)}
       disabled={!isRenpyPathValid || isGenerating}
-      title={!isRenpyPathValid ? 'Configure Ren\'Py SDK path in settings first' : undefined}
+      title={!isRenpyPathValid ? uiText("Configure Ren'Py SDK path in settings first") : undefined}
       className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       data-testid="generate-translations-btn"
     >
       {isGenerating ? (
         <>
           <svg className="animate-spin h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-          Generating...
-        </>
-      ) : 'Generate Translations'}
+          {uiText("Generating...")}</>
+      ) : uiText("Generate Translations")}
     </button>
   );
 
@@ -169,16 +169,15 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
                 <h3 id="generate-translation-title" className="text-base font-semibold text-primary">
-                  Generate Translations
-                </h3>
+                  {uiText("Generate Translations")}</h3>
                 <p className="text-xs text-secondary mt-1">
-                  Enter the language code Ren'Py should generate under <code className="px-1 py-0.5 bg-tertiary rounded">game/tl/</code>.
+                  {("" + uiText("Enter the language code Ren'Py should generate under") + " ")}<code className="px-1 py-0.5 bg-tertiary rounded">game/tl/</code>.
                 </p>
               </div>
               <button
                 onClick={() => { setShowGenerateForm(false); setLanguageInput(''); }}
                 className="text-secondary hover:text-primary text-lg leading-none"
-                aria-label="Close dialog"
+                aria-label={uiText("Close dialog")}
               >
                 ×
               </button>
@@ -187,7 +186,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
             <div className="flex flex-col gap-3">
               <input
                 type="text"
-                placeholder='e.g. "french", "japanese"'
+                placeholder={uiText("e.g. \"french\", \"japanese\"")}
                 value={languageInput}
                 onChange={e => setLanguageInput(e.target.value.toLowerCase())}
                 onKeyDown={e => { if (e.key === 'Enter') handleGenerate(); }}
@@ -196,7 +195,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
                 autoFocus
               />
               {languageInput && !isLanguageValid && (
-                <span className="text-xs text-red-500" data-testid="language-validation-error">Lowercase letters, numbers, underscores only. Must start with a letter.</span>
+                <span className="text-xs text-red-500" data-testid="language-validation-error">{uiText("Lowercase letters, numbers, underscores only. Must start with a letter.")}</span>
               )}
               <div className="flex justify-end gap-2 pt-1">
                 <button
@@ -204,16 +203,14 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
                   className="px-3 py-1.5 text-xs font-medium rounded-md bg-secondary text-secondary hover:bg-tertiary border border-primary transition-colors"
                   data-testid="cancel-generate-btn"
                 >
-                  Cancel
-                </button>
+                  {uiText("Cancel")}</button>
                 <button
                   onClick={handleGenerate}
                   disabled={!isLanguageValid || isGenerating}
                   className="px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   data-testid="confirm-generate-btn"
                 >
-                  Generate
-                </button>
+                  {uiText("Generate")}</button>
               </div>
             </div>
           </div>
@@ -240,9 +237,9 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
     if (tlBlock) {
       setSelectedLanguage(language);
       onOpenBlock(tlBlock.id);
-      addToast?.(`No ${language} translation yet for this string — opened ${tlPath} so you can add it.`, 'info');
+      addToast?.(uiText("No {value0} translation yet for this string — opened {value1} so you can add it.", { value0: language, value1: tlPath }), 'info');
     } else {
-      addToast?.(`No translation file exists yet for ${language}. Generate translations first.`, 'warning');
+      addToast?.(uiText("No translation file exists yet for {value0}. Generate translations first.", { value0: language }), 'warning');
       onOpenBlock(sourceBlockId, sourceLine);
     }
   }, [blocks, onOpenBlock, addToast]);
@@ -341,11 +338,9 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
           <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
           </svg>
-          <h3 className="text-lg font-semibold text-primary">No Translations Detected</h3>
+          <h3 className="text-lg font-semibold text-primary">{uiText("No Translations Detected")}</h3>
           <p className="text-sm text-center max-w-md">
-            Ren'Py stores translations under <code className="px-1 py-0.5 bg-secondary rounded text-xs">game/tl/&lt;language&gt;/</code> directories.
-            Generate translations with Ren'Py's built-in tool or create translation files manually to see coverage here.
-          </p>
+            {("" + uiText("Ren'Py stores translations under") + " ")}<code className="px-1 py-0.5 bg-secondary rounded text-xs">game/tl/&lt;language&gt;/</code> {(" " + uiText("directories. Generate translations with Ren'Py's built-in tool or create translation files manually to see coverage here.") + "")}</p>
           {!showGenerateForm && generateButton}
         </div>
         {generateModal}
@@ -358,7 +353,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
       {/* ── Section 1: Language Overview Cards (sticky) ── */}
       <section className="flex-none px-6 pt-6 pb-4 border-b border-primary">
         <div className="flex items-center justify-between mb-3">
-          <SectionLabel>Language Coverage</SectionLabel>
+          <SectionLabel>{uiText("Language Coverage")}</SectionLabel>
           {!showGenerateForm && generateButton}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -375,7 +370,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
               <ProgressBar percent={cov.completionPercent} />
               <div className="flex justify-between text-xs text-secondary">
                 <span>{cov.translatedCount - cov.staleCount}/{cov.totalStrings}</span>
-                {cov.staleCount > 0 && <span className="text-amber-500">{cov.staleCount} stale</span>}
+                {cov.staleCount > 0 && <span className="text-amber-500">{cov.staleCount} {(" " + uiText("stale") + "")}</span>}
               </div>
             </button>
           ))}
@@ -411,7 +406,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
                     statusFilter === s ? 'bg-indigo-500 text-white' : 'bg-secondary text-secondary hover:bg-tertiary'
                   }`}
                 >
-                  {s === 'all' ? 'All Status' : s}
+                  {s === 'all' ? uiText("All Status") : s}
                 </button>
               ))}
             </div>
@@ -423,13 +418,13 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
               </svg>
               <input
                 type="text"
-                placeholder="Filter files or strings..."
+                placeholder={uiText("Filter files or strings...")}
                 value={textFilter}
                 onChange={e => setTextFilter(e.target.value)}
                 className="w-full pl-7 pr-2 py-1 text-xs bg-secondary border border-primary rounded focus:outline-none focus:ring-1 focus:ring-indigo-400 text-primary placeholder:text-secondary"
               />
             </div>
-            <span className="text-xs text-secondary flex-none">{fileRows.length} file{fileRows.length !== 1 ? 's' : ''}</span>
+            <span className="text-xs text-secondary flex-none">{fileRows.length} {(" " + uiText("file") + "")}{fileRows.length !== 1 ? 's' : ''}</span>
           </div>
         </div>
       )}
@@ -439,7 +434,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
         {/* ── Section 2: File Breakdown Table ── */}
         {activeCoverage && (
           <section className="flex-1 min-h-0 flex flex-col">
-            <SectionLabel>File Breakdown — {activeLang}</SectionLabel>
+            <SectionLabel>{("" + uiText("File Breakdown —") + " ")}{activeLang}</SectionLabel>
             <div className="flex-1 min-h-0 overflow-auto rounded-lg border border-primary">
               <table className="w-full text-sm">
                 <thead className="sticky top-0 z-10">
@@ -484,7 +479,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
                     );
                   })}
                   {fileRows.length === 0 && (
-                    <tr><td colSpan={6} className="px-3 py-6 text-center text-secondary text-xs">No matching files</td></tr>
+                    <tr><td colSpan={6} className="px-3 py-6 text-center text-secondary text-xs">{uiText("No matching files")}</td></tr>
                   )}
                 </tbody>
               </table>
@@ -494,7 +489,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
 
         {/* ── Section 3: String-Level View (Virtual) ── */}
         <section className="flex-1 min-h-0 flex flex-col">
-          <SectionLabel>Translatable Strings ({stringItems.length})</SectionLabel>
+          <SectionLabel>{uiText("Translatable Strings (")}{stringItems.length})</SectionLabel>
           <div
             ref={containerRef}
             onScroll={handleScroll}
@@ -521,7 +516,7 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
                       s.type === 'narration' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300' :
                       'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300'
                     }`}>
-                      {s.type === 'menu-choice' ? 'choice' : s.type}
+                      {s.type === 'menu-choice' ? uiText("choice") : s.type}
                     </span>
 
                     {/* Source text */}
@@ -548,8 +543,8 @@ const TranslationDashboard: React.FC<TranslationDashboardProps> = ({ translation
                             key={lang}
                             type="button"
                             className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded transition-colors focus:outline-none focus:ring-1 focus:ring-indigo-400 cursor-pointer hover:brightness-95 ${color}`}
-                            title={t ? (isStale ? `${lang}: stale` : `${lang}: ${t.translatedText}`) : `${lang}: missing — click to go to the tl/${lang}/ file`}
-                            aria-label={t ? `Open ${lang} translation` : `Go to ${lang} translation file`}
+                            title={t ? (isStale ? uiText("{value0}: stale", { value0: lang }) : `${lang}: ${t.translatedText}`) : uiText("{value0}: missing — click to go to the tl/{value1}/ file", { value0: lang, value1: lang })}
+                            aria-label={t ? uiText("Open {value0} translation", { value0: lang }) : uiText("Go to {value0} translation file", { value0: lang })}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (t) {

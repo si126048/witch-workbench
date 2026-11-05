@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file RouteCanvas.tsx
  * @description Label-by-label narrative flow visualization (521 lines).
@@ -177,7 +178,7 @@ const Arrow: React.FC<{
           }}
           style={{ cursor: 'pointer', pointerEvents: 'all', filter: isHovered ? 'brightness(1.5) drop-shadow(0 0 4px currentColor)' : undefined }}
         >
-          <title>{`Click to center ${targetNode.label}. Alt+click centers ${sourceNode.label}.`}</title>
+          <title>{uiText("Click to center {value0}. Alt+click centers {value1}.", { value0: targetNode.label, value1: sourceNode.label })}</title>
           <path
               d={pathData}
               stroke="transparent"
@@ -1384,7 +1385,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
     <div
       ref={canvasRef}
       role="application"
-      aria-label="Route canvas"
+      aria-label={uiText("Route canvas")}
       className="absolute inset-0 overflow-hidden cursor-grab active:cursor-grabbing bg-gray-100 dark:bg-gray-900 bg-[radial-gradient(#d4d4d8_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)]"
       style={backgroundStyle}
       onPointerDown={handlePointerDown}
@@ -1393,7 +1394,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
     >
       <div ref={announceLiveRef} role="status" aria-live="polite" aria-atomic="true" className="sr-only" />
       {/* ── Canvas Toolbox (top-left) — section order: Layout → Nav → Routes → Menu Inspector ── */}
-      <CanvasToolbox label="Flow Canvas">
+      <CanvasToolbox label={uiText("Flow Canvas")}>
         <CanvasLayoutControls
           canvasLabel="Flow Canvas"
           layoutMode={layoutMode}
@@ -1412,8 +1413,8 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
           <button
             onClick={() => applyHistoryEntry(navHistoryIndex - 1)}
             disabled={navHistoryIndex <= 0}
-            title="Back ([)"
-            aria-label="Back"
+            title={uiText("Back ([)")}
+            aria-label={uiText("Back")}
             className="h-8 w-8 shrink-0 rounded-md border border-gray-200 dark:border-gray-700 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L8.414 9H16a1 1 0 110 2H8.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" /></svg>
@@ -1421,8 +1422,8 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
           <button
             onClick={() => applyHistoryEntry(navHistoryIndex + 1)}
             disabled={navHistoryIndex < 0 || navHistoryIndex >= navHistory.length - 1}
-            title="Forward (])"
-            aria-label="Forward"
+            title={uiText("Forward (])")}
+            aria-label={uiText("Forward")}
             className="h-8 w-8 shrink-0 rounded-md border border-gray-200 dark:border-gray-700 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 4.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L11.586 11H4a1 1 0 110-2h7.586L7.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
@@ -1437,7 +1438,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
             }}
             onFocus={() => setShowRouteSearchResults(true)}
             onKeyDown={event => event.stopPropagation()}
-            placeholder="Go to label..."
+            placeholder={uiText("Go to label...")}
             className="flex-1 rounded-md border border-gray-200 dark:border-gray-700 bg-transparent px-2 py-1.5 text-sm"
           />
         </div>
@@ -1450,10 +1451,10 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                 onClick={() => centerOnNode(node.id)}
               >
                 <div className="font-mono text-gray-900 dark:text-gray-100">{node.label}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">{node.containerName ?? 'Unknown file'}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">{node.containerName ?? uiText("Unknown file")}</div>
               </button>
             )) : (
-              <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">No matching labels.</div>
+              <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">{uiText("No matching labels.")}</div>
             )}
           </div>
         )}
@@ -1462,9 +1463,9 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
         {!traceMode && (
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2">
             <div className="mb-1.5 flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Focus</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Focus")}</span>
               {focusMode !== 'none' && selectedNodeIds.length > 0 && (
-                <span className="text-[10px] font-medium text-indigo-500 dark:text-indigo-400">active</span>
+                <span className="text-[10px] font-medium text-indigo-500 dark:text-indigo-400">{uiText("active")}</span>
               )}
             </div>
             <div className="flex gap-1">
@@ -1493,8 +1494,8 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
               })}
               {focusMode !== 'none' && (
                 <button
-                  title="Clear focus"
-                  aria-label="Clear focus"
+                  title={uiText("Clear focus")}
+                  aria-label={uiText("Clear focus")}
                   onClick={() => setFocusMode('none')}
                   className="rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
@@ -1503,7 +1504,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
               )}
             </div>
             {focusMode !== 'none' && selectedNodeIds.length === 0 && (
-              <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">Select a node to activate focus.</p>
+              <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">{uiText("Select a node to activate focus.")}</p>
             )}
           </div>
         )}
@@ -1512,14 +1513,13 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
         {viewLevel === 'label' && !traceMode && (
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2">
             <div className="mb-1.5 flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Overlays</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Overlays")}</span>
               {overlayMode !== 'none' && (
                 <button
                   onClick={() => setOverlayMode('none')}
                   className="text-[10px] text-red-400 hover:text-red-500 dark:hover:text-red-300"
                 >
-                  ✕ Clear
-                </button>
+                  {uiText("✕ Clear")}</button>
               )}
             </div>
             <div className="grid grid-cols-2 gap-1">
@@ -1559,11 +1559,11 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
         {!traceMode && (
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2">
             <div className="mb-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Edge Filters</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Edge Filters")}</span>
             </div>
             <div className="flex gap-1">
               <button
-                title="Show only call edges — highlights reusable subflow structure"
+                title={uiText("Show only call edges — highlights reusable subflow structure")}
                 onClick={() => {
                   setShowOnlyCalls(v => {
                     if (!v) setHideImplicit(false); // mutually exclusive
@@ -1576,10 +1576,9 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                     : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >
-                Calls only
-              </button>
+                {uiText("Calls only")}</button>
               <button
-                title="Hide implicit fall-through edges"
+                title={uiText("Hide implicit fall-through edges")}
                 disabled={showOnlyCalls}
                 onClick={() => setHideImplicit(v => !v)}
                 className={`flex-1 rounded-md border px-1.5 py-1 text-xs transition-colors ${
@@ -1588,8 +1587,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                     : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40'
                 }`}
               >
-                Hide implicit
-              </button>
+                {uiText("Hide implicit")}</button>
             </div>
           </div>
         )}
@@ -1598,28 +1596,27 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
         {viewLevel === 'label' && (traceMode ? (
           <div className="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Trace Mode</span>
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">{uiText("Trace Mode")}</span>
               <button
                 onClick={handleExitTrace}
-                title="Exit trace mode"
-                aria-label="Exit trace mode"
+                title={uiText("Exit trace mode")}
+                aria-label={uiText("Exit trace mode")}
                 className="rounded px-1.5 py-0.5 text-[10px] text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-200"
               >
-                ✕ Exit
-              </button>
+                {uiText("✕ Exit")}</button>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleTraceStep('prev')}
                 disabled={traceIndex <= 0}
-                title="Previous step"
-                aria-label="Previous step"
+                title={uiText("Previous step")}
+                aria-label={uiText("Previous step")}
                 className="h-8 w-8 shrink-0 rounded-md border border-gray-200 dark:border-gray-700 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L8.414 9H16a1 1 0 110 2H8.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" /></svg>
               </button>
               <span className="flex-1 text-center text-xs text-gray-500 dark:text-gray-400">
-                step {traceIndex + 1} / {tracePath.length}
+                {("" + uiText("step") + " ")}{traceIndex + 1} / {tracePath.length}
               </span>
               <button
                 onClick={() => handleTraceStep('next')}
@@ -1627,8 +1624,8 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                   traceIndex >= tracePath.length - 1 &&
                   (outgoingLinksByNode.get(tracePath[traceIndex])?.length ?? 0) === 0
                 }
-                title="Next step"
-                aria-label="Next step"
+                title={uiText("Next step")}
+                aria-label={uiText("Next step")}
                 className="h-8 w-8 shrink-0 rounded-md border border-gray-200 dark:border-gray-700 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 4.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L11.586 11H4a1 1 0 110-2h7.586L7.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
@@ -1640,8 +1637,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
             {traceChooserLinks.length > 0 && (
               <div className="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-800">
-                  Choose next step
-                </p>
+                  {uiText("Choose next step")}</p>
                 {traceChooserLinks.map(link => {
                   const node = nodeMap.get(link.targetId);
                   if (!node) return null;
@@ -1664,7 +1660,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
         ) : selectedNode ? (
           <div className="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-2">
             <div className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Selected: <span className="font-mono normal-case text-gray-900 dark:text-gray-100">{selectedNode.label}</span>
+              {("" + uiText("Selected:") + " ")}<span className="font-mono normal-case text-gray-900 dark:text-gray-100">{selectedNode.label}</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               <button
@@ -1675,7 +1671,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                 disabled={selectedIncomingLinks.length === 0}
                 className="flex-1 rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1.5 text-sm disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
-                Prev ({selectedIncomingLinks.length})
+                {uiText("Prev (")}{selectedIncomingLinks.length})
               </button>
               <button
                 onClick={() => {
@@ -1685,16 +1681,15 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                 disabled={selectedOutgoingLinks.length === 0}
                 className="flex-1 rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1.5 text-sm disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
-                Next ({selectedOutgoingLinks.length})
+                {uiText("Next (")}{selectedOutgoingLinks.length})
               </button>
               <button
                 onClick={handleStartTrace}
-                title="Walk this graph one step at a time"
-                aria-label="Trace — walk this graph one step at a time"
+                title={uiText("Walk this graph one step at a time")}
+                aria-label={uiText("Trace — walk this graph one step at a time")}
                 className="rounded-md border border-indigo-200 dark:border-indigo-700 px-2 py-1.5 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
               >
-                Trace ⇝
-              </button>
+                {uiText("Trace ⇝")}</button>
             </div>
             {chooserMode && (
               <div className="max-h-40 overflow-y-auto rounded-md border border-gray-200 dark:border-gray-700">
@@ -1708,7 +1703,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                       onClick={() => centerOnNode(node.id)}
                     >
                       <div className="font-mono text-gray-900 dark:text-gray-100">{node.label}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">{node.containerName ?? 'Unknown file'}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{node.containerName ?? uiText("Unknown file")}</div>
                     </button>
                   );
                 })}
@@ -1729,11 +1724,11 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
           return (
             <div className="border-t border-gray-200 dark:border-gray-700 pt-2 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Edge</span>
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Edge")}</span>
                 <button
                   onClick={() => setSelectedEdge(null)}
-                  title="Dismiss"
-                  aria-label="Dismiss edge inspector"
+                  title={uiText("Dismiss")}
+                  aria-label={uiText("Dismiss edge inspector")}
                   className="rounded px-1.5 py-0.5 text-[10px] text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-200"
                 >
                   ✕
@@ -1749,7 +1744,7 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                   {selectedEdge.type}
                 </span>
                 {selectedEdge.sourceLine !== undefined && (
-                  <span className="text-[10px] text-gray-400 dark:text-gray-500">line {selectedEdge.sourceLine}</span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500">{("" + uiText("line") + " ")}{selectedEdge.sourceLine}</span>
                 )}
               </div>
               {selectedEdge.choiceText && (
@@ -1765,29 +1760,25 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
                   onClick={() => centerOnNode(selectedEdge.sourceId)}
                   className="rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  Center source
-                </button>
+                  {uiText("Center source")}</button>
                 <button
                   onClick={() => centerOnNode(selectedEdge.targetId)}
                   className="rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  Center target
-                </button>
+                  {uiText("Center target")}</button>
                 {src && (
                   <button
                     onClick={() => onOpenEditor(src.blockId, src.startLine)}
                     className="rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    Open source ↗
-                  </button>
+                    {uiText("Open source ↗")}</button>
                 )}
                 {tgt && (
                   <button
                     onClick={() => onOpenEditor(tgt.blockId, tgt.startLine)}
                     className="rounded-md border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    Open target ↗
-                  </button>
+                    {uiText("Open target ↗")}</button>
                 )}
               </div>
             </div>
@@ -1821,73 +1812,63 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
           onClick={() => setShowLegend(v => !v)}
           className="w-full flex items-center gap-1.5 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          <span>Legend</span>
+          <span>{uiText("Legend")}</span>
           <svg xmlns="http://www.w3.org/2000/svg" className={`h-3.5 w-3.5 text-gray-400 ml-auto transition-transform ${showLegend ? '' : '-rotate-90'}`} viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
           </svg>
         </button>
         {showLegend && (
           <div className="px-3 pb-3 pt-1 space-y-2 text-xs text-gray-600 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Edges</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{uiText("Edges")}</p>
             <div className="flex items-center gap-2">
               <svg width="28" height="10" className="shrink-0">
                 <path d="M0,5 L20,5" stroke="#4f46e5" strokeWidth="2.5" fill="none" />
                 <polygon points="18,2 26,5 18,8" fill="#4f46e5" />
               </svg>
-              Jump
-            </div>
+              {uiText("Jump")}</div>
             <div className="flex items-center gap-2">
               <svg width="28" height="10" className="shrink-0">
                 <circle cx="4" cy="5" r="3.5" fill="none" stroke="#7c3aed" strokeWidth="2" />
                 <path d="M8,5 L20,5" stroke="#7c3aed" strokeWidth="2.5" fill="none" />
                 <polygon points="18,2 26,5 18,8" fill="#7c3aed" />
               </svg>
-              Call <span className="text-gray-400 dark:text-gray-500">(circle = returns)</span>
+              {("" + uiText("Call") + " ")}<span className="text-gray-400 dark:text-gray-500">{uiText("(circle = returns)")}</span>
             </div>
             <div className="flex items-center gap-2">
               <svg width="28" height="10" className="shrink-0">
                 <path d="M0,5 L20,5" stroke="#94a3b8" strokeWidth="2.5" fill="none" strokeDasharray="4,2" />
                 <polygon points="18,2 26,5 18,8" fill="#94a3b8" />
               </svg>
-              Implicit flow
-            </div>
+              {uiText("Implicit flow")}</div>
             <div className="flex items-center gap-2">
               <svg width="16" height="16" className="shrink-0">
                 <circle cx="8" cy="8" r="7" fill="#4f46e5" opacity="0.9" />
                 <text x="8" y="8" textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="bold" fill="white">2</text>
               </svg>
-              Menu choices
-            </div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 pt-1">Nodes</p>
+              {uiText("Menu choices")}</div>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 pt-1">{uiText("Nodes")}</p>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-green-500 border-2 border-white dark:border-gray-800 inline-block" />
-              Entry (start)
-            </div>
+              {uiText("Entry (start)")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-orange-400 border-2 border-white dark:border-gray-800 inline-block" />
-              Unreachable
-            </div>
+              {uiText("Unreachable")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-amber-500 border-2 border-white dark:border-gray-800 inline-block" />
-              Dead end
-            </div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 pt-1">Overlays</p>
+              {uiText("Dead end")}</div>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 pt-1">{uiText("Overlays")}</p>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-sky-500 border-2 border-white dark:border-gray-800 inline-block" />
-              Hub (≥3 incoming)
-            </div>
+              {uiText("Hub (≥3 incoming)")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-violet-500 border-2 border-white dark:border-gray-800 inline-block" />
-              Branch (≥3 outgoing)
-            </div>
+              {uiText("Branch (≥3 outgoing)")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-rose-500 border-2 border-white dark:border-gray-800 inline-block" />
-              Menu-heavy (≥2 menus)
-            </div>
+              {uiText("Menu-heavy (≥2 menus)")}</div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 shrink-0 rounded-full bg-teal-500 border-2 border-white dark:border-gray-800 inline-block" />
-              Call-heavy (≥2 calls in)
-            </div>
+              {uiText("Call-heavy (≥2 calls in)")}</div>
           </div>
         )}
       </div>
@@ -2125,25 +2106,21 @@ const RouteCanvas: React.FC<RouteCanvasProps> = ({
           onPointerDown={event => event.stopPropagation()}
         >
           <button className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => handleFollowLink(edgeContextMenu.link, 'target')}>
-            Center target
-          </button>
+            {uiText("Center target")}</button>
           <button className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => handleFollowLink(edgeContextMenu.link, 'source')}>
-            Center source
-          </button>
+            {uiText("Center source")}</button>
           <button className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => {
             const node = nodeMap.get(edgeContextMenu.link.targetId);
             if (node) onOpenEditor(node.blockId, node.startLine);
             closeTransientUi();
           }}>
-            Open target in editor
-          </button>
+            {uiText("Open target in editor")}</button>
           <button className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700" onClick={() => {
             const node = nodeMap.get(edgeContextMenu.link.sourceId);
             if (node) onOpenEditor(node.blockId, node.startLine);
             closeTransientUi();
           }}>
-            Open source in editor
-          </button>
+            {uiText("Open source in editor")}</button>
         </div>
       )}
       {nodeContextMenu && (

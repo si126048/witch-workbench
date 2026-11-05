@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file MarkdownPreviewView.tsx
  * @description Split preview/edit view for `.md` files (~200 lines).
@@ -39,7 +40,7 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
         savedContentRef.current = text;
       } catch (err) {
         logger.error('Failed to load markdown file', err);
-        setError('Failed to load file.');
+        setError(uiText("Failed to load file."));
       } finally {
         setIsLoading(false);
       }
@@ -55,10 +56,10 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
       await window.electronAPI.writeFile(fullPath, content);
       savedContentRef.current = content;
       setIsDirty(false);
-      addToast?.('File saved', 'success');
+      addToast?.(uiText("File saved"), 'success');
     } catch (err) {
       logger.error('Failed to save markdown file', err);
-      addToast?.('Failed to save file', 'error');
+      addToast?.(uiText("Failed to save file"), 'error');
     }
   }, [content, filePath, projectRootPath, isDirty, addToast]);
 
@@ -95,7 +96,7 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full text-secondary">
-        Loading {fileName}...
+        {("" + uiText("Loading") + " ")}{fileName}...
       </div>
     );
   }
@@ -114,7 +115,7 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
       <div className="flex-none flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
         <div className="flex items-center space-x-2">
           <span className="text-sm font-semibold text-secondary">{fileName}</span>
-          {isDirty && <span className="text-xs text-blue-500 font-medium">Modified</span>}
+          {isDirty && <span className="text-xs text-blue-500 font-medium">{uiText("Modified")}</span>}
         </div>
         <div className="flex items-center space-x-2">
           {mode === 'edit' && isDirty && (
@@ -122,8 +123,7 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
               onClick={handleSave}
               className="px-3 py-1 text-xs font-semibold rounded bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
             >
-              Save
-            </button>
+              {uiText("Save")}</button>
           )}
           <div className="flex rounded-md overflow-hidden border border-gray-300 dark:border-gray-600">
             <button
@@ -133,10 +133,9 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
                   ? 'bg-indigo-600 text-white'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
-              aria-label="Preview markdown"
+              aria-label={uiText("Preview markdown")}
             >
-              Preview
-            </button>
+              {uiText("Preview")}</button>
             <button
               onClick={() => setMode('edit')}
               className={`px-3 py-1 text-xs font-semibold transition-colors ${
@@ -144,10 +143,9 @@ const MarkdownPreviewView: React.FC<MarkdownPreviewViewProps> = ({ filePath, pro
                   ? 'bg-indigo-600 text-white'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
-              aria-label="Edit markdown"
+              aria-label={uiText("Edit markdown")}
             >
-              Edit
-            </button>
+              {uiText("Edit")}</button>
           </div>
         </div>
       </div>

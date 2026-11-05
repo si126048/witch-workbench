@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useModalAccessibility } from '@/hooks/useModalAccessibility';
@@ -101,19 +102,17 @@ const WarpVariablesModal: React.FC<WarpVariablesModalProps> = ({
         onMouseDown={event => event.stopPropagation()}
       >
         <header className="border-b border-gray-800 px-5 py-4">
-          <h2 id="warp-variables-title" className="text-lg font-semibold">Warp Variables</h2>
+          <h2 id="warp-variables-title" className="text-lg font-semibold">{uiText("Warp Variables")}</h2>
           <p className="mt-1 text-sm text-gray-400">
-            {warpLabelName ? `Edit any default values before warping to ${warpLabelName}. ` : 'Edit any default values you want applied for this warp launch. '}
-            The IDE will write a temporary <code className="rounded bg-gray-800 px-1 py-0.5 font-mono text-xs">_ide_after_warp.rpy</code> and remove it when the game stops.
-          </p>
+            {warpLabelName ? ("" + uiText("Edit any default values before warping to {value0}.", { value0: warpLabelName }) + " ") : ("" + uiText("Edit any default values you want applied for this warp launch.") + " ")}
+            {("" + uiText("The IDE will write a temporary") + " ")}<code className="rounded bg-gray-800 px-1 py-0.5 font-mono text-xs">_ide_after_warp.rpy</code> {(" " + uiText("and remove it when the game stops.") + "")}</p>
         </header>
 
         <form onSubmit={handleSubmit}>
           <main className="max-h-[68vh] overflow-y-auto px-5 py-4">
             {hasExistingAfterWarp && (
               <div className="mb-4 rounded-lg border border-amber-700/60 bg-amber-950/40 px-4 py-3 text-sm text-amber-100">
-                This project already defines <code className="font-mono text-xs">label after_warp</code>, so the temporary file will only carry the variable overrides.
-              </div>
+                {("" + uiText("This project already defines") + " ")}<code className="font-mono text-xs">label after_warp</code>{uiText(", so the temporary file will only carry the variable overrides.")}</div>
             )}
 
             {drafts.length > 0 ? (
@@ -133,13 +132,11 @@ const WarpVariablesModal: React.FC<WarpVariablesModalProps> = ({
               </div>
             ) : (
               <div className="rounded-lg border border-dashed border-gray-700 bg-gray-950/30 px-4 py-6 text-sm text-gray-400">
-                No default variables were found. Vangard Studio can still generate the temporary after_warp hook if needed.
-              </div>
+                {uiText("No default variables were found. Vangard Studio can still generate the temporary after_warp hook if needed.")}</div>
             )}
 
             <div className="mt-4 text-xs text-gray-500">
-              {variableCount} variable{variableCount === 1 ? '' : 's'} available for temporary warp overrides.
-            </div>
+              {variableCount} {(" " + uiText("variable") + "")}{variableCount === 1 ? '' : 's'} {(" " + uiText("available for temporary warp overrides.") + "")}</div>
           </main>
 
           <footer className="flex items-center justify-end gap-3 border-t border-gray-800 bg-gray-950/70 px-5 py-4">
@@ -148,14 +145,12 @@ const WarpVariablesModal: React.FC<WarpVariablesModalProps> = ({
               onClick={onClose}
               className="rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-100 hover:bg-gray-700"
             >
-              Cancel
-            </button>
+              {uiText("Cancel")}</button>
             <button
               type="submit"
               className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
             >
-              Warp Now
-            </button>
+              {uiText("Warp Now")}</button>
           </footer>
         </form>
       </div>

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file useProjectIO.ts
  * @description Custom hook for project save, reload, and refresh operations.
@@ -241,7 +242,7 @@ export function useProjectIO(params: UseProjectIOParams): UseProjectIOReturn {
       return true;
     } catch (e) {
       logger.error("Failed to save IDE settings:", e);
-      addToast(e instanceof Error ? `Failed to save workspace settings: ${e.message}` : 'Failed to save workspace settings', 'error');
+      addToast(e instanceof Error ? uiText("Failed to save workspace settings: {value0}", { value0: e.message }) : uiText("Failed to save workspace settings"), 'error');
       return false;
     }
   }, [projectRootPath, buildSettingsForDisk, addToast, setHasUnsavedSettings]);
@@ -293,7 +294,7 @@ export function useProjectIO(params: UseProjectIOParams): UseProjectIOReturn {
                setHasUnsavedSettings(false);
                setSaveStatus('saved');
                notifyFirstSave();
-               addToast('Changes saved to memory', 'success');
+               addToast(uiText("Changes saved to memory"), 'success');
                return true;
           }
 
@@ -346,24 +347,24 @@ export function useProjectIO(params: UseProjectIOParams): UseProjectIOReturn {
           if (!settingsSaved) {
               // handleSaveProjectSettings already toasted the underlying error.
               setSaveStatus('error');
-              addToast('Script files were saved, but workspace settings were not', 'warning');
+              addToast(uiText("Script files were saved, but workspace settings were not"), 'warning');
               return false;
           }
           setSaveStatus('saved');
           if (sourcesPendingRecovery) {
-            addToast('Saved, but some files are still being finalized -- they will be completed automatically on the next save or project load', 'warning');
+            addToast(uiText("Saved, but some files are still being finalized -- they will be completed automatically on the next save or project load"), 'warning');
             return true;
           }
           if (untitledSaveFailed) {
-            addToast('Some changes saved — one or more untitled files were not saved', 'warning');
+            addToast(uiText("Some changes saved — one or more untitled files were not saved"), 'warning');
             return false;
           }
-          addToast('All changes saved', 'success');
+          addToast(uiText("All changes saved"), 'success');
           return true;
       } catch (err) {
           logger.error('Failed to save changes', err);
           setSaveStatus('error');
-          addToast(err instanceof Error ? err.message : 'Failed to save changes', 'error');
+          addToast(err instanceof Error ? err.message : uiText("Failed to save changes"), 'error');
           return false;
       }
     };
@@ -371,10 +372,10 @@ export function useProjectIO(params: UseProjectIOParams): UseProjectIOReturn {
     if (conflictingPaths.length > 0) {
       const names = conflictingPaths.map(p => p.split('/').pop()).join(', ');
       openUnsavedChangesModal({
-        title: 'Overwrite External Changes?',
-        message: `${conflictingPaths.length} file(s) were modified on disk: ${names}. Save All will overwrite those changes with your editor versions.`,
-        confirmText: 'Save All',
-        dontSaveText: 'Cancel',
+        title: uiText("Overwrite External Changes?"),
+        message: uiText("{value0} file(s) were modified on disk: {value1}. Save All will overwrite those changes with your editor versions.", { value0: conflictingPaths.length, value1: names }),
+        confirmText: uiText("Save All"),
+        dontSaveText: uiText("Cancel"),
         onConfirm: async () => {
           closeUnsavedChangesModal();
           setFilesWithDiskConflict(prev => {
@@ -412,7 +413,7 @@ export function useProjectIO(params: UseProjectIOParams): UseProjectIOReturn {
           setFilesWithDiskConflict(prev => { const next = new Set(prev); next.delete(item.relativePath); return next; });
       } catch (err) {
           logger.error('Failed to reload externally changed file', err);
-          addToast(`Failed to reload ${item.relativePath}`, 'error');
+          addToast(uiText("Failed to reload {value0}", { value0: item.relativePath }), 'error');
       }
   }, [blocks, setBlocks, addToast, editorInstances, setDirtyBlockIds, setDirtyEditors, setExternallyChangedFiles, setFilesWithDiskConflict]);
 
@@ -541,10 +542,10 @@ export function useProjectIO(params: UseProjectIOParams): UseProjectIOReturn {
           if (removedPaths.size) summary.push(`${removedPaths.size} removed`);
           if (silentUpdates.length) summary.push(`${silentUpdates.length} updated`);
           if (toQueue.length) summary.push(`${toQueue.length} conflict(s) need review`);
-          addToast(summary.length ? `Refreshed: ${summary.join(', ')}` : 'Project is up to date', 'success');
+          addToast(summary.length ? uiText("Refreshed: {value0}", { value0: summary.join(', ') }) : uiText("Project is up to date"), 'success');
       } catch (err) {
           logger.error('Failed to refresh project:', err);
-          addToast('Failed to refresh project', 'error');
+          addToast(uiText("Failed to refresh project"), 'error');
       }
   }, [projectRootPath, addToast, setBlocks, setFileSystemTree, setImages, setAudios, setOpenTabs, blocksRef, dirtyBlockIdsRef, dirtyEditorsRef, editorInstances, setExternallyChangedFiles]);
 

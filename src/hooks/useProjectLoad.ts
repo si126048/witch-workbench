@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useCallback } from 'react';
 import type { Updater } from 'use-immer';
 import { deserializeProjectData } from '@/lib/projectSerializer';
@@ -331,11 +332,11 @@ export function useProjectLoad(params: UseProjectLoadParams): UseProjectLoadRetu
       if (recovery) {
         const count = `${recovery.files.length} file${recovery.files.length === 1 ? '' : 's'}`;
         if (recovery.status === 'rolled-forward') {
-          addToast(`An interrupted save from last session was completed (${count}).`, 'info');
+          addToast(uiText("An interrupted save from last session was completed ({value0}).", { value0: count }), 'info');
         } else if (recovery.status === 'rolled-back') {
-          addToast(`An interrupted save from last session was discarded; ${count} kept their previous saved content.`, 'warning');
+          addToast(uiText("An interrupted save from last session was discarded; {value0} kept their previous saved content.", { value0: count }), 'warning');
         } else {
-          addToast(`An interrupted save from last session could not be recovered: ${recovery.error ?? 'unknown error'}. Saving is blocked until .renide/save-journal.json is resolved.`, 'error');
+          addToast(uiText("An interrupted save from last session could not be recovered: {value0}. Saving is blocked until .renide/save-journal.json is resolved.", { value0: recovery.error ?? 'unknown error' }), 'error');
         }
       }
 
@@ -343,8 +344,8 @@ export function useProjectLoad(params: UseProjectLoadParams): UseProjectLoadRetu
         const backupPath = projectData.settingsWarning.backupPath;
         addToast(
           backupPath
-            ? `Project settings could not be read — using defaults. The unreadable file was backed up to ${backupPath}`
-            : 'Project settings could not be read — using defaults',
+            ? uiText("Project settings could not be read — using defaults. The unreadable file was backed up to {value0}", { value0: backupPath })
+            : uiText("Project settings could not be read — using defaults"),
           'warning',
         );
       }
@@ -356,7 +357,7 @@ export function useProjectLoad(params: UseProjectLoadParams): UseProjectLoadRetu
       const snapshot = deserializeProjectData(projectData, blocksRef.current);
       if (snapshot.settingsMeta.newerThanSupported) {
         addToast(
-          'This project was saved by a newer version of Vangard Studio. Settings this version does not recognise will be kept, but may not take effect.',
+          uiText("This project was saved by a newer version of Vangard Studio. Settings this version does not recognise will be kept, but may not take effect."),
           'warning',
         );
       }
@@ -390,7 +391,7 @@ export function useProjectLoad(params: UseProjectLoadParams): UseProjectLoadRetu
       setIsInitialAnalysisPending(true);
       setHasUnsavedSettings(false);
       perfRecorders.recordLoad(performance.now() - loadStartTime);
-      addToast('Project loaded successfully', 'success');
+      addToast(uiText("Project loaded successfully"), 'success');
 
       try {
         const pending = await window.electronAPI?.recovery?.listPending(recoverySessionIdRef.current!);
@@ -404,7 +405,7 @@ export function useProjectLoad(params: UseProjectLoadParams): UseProjectLoadRetu
     } catch (err) {
       if (loadCancelRef.current) return;
       logger.error('Failed to load project', err);
-      addToast('Failed to load project', 'error');
+      addToast(uiText("Failed to load project"), 'error');
     } finally {
       unsubscribeProgress?.();
       setIsLoading(false);

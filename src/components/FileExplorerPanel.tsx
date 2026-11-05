@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file FileExplorerPanel.tsx
  * @description Left sidebar panel showing the project file tree structure (452 lines).
@@ -191,7 +192,7 @@ const FlatTreeRow: React.FC<FlatTreeRowProps> = ({
         <button
           onClick={(e) => { e.stopPropagation(); onToggleExpand(node.path); }}
           className="ml-auto opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-tertiary-hover flex-shrink-0"
-          aria-label={isExpanded ? 'Collapse' : 'Expand'}
+          aria-label={isExpanded ? uiText("Collapse") : uiText("Expand")}
         >
           <svg className={`w-3 h-3 transition-transform ${isExpanded ? '' : '-rotate-90'}`} viewBox="0 0 12 12" fill="none">
             <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -400,7 +401,7 @@ const FileExplorerPanel: React.FC<FileExplorerPanelProps> = ({
   return (
     <aside className="w-full h-full bg-secondary flex flex-col z-10 text-primary" onClick={() => { setContextMenu(null); setSelectedPaths(new Set()); }}>
       <div className="flex-none p-4 border-b border-primary">
-        <h2 className="text-xl font-bold">Project Explorer</h2>
+        <h2 className="text-xl font-bold">{uiText("Project Explorer")}</h2>
       </div>
       <div
         ref={treeContainerRef}
@@ -467,8 +468,7 @@ const FileExplorerPanel: React.FC<FileExplorerPanelProps> = ({
             </div>
         ) : (
           <p className="text-sm text-secondary text-center py-4 px-2">
-            Open a project folder to see files here.
-          </p>
+            {uiText("Open a project folder to see files here.")}</p>
         )}
       </div>
       {contextMenu && createPortal(

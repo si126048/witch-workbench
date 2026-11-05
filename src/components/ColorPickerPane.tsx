@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file ColorPickerPane.tsx
  * @description Sidebar color picker pane for the Tools tab in StoryElementsPanel.
@@ -40,7 +41,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
     const palettes = useMemo<ColorPalette[]>(() => {
         const list = [...BUILT_IN_PALETTES];
         if (projectColors && projectColors.length > 0) {
-            list.push({ id: 'project', label: 'Project Theme', colors: projectColors });
+            list.push({ id: 'project', label: uiText("Project Theme"), colors: projectColors });
         }
         return list;
     }, [projectColors]);
@@ -82,8 +83,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
             {/* ── Palette dropdown ── flex-none */}
             <div className="flex-none">
                 <label className="block text-xs font-semibold text-secondary mb-1 uppercase tracking-wide">
-                    Palette
-                </label>
+                    {uiText("Palette")}</label>
                 <select
                     value={activePaletteId}
                     onChange={e => { setActivePaletteId(e.target.value); setSelectedColor(null); }}
@@ -99,8 +99,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
             {/* ── Swatch grid ── flex-1 so it fills all remaining space */}
             <div className="flex-1 min-h-0 flex flex-col">
                 <label className="flex-none block text-xs font-semibold text-secondary mb-1 uppercase tracking-wide">
-                    Colors
-                </label>
+                    {uiText("Colors")}</label>
                 {/* Outer shell provides the border; inner div scrolls */}
                 <div className="flex-1 min-h-0 rounded border border-primary bg-tertiary overflow-hidden">
                     <div className="h-full overflow-y-auto overscroll-contain p-2">
@@ -108,7 +107,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
                             className="grid gap-1"
                             style={{ gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' }}
                             role="listbox"
-                            aria-label={`Colors in ${activePalette.label}`}
+                            aria-label={uiText("Colors in {value0}", { value0: activePalette.label })}
                         >
                             {activePalette.colors.map(color => {
                                 const isSelected = selectedColor?.hex === color.hex;
@@ -149,8 +148,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
                     </div>
                 </div>
                 <p className="flex-none text-xs text-secondary mt-1">
-                    Click to select · Double-click to insert · Drag to color pickers
-                </p>
+                    {uiText("Click to select · Double-click to insert · Drag to color pickers")}</p>
             </div>
 
             {/* ── Fixed-position tooltip ── rendered outside any overflow context */}
@@ -174,8 +172,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
             {/* ── Preview box ── flex-none */}
             <div className="flex-none">
                 <label className="block text-xs font-semibold text-secondary mb-1 uppercase tracking-wide">
-                    Preview
-                </label>
+                    {uiText("Preview")}</label>
                 <div
                     className="rounded border border-primary overflow-hidden"
                     style={{ background: '#6b7280' }}
@@ -193,8 +190,7 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
                             </span>
                         ) : (
                             <span className="text-xs text-zinc-300 italic select-none">
-                                No color selected
-                            </span>
+                                {uiText("No color selected")}</span>
                         )}
                     </div>
                 </div>
@@ -203,17 +199,17 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
             {/* ── Info frame ── flex-none */}
             <div className="flex-none rounded border border-primary bg-tertiary px-3 py-1.5 space-y-0.5">
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-secondary">Hex</span>
+                    <span className="text-xs text-secondary">{uiText("Hex")}</span>
                     <span className="text-xs font-mono text-primary">{hex ?? '—'}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-secondary">Name</span>
+                    <span className="text-xs text-secondary">{uiText("Name")}</span>
                     <span className="text-xs text-primary truncate max-w-[60%] text-right">
                         {selectedColor?.name ?? '—'}
                     </span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-secondary">Palette</span>
+                    <span className="text-xs text-secondary">{uiText("Palette")}</span>
                     <span className="text-xs text-primary truncate max-w-[60%] text-right">
                         {activePalette.label}
                     </span>
@@ -230,13 +226,12 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
                                    border border-primary bg-tertiary hover:bg-secondary
                                    text-primary text-xs font-medium
                                    disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                        title="Insert hex code at the cursor position in the active editor"
+                        title={uiText("Insert hex code at the cursor position in the active editor")}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m-4-4l4 4 4-4" />
                         </svg>
-                        Insert
-                    </button>
+                        {uiText("Insert")}</button>
                     <button
                         disabled={!hex}
                         onClick={() => hex && onWrapSelection(hex)}
@@ -244,13 +239,12 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
                                    border border-primary bg-tertiary hover:bg-secondary
                                    text-primary text-xs font-medium
                                    disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                        title="Wrap the selected text in {color=…}{/color} tags"
+                        title={uiText("Wrap the selected text in {color=…}{/color} tags")}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14" />
                         </svg>
-                        Wrap
-                    </button>
+                        {uiText("Wrap")}</button>
                 </div>
                 <button
                     disabled={!hex}
@@ -259,13 +253,12 @@ const ColorPickerPane: React.FC<ColorPickerPaneProps> = ({
                                border border-primary bg-tertiary hover:bg-secondary
                                text-secondary hover:text-primary text-xs font-medium
                                disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    title="Copy the hex code to the clipboard"
+                    title={uiText("Copy the hex code to the clipboard")}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                     </svg>
-                    Copy Hex
-                    {hex && <span className="font-mono text-secondary ml-0.5">{hex}</span>}
+                    {uiText("Copy Hex")}{hex && <span className="font-mono text-secondary ml-0.5">{hex}</span>}
                 </button>
             </div>
 

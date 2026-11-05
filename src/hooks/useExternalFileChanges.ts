@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 import { useState, useCallback, useEffect } from 'react';
 import type * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import type { Block } from '@/types';
@@ -57,7 +58,7 @@ export function useExternalFileChanges({
   useEffect(() => {
     if (!window.electronAPI?.onWatcherError) return;
     const unsub = window.electronAPI.onWatcherError(() => {
-      addToast?.('Live file change detection is unavailable for this project — external edits will not auto-sync.', 'warning');
+      addToast?.(uiText("Live file change detection is unavailable for this project — external edits will not auto-sync."), 'warning');
     });
     return unsub;
   }, [addToast]);

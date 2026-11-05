@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file LoadingOverlay.tsx
  * @description Full-screen progress overlay used during file and asset scanning (~70 lines).
@@ -27,8 +28,8 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ progress, message, onCa
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-lg w-full text-center border border-gray-200 dark:border-gray-700">
         {cancelling ? (
           <>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Cancelling...</h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">Stopping file scan, please wait.</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">{uiText("Cancelling...")}</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">{uiText("Stopping file scan, please wait.")}</p>
             <div className="flex justify-center">
               <svg className="animate-spin h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -38,7 +39,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ progress, message, onCa
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Loading Project...</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">{uiText("Loading Project...")}</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6 h-6 truncate" title={message}>
               {message}
             </p>
@@ -54,8 +55,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ progress, message, onCa
                 onClick={handleCancel}
                 className="mt-6 px-5 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                Cancel
-              </button>
+                {uiText("Cancel")}</button>
             )}
           </>
         )}

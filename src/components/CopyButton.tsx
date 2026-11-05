@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file CopyButton.tsx
  * @description Reusable clipboard copy button with idle and success states (~60 lines).
@@ -29,7 +30,7 @@ interface CopyButtonProps {
  * Idle: clipboard icon + label text, neutral bg.
  * Copied: checkmark icon + "Copied!", green bg. Resets after 2 s.
  */
-export default function CopyButton({ text, label = 'Copy to Clipboard', size = 'sm', className = '', onCopy }: CopyButtonProps) {
+export default function CopyButton({ text, label = uiText("Copy to Clipboard"), size = 'sm', className = '', onCopy }: CopyButtonProps) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
@@ -73,8 +74,7 @@ export default function CopyButton({ text, label = 'Copy to Clipboard', size = '
                     <svg viewBox="0 0 12 12" className={iconClass} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M2 6l3 3 5-5" />
                     </svg>
-                    Copied!
-                </>
+                    {uiText("Copied!")}</>
             ) : (
                 <>
                     <svg viewBox="0 0 12 12" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

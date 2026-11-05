@@ -1,3 +1,4 @@
+import { uiText } from "./uiText.js";
 /**
  * @file colorPalettes.ts
  * @description Static color palette data for the ColorPickerPane.
@@ -18,7 +19,7 @@ export interface ColorPalette {
 /** Ren'Py Standard — colors commonly used for dialogue text tags in visual novels */
 const RENPY_STANDARD: ColorPalette = {
     id: 'renpy_standard',
-    label: "Ren'Py Standard",
+    label: uiText("Ren'Py Standard"),
     colors: [
         { hex: '#FFFFFF', name: 'White' },
         { hex: '#F0F0F0', name: 'Off White' },
@@ -62,7 +63,7 @@ const RENPY_STANDARD: ColorPalette = {
 /** HTML Named Colors — CSS Level 1/2/3 named colors */
 const HTML_NAMED: ColorPalette = {
     id: 'html_named',
-    label: 'HTML Named',
+    label: uiText("HTML Named"),
     colors: [
         { hex: '#F0F8FF', name: 'AliceBlue' },
         { hex: '#FAEBD7', name: 'AntiqueWhite' },
@@ -264,7 +265,7 @@ const MATERIAL_500: ColorPalette = {
 /** Pastel — soft muted tones popular in visual novel UIs */
 const PASTEL: ColorPalette = {
     id: 'pastel',
-    label: 'Pastel',
+    label: uiText("Pastel"),
     colors: [
         { hex: '#FFB3BA', name: 'Pastel Red' },
         { hex: '#FFDFBA', name: 'Pastel Orange' },

@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file FileBlock.tsx
  * @description Canvas node representing a `.rpy` file in the `StoryCanvas` file-level view (~60 lines).
@@ -50,8 +51,8 @@ const FileBlock: React.FC<FileBlockProps> = React.memo(({
       {/* Drill-down button — visible on group hover */}
       <button
         type="button"
-        title="Drill into labels"
-        aria-label="Drill into labels"
+        title={uiText("Drill into labels")}
+        aria-label={uiText("Drill into labels")}
         className="absolute top-1.5 right-1.5 hidden group-hover:flex items-center justify-center h-6 w-6 rounded-md bg-indigo-600 text-white opacity-90 hover:opacity-100 hover:bg-indigo-700 transition-colors z-10"
         onClick={e => { e.stopPropagation(); onDrillDown(node.id); }}
         onDoubleClick={e => e.stopPropagation()}
@@ -84,18 +85,17 @@ const FileBlock: React.FC<FileBlockProps> = React.memo(({
 
         {/* Label count badge */}
         <span className="rounded-full bg-indigo-100 dark:bg-indigo-900/50 px-2 py-0.5 text-[10px] font-semibold text-indigo-700 dark:text-indigo-300">
-          {labelCount} {labelCount === 1 ? 'label' : 'labels'}
+          {labelCount} {labelCount === 1 ? 'label' : uiText("labels")}
         </span>
 
         {/* Open in editor button */}
         <button
           type="button"
-          title="Open in editor"
+          title={uiText("Open in editor")}
           className="hidden group-hover:inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
           onClick={e => { e.stopPropagation(); onOpenEditor(node.id, 1); }}
         >
-          Open ↗
-        </button>
+          {uiText("Open ↗")}</button>
       </div>
     </div>
   );

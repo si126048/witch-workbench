@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file SettingsModal.tsx
  * @description Application and project settings dialog.
@@ -20,18 +21,18 @@ interface SettingsModalProps {
 }
 
 const THEME_OPTIONS: { value: Theme; label: string }[] = [
-    { value: 'system', label: 'System Default' },
-    { value: 'light', label: 'Light' },
-    { value: 'dark', label: 'Dark' },
-    { value: 'solarized-light', label: 'Solarized Light' },
-    { value: 'solarized-dark', label: 'Solarized Dark' },
-    { value: 'colorful', label: 'Colorful (Dark)' },
-    { value: 'colorful-light', label: 'Colorful (Light)' },
-    { value: 'neon-dark', label: 'Neon Dark' },
-    { value: 'ocean-dark', label: 'Ocean Dark' },
-    { value: 'candy-light', label: 'Candy Light' },
-    { value: 'forest-light', label: 'Forest Light' },
-    { value: 'synthwave', label: 'Synthwave' },
+    { value: 'system', label: uiText("System Default") },
+    { value: 'light', label: uiText("Light") },
+    { value: 'dark', label: uiText("Dark") },
+    { value: 'solarized-light', label: uiText("Solarized Light") },
+    { value: 'solarized-dark', label: uiText("Solarized Dark") },
+    { value: 'colorful', label: uiText("Colorful (Dark)") },
+    { value: 'colorful-light', label: uiText("Colorful (Light)") },
+    { value: 'neon-dark', label: uiText("Neon Dark") },
+    { value: 'ocean-dark', label: uiText("Ocean Dark") },
+    { value: 'candy-light', label: uiText("Candy Light") },
+    { value: 'forest-light', label: uiText("Forest Light") },
+    { value: 'synthwave', label: uiText("Synthwave") },
 ];
 
 const DEFAULT_MOUSE_GESTURES: MouseGestureSettings = {
@@ -135,13 +136,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
         onClick={e => e.stopPropagation()}
       >
         <header className="px-6 py-5 border-b border-primary">
-          <h2 id="settings-modal-title" className="text-xl font-bold">Settings</h2>
+          <h2 id="settings-modal-title" className="text-xl font-bold">{uiText("Settings")}</h2>
         </header>
         <main className="p-6 space-y-6 overflow-y-auto">
             <div>
                 <label htmlFor="theme-select" className="block text-sm font-medium text-primary mb-1">
-                    Color Theme
-                </label>
+                    {uiText("Color Theme")}</label>
                 <select
                     id="theme-select"
                     value={settings.theme}
@@ -156,12 +156,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
 
             <div className="border-t border-primary"></div>
             <div>
-                <h3 className="text-sm font-medium text-primary mb-3">Editor Appearance</h3>
+                <h3 className="text-sm font-medium text-primary mb-3">{uiText("Editor Appearance")}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label htmlFor="font-family" className="block text-xs font-medium text-secondary mb-1">
-                            Font Family
-                        </label>
+                            {uiText("Font Family")}</label>
                         <input
                             id="font-family"
                             type="text"
@@ -173,8 +172,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                     </div>
                     <div>
                         <label htmlFor="font-size" className="block text-xs font-medium text-secondary mb-1">
-                            Font Size (px)
-                        </label>
+                            {uiText("Font Size (px)")}</label>
                         <input
                             id="font-size"
                             type="number"
@@ -190,21 +188,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
             
             <div className="border-t border-primary"></div>
             <div>
-                <h3 className="text-sm font-medium text-primary mb-3">Canvas & Mouse</h3>
+                <h3 className="text-sm font-medium text-primary mb-3">{uiText("Canvas & Mouse")}</h3>
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="pan-gesture-select" className="block text-xs font-medium text-secondary mb-1">
-                            Canvas Pan Gesture
-                        </label>
+                            {uiText("Canvas Pan Gesture")}</label>
                         <select
                             id="pan-gesture-select"
                             value={mouseGestures.canvasPanGesture}
                             onChange={(e) => handleMouseGestureChange('canvasPanGesture', e.target.value as CanvasPanGesture)}
                             className="w-full p-2 rounded bg-tertiary border border-primary focus:ring-accent focus:border-accent text-primary text-sm"
                         >
-                            <option value="shift-drag">Shift + Drag (default)</option>
-                            <option value="drag">Drag on empty canvas</option>
-                            <option value="middle-drag">Middle Mouse Button</option>
+                            <option value="shift-drag">{uiText("Shift + Drag (default)")}</option>
+                            <option value="drag">{uiText("Drag on empty canvas")}</option>
+                            <option value="middle-drag">{uiText("Middle Mouse Button")}</option>
                         </select>
                     </div>
 
@@ -217,28 +214,27 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                                 className="h-4 w-4 rounded focus:ring-accent"
                                 style={{ accentColor: 'var(--accent-primary)' }}
                             />
-                            <span className="text-sm text-primary select-none">Middle mouse button also pans</span>
+                            <span className="text-sm text-primary select-none">{uiText("Middle mouse button also pans")}</span>
                         </label>
                     )}
 
                     <div>
                         <label htmlFor="zoom-direction-select" className="block text-xs font-medium text-secondary mb-1">
-                            Zoom Scroll Direction
-                        </label>
+                            {uiText("Zoom Scroll Direction")}</label>
                         <select
                             id="zoom-direction-select"
                             value={mouseGestures.zoomScrollDirection}
                             onChange={(e) => handleMouseGestureChange('zoomScrollDirection', e.target.value as 'normal' | 'inverted')}
                             className="w-full p-2 rounded bg-tertiary border border-primary focus:ring-accent focus:border-accent text-primary text-sm"
                         >
-                            <option value="normal">Scroll up = Zoom In (Normal)</option>
-                            <option value="inverted">Scroll up = Zoom Out (Inverted)</option>
+                            <option value="normal">{uiText("Scroll up = Zoom In (Normal)")}</option>
+                            <option value="inverted">{uiText("Scroll up = Zoom Out (Inverted)")}</option>
                         </select>
                     </div>
 
                     <div>
                         <label htmlFor="zoom-sensitivity" className="block text-xs font-medium text-secondary mb-1">
-                            Zoom Scroll Sensitivity: <span className="font-mono">{mouseGestures.zoomScrollSensitivity.toFixed(1)}×</span>
+                            {("" + uiText("Zoom Scroll Sensitivity:") + " ")}<span className="font-mono">{mouseGestures.zoomScrollSensitivity.toFixed(1)}×</span>
                         </label>
                         <input
                             id="zoom-sensitivity"
@@ -261,15 +257,13 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
 
             <div className="border-t border-primary"></div>
             <div>
-                <h3 className="text-sm font-medium text-primary mb-3">File Size Warnings</h3>
+                <h3 className="text-sm font-medium text-primary mb-3">{uiText("File Size Warnings")}</h3>
                 <p className="text-xs text-secondary mb-3">
-                    Line-count thresholds used to color-code file size on the graph, tabs, and status bar.
-                </p>
+                    {uiText("Line-count thresholds used to color-code file size on the graph, tabs, and status bar.")}</p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label htmlFor="threshold-healthy" className="block text-xs font-medium text-secondary mb-1">
-                            Healthy starts at
-                        </label>
+                            {uiText("Healthy starts at")}</label>
                         <input
                             id="threshold-healthy"
                             type="number"
@@ -281,8 +275,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                     </div>
                     <div>
                         <label htmlFor="threshold-warning" className="block text-xs font-medium text-secondary mb-1">
-                            Warning starts at
-                        </label>
+                            {uiText("Warning starts at")}</label>
                         <input
                             id="threshold-warning"
                             type="number"
@@ -294,8 +287,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                     </div>
                     <div>
                         <label htmlFor="threshold-critical" className="block text-xs font-medium text-secondary mb-1">
-                            Critical starts at
-                        </label>
+                            {uiText("Critical starts at")}</label>
                         <input
                             id="threshold-critical"
                             type="number"
@@ -308,8 +300,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                 </div>
                 {!thresholdsAscending && (
                     <p className="text-xs text-red-500 dark:text-red-400 mt-2">
-                        Thresholds should increase from Healthy to Warning to Critical.
-                    </p>
+                        {uiText("Thresholds should increase from Healthy to Warning to Critical.")}</p>
                 )}
             </div>
 
@@ -318,8 +309,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                 <div className="border-t border-primary"></div>
                 <div>
                     <label className="block text-sm font-medium text-primary mb-1">
-                        Ren'Py SDK Directory
-                    </label>
+                        {uiText("Ren'Py SDK Directory")}</label>
                     <div className="flex items-center space-x-2">
                          <input
                             type="text"
@@ -331,25 +321,22 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, settings
                             onClick={handleSelectRenpyPath}
                             className="mt-1 px-4 py-2 rounded bg-tertiary hover:bg-tertiary-hover text-sm font-bold text-primary border border-primary"
                         >
-                            Change...
-                        </button>
+                            {uiText("Change...")}</button>
                     </div>
-                    <p className="text-xs text-secondary mt-1">Select the Ren'Py SDK root directory (contains renpy.exe or renpy.sh). Used to launch your game and for new project templates.</p>
+                    <p className="text-xs text-secondary mt-1">{uiText("Select the Ren'Py SDK root directory (contains renpy.exe or renpy.sh). Used to launch your game and for new project templates.")}</p>
                 </div>
               </>
             )}
 
              <p className="text-xs text-secondary pt-4 border-t border-primary">
-                    Application settings (like theme, font, and mouse gestures) are saved globally. Project settings (like drafting mode) are saved in `project.ide.json`.
-                </p>
+                    {uiText("Application settings (like theme, font, and mouse gestures) are saved globally. Project settings (like drafting mode) are saved in `project.ide.json`.")}</p>
         </main>
         <footer className="bg-header px-6 py-4 rounded-b-lg flex justify-end items-center space-x-4 border-t border-primary">
           <button
             onClick={onClose}
             className="bg-tertiary hover:bg-tertiary-hover text-primary font-bold py-2 px-4 rounded transition duration-200 border border-primary"
           >
-            Close
-          </button>
+            {uiText("Close")}</button>
         </footer>
       </div>
     </div>

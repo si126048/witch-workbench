@@ -15,7 +15,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import { validateSnippetPack } from '@/lib/snippetSchema';
 import type { Snippet, SnippetCategory, SnippetPackFile } from '@/types';
-import defaultSnippetsData from '../../snippets/default-snippets.json';
+import { builtinSnippetCategories } from '@/lib/builtinSnippets';
 
 interface UseSnippetLoaderOptions {
   projectRootPath?: string | null;
@@ -125,7 +125,7 @@ export function useSnippetLoader(options: UseSnippetLoaderOptions = {}): UseSnip
 
     try {
       // 1. Built-in snippets (always available)
-      const builtInCategories = (defaultSnippetsData as SnippetPackFile).categories;
+      const builtInCategories = builtinSnippetCategories();
 
       // 2. User global snippets (Electron userData/snippets/custom.json). Read via
       // the dedicated snippets:readUserGlobal IPC (fixed path computed in the main
@@ -172,7 +172,7 @@ export function useSnippetLoader(options: UseSnippetLoaderOptions = {}): UseSnip
       logger.error('Snippet loading error:', err);
 
       // Fallback to built-in snippets on error
-      setCategories((defaultSnippetsData as SnippetPackFile).categories);
+      setCategories(builtinSnippetCategories());
       setWarnings(collectedWarnings);
     } finally {
       setIsLoading(false);

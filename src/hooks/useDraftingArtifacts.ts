@@ -1,3 +1,4 @@
+import { uiText } from "../lib/uiText.js";
 /**
  * @file useDraftingArtifacts.ts
  * @description Custom hook for managing Drafting Mode placeholder artifacts
@@ -196,9 +197,9 @@ export function useDraftingArtifacts({
     setHasUnsavedSettings(true); // Persist this choice
 
     if (enabled) {
-      addToast('Drafting Mode Enabled: Placeholders will be generated.', 'info');
+      addToast(uiText("Drafting Mode Enabled: Placeholders will be generated."), 'info');
     } else {
-      addToast('Drafting Mode Disabled: Placeholders removed.', 'info');
+      addToast(uiText("Drafting Mode Disabled: Placeholders removed."), 'info');
       await cleanupDraftingArtifacts();
     }
   }, [updateProjectSettings, setHasUnsavedSettings, addToast, cleanupDraftingArtifacts]);
